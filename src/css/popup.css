@@ -1,0 +1,252 @@
+:root {
+  --color-theme: #75c3b4;
+  --color-text: #333;
+  --color-background: #fff;
+  --color-border: #ddd;
+  --color-hover: #d3ece7;
+
+  --color-text-dark: #adaaa6;
+  --color-background-dark: #3a3a3a;
+  --color-input-background-dark: #171a1a;
+  --color-hover-dark: #545454;
+}
+::-webkit-scrollbar {
+  width: 3px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  -webkit-border-radius: 10px;
+  border-radius: 10px;
+  background-color: rgba(50, 50, 50, .3);
+}
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  width: 280px;
+  max-height: 600px;
+  background-color: var(--color-background);
+  overflow: hidden;
+  user-select: none;
+}
+header,
+footer {
+  padding: 0 8px;
+}
+header {
+  padding-bottom: 4px;
+  border-bottom: 1px solid var(--color-border);
+}
+main {
+  position: relative;
+  max-height: 480px;
+  min-height: 300px;
+  overflow: auto;
+}
+footer {
+  display: flex;
+  justify-content: space-between;
+  height: 28px;
+  line-height: 28px;
+  color: var(--color-text);
+  background-color: #eee;
+}
+
+input,
+textarea {
+  outline: none;
+  color: var(--color-text);
+  border: 1px solid;
+}
+input::placeholder,
+textarea::placeholder {
+  opacity: .66;
+}
+button {
+  cursor: pointer;
+  margin-right: 0.5em;
+}
+a {
+  text-decoration: none;
+  cursor: pointer;
+}
+img {
+  max-height: 100%;
+}
+
+nav {
+  margin: 4px 0;
+  min-height: 24px;
+  line-height: 1.65em;
+  font-size: 16px;
+  color: #789;
+  word-break: keep-all;
+}
+.nav {
+  font-size: 14px;
+  font-weight: bold;
+  color: var(--color-theme);
+}
+nav a {
+  padding: 1px 4px;
+  border-radius: 4px;
+  font-size: 16px;
+  color: #fff;
+  background-color: var(--color-theme);
+}
+
+#search-input {
+  width: 100%;
+  height: 24px;
+  border: 1px solid var(--color-border);
+  border-radius: 2px;
+}
+#search-input::-webkit-search-cancel-button {
+  transform: translateY(-1px);
+  cursor: pointer;
+}
+.nodata {
+  opacity: .8;
+}
+.item {
+  position: relative;
+  padding-left: 8px;
+  height: 28px;
+  line-height: 28px;
+  font-size: 13px;
+}
+.item:hover,
+.item:focus,
+.item.active {
+  background-color: var(--color-hover);
+}
+.cols-2 {
+  float: left;
+  width: 50%;
+}
+.cols-3 {
+  float: left;
+  width: 33%;
+}
+.cols-4 {
+  float: left;
+  width: 25%;
+}
+.cols-5 {
+  float: left;
+  width: 20%;
+}
+.favicon {
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  top: 6px; /* (28 - 16) / 2 */
+}
+.item a {
+  display: block;
+  padding-left: 24px;
+  color: var(--color-text);
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+}
+.btns {
+  padding: 4px 0;
+  opacity: .5;
+}
+
+#context-menu,
+#context-menu-folder,
+#dialog {
+  position: absolute;
+  padding: 5px;
+  margin: 0;
+  min-width: 120px;
+  max-width: 100%;
+  border: 1px solid #bbb;
+  border-radius: 5px;
+  background-color: rgba(255, 255, 255, .96);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, .2);
+  list-style: none;
+  outline: 0;
+  transition: opacity .25s;
+}
+#dialog {
+  position: fixed;
+  top: 32px;
+  width: 280px;
+  line-height: 2em;
+  left: calc(50% - 140px) !important;
+}
+#context-menu li,
+#context-menu-folder li {
+  display: block;
+  padding: 0 8px;
+  line-height: 22px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  text-shadow: none;
+}
+#context-menu li:hover,
+#context-menu-folder li:hover {
+  background: var(--color-hover);
+}
+#context-menu hr,
+#context-menu-folder hr {
+  border: 0;
+  padding: 0;
+  height: 1px;
+  margin: 2px 0;
+  background-color: #eee;
+  pointer-events: none;
+}
+#dialog input,
+#dialog textarea {
+  margin: 8px 0;
+  width: 100%;
+  min-width: 100%;
+  max-width: 100%;
+  line-height: 18px;
+  word-break: break-all;
+}
+.title {
+  text-align: center;
+  font-size: 1.4em;
+}
+
+/* 夜间模式 */
+.dark {
+  color: var(--color-text-dark);
+  background-color: var(--color-background-dark);
+}
+.dark input,
+.dark textarea {
+  color: var(--color-text-dark);
+  background-color: var(--color-input-background-dark);
+}
+.dark .item a {
+  color: var(--color-text-dark);
+}
+.dark .item:hover,
+.dark .item:focus,
+.dark .item.active {
+  background-color: var(--color-hover-dark);
+}
+.dark #context-menu,
+.dark #context-menu-folder,
+.dark #dialog {
+  background-color: var(--color-background-dark);
+}
+.dark #context-menu li:hover,
+.dark #context-menu-folder li:hover {
+  background-color: var(--color-hover-dark);
+}
+.dark img {
+  filter: brightness(0.9);
+}

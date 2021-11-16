@@ -1,0 +1,139 @@
+{
+  "pluginDesc":
+  {
+    "message": "Easy to use bookmark manager"
+  },
+  "noBookmarksTip":
+  {
+    "message": "There is no bookmark here."
+  },
+  "seachPlaceholder":
+  {
+    "message": "Search Bookmarks..."
+  },
+  "seachNoResultTip":
+  {
+    "message": "No matching bookmark."
+  },
+
+  // contextmenu
+  "openInNewTab":
+  {
+    "message": "Open in new tab"
+  },
+  "openInBackgroundTab":
+  {
+    "message": "Open in background tab"
+  },
+  "openInIncognitoWindow":
+  {
+    "message": "Open in Incognito window"
+  },
+  "updateToCurrentURL":
+  {
+    "message": "Update to current URL"
+  },
+  "edit":
+  {
+    "message": "Edit"
+  },
+  "delete":
+  {
+    "message": "Delete"
+  },
+  "deleteFolderConfirm":
+  {
+    "message": "This will also delete all bookmarks in this directory, is it sure?"
+  },
+  "rename":
+  {
+    "message": "Rename"
+  },
+  
+  // dialog
+  "editBookmark":
+  {
+    "message": "Edit bookmark"
+  },
+  "editFolderName":
+  {
+    "message": "Edit folder name"
+  },
+  "save":
+  {
+    "message": "Save"
+  },
+  "cancel":
+  {
+    "message": "Cancel"
+  },
+  "name":
+  {
+    "message": "Name"
+  },
+  "URL":
+  {
+    "message": "URL"
+  },
+
+  // options.html
+  "themeColor":
+  {
+    "message": "Theme color:"
+  },
+  "auto":
+  {
+    "message": "Auto"
+  },
+  "light":
+  {
+    "message": "Light"
+  },
+  "dark":
+  {
+    "message": "Dark"
+  },
+  "openIn":
+  {
+    "message": "Open bookmarks in:"
+  },
+  "currentTab":
+  {
+    "message": "Current tab"
+  },
+  "newTab":
+  {
+    "message": "New tab"
+  },
+  "backgroundTab":
+  {
+    "message": "Background tab"
+  },
+  "hoverEnter": {
+      "message": "Hover to open folder:"
+  },
+  "off": {
+      "message": "Off"
+  },
+  "slow": {
+      "message": "Slow"
+  },
+  "moderate": {
+      "message": "Moderate"
+  },
+  "fast": {
+      "message": "Fast"
+  },
+  "layoutCols": {
+      "message": "Layout column(s):"
+  },
+  "alias": {
+      "message": "Alias:"
+  },
+  "customCSS": {
+      "message": "Custom style:"
+  },
+  "example": {
+      "message": "For example:"
+  }
+}

@@ -1,0 +1,45 @@
+{
+  "manifest_version": 2,
+  "name": "Ease Bookmarks",
+  "description": "__MSG_pluginDesc__",
+  "version": "1.0.0",
+  "default_locale": "zh_CN",
+  "icons": {
+    "48": "icons/48.png"
+  },
+
+  "author": "qinxs",
+  "homepage_url": "https://7bxing.com/",
+
+  "browser_action": {
+    "default_title": "Ease Bookmarks",
+    "default_popup": "popup.html",
+    "default_icon": "icons/32.png"
+  },
+  "background": {
+    "scripts": ["eventPage.js"],
+    "persistent": false
+  },
+  "options_page": "options.html",
+  "options_ui": {
+    "page": "options.html",
+    "open_in_tab": false
+  },
+  "commands": {
+    "_execute_browser_action": {
+      "suggested_key": {
+        "windows": "Ctrl+Q",
+        "mac": "Command+Q"
+      },
+      "description": "打开/关闭扩展"
+    }
+  },
+
+  "permissions": [
+    "storage",
+    "tabs",
+    "activeTab",
+    "bookmarks",
+    "chrome://favicon/"
+  ]
+}

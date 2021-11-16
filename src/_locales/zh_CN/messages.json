@@ -1,0 +1,141 @@
+{
+  "pluginDesc":
+  {
+    "message": "简单易用的书签管理器"
+  },
+
+  // popup.html
+  "noBookmarksTip":
+  {
+    "message": "这里没有书签呢~"
+  },
+  "seachPlaceholder":
+  {
+    "message": "搜索书签..."
+  },
+  "seachNoResultTip":
+  {
+    "message": "没有匹配的书签~"
+  },
+
+  // contextmenu
+  "openInNewTab":
+  {
+    "message": "在新标签中打开"
+  },
+  "openInBackgroundTab":
+  {
+    "message": "在后台打开"
+  },
+  "openInIncognitoWindow":
+  {
+    "message": "在隐身窗口中打开"
+  },
+  "updateToCurrentURL":
+  {
+    "message": "更新为当前网址"
+  },
+  "edit":
+  {
+    "message": "编辑"
+  },
+  "delete":
+  {
+    "message": "删除"
+  },
+  "deleteFolderConfirm":
+  {
+    "message": "这还将删除此目录下的所有书签, 确定吗?"
+  },
+  "rename":
+  {
+    "message": "重命名"
+  },
+
+  // dialog
+  "editBookmark":
+  {
+    "message": "编辑书签"
+  },
+  "editFolderName":
+  {
+    "message": "修改文件夹名"
+  },
+  "save":
+  {
+    "message": "保存"
+  },
+  "cancel":
+  {
+    "message": "取消"
+  },
+  "name":
+  {
+    "message": "名称"
+  },
+  "URL":
+  {
+    "message": "网址"
+  },
+
+  // options.html
+  "themeColor":
+  {
+    "message": "主题色:"
+  },
+  "auto":
+  {
+    "message": "跟随系统"
+  },
+  "light":
+  {
+    "message": "浅色"
+  },
+  "dark":
+  {
+    "message": "深色"
+  },
+  "openIn":
+  {
+    "message": "书签打开方式:"
+  },
+  "currentTab":
+  {
+    "message": "当前页"
+  },
+  "newTab":
+  {
+    "message": "新标签"
+  },
+  "backgroundTab":
+  {
+    "message": "新标签（后台）"
+  },
+  "hoverEnter": {
+      "message": "目录悬停进入:"
+  },
+  "off": {
+      "message": "关闭"
+  },
+  "slow": {
+      "message": "缓慢"
+  },
+  "moderate": {
+      "message": "适中"
+  },
+  "fast": {
+      "message": "快速"
+  },
+  "layoutCols": {
+      "message": "布局列数:"
+  },
+  "alias": {
+      "message": "别名:"
+  },
+  "customCSS": {
+      "message": "自定义样式:"
+  },
+  "example": {
+      "message": "例如:"
+  }
+}
