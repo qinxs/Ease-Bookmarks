@@ -37,7 +37,7 @@
 
   "permissions": [
     "storage",
-    "tabs",
+    // "tabs",
     "activeTab",
     "bookmarks",
     "chrome://favicon/"

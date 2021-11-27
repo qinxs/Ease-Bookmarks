@@ -300,9 +300,7 @@ function loadChildrenView(id, $list) {
     }
     // @TODO 优化它
     $list.innerHTML = html;
-    dataReady(() => {
-      handleFolderEvent($$('main [type="folder"]'));
-    })
+    handleFolderEvent($$('main [type="folder"]'));
   })
 }
 
@@ -435,6 +433,10 @@ function openFolder(event) {
 }
 
 function dragToMove() {
+  if (typeof dragula !== 'function') {
+    setTimeout(dragToMove);
+    return
+  }
   // @TODO 优化移动到文件夹中
   var drake = dragula([$bookmarkList, $subList], {
     // spilling will put the element back where it was dragged from, if this is true
@@ -455,16 +457,15 @@ function dragToMove() {
   });
 }
 
-
 /******************************************************/
 dataReady(() => {
   // console.log(BM.data);
-  loadChildrenView(BM.startup, $bookmarkList);
   dataSetting.init();
+  loadChildrenView(BM.startup, $bookmarkList);
   nav.init();
   $main.addEventListener('click', handleMainClick, false);
+  search.init();
+  contextMenu.init();
+  dialog.init();
   dragToMove();
 });
-search.init();
-contextMenu.init();
-dialog.init();
