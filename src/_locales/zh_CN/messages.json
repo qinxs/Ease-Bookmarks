@@ -4,7 +4,6 @@
     "message": "简单易用的书签管理器"
   },
 
-  // popup.html
   "noBookmarksTip":
   {
     "message": "这里没有书签呢~"
@@ -18,7 +17,6 @@
     "message": "没有匹配的书签~"
   },
 
-  // contextmenu
   "openInNewTab":
   {
     "message": "在新标签中打开"
@@ -52,7 +50,6 @@
     "message": "重命名"
   },
 
-  // dialog
   "editBookmark":
   {
     "message": "编辑书签"
@@ -78,7 +75,6 @@
     "message": "网址"
   },
 
-  // options.html
   "themeColor":
   {
     "message": "主题色:"

@@ -5,16 +5,18 @@
   "version": "1.0.0",
   "default_locale": "zh_CN",
   "icons": {
-    "48": "icons/48.png"
+    "32": "icons/icon32.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
   },
 
   "author": "qinxs",
-  "homepage_url": "https://7bxing.com/",
+  "homepage_url": "https://github.com/qinxs/Ease-Bookmarks",
 
   "browser_action": {
     "default_title": "Ease Bookmarks",
     "default_popup": "popup.html",
-    "default_icon": "icons/32.png"
+    "default_icon": "icons/icon32.png"
   },
   "background": {
     "scripts": ["eventPage.js"],
@@ -37,7 +39,6 @@
 
   "permissions": [
     "storage",
-    // "tabs",
     "activeTab",
     "bookmarks",
     "chrome://favicon/"

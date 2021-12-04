@@ -3,6 +3,7 @@
   {
     "message": "Easy to use bookmark manager"
   },
+
   "noBookmarksTip":
   {
     "message": "There is no bookmark here."
@@ -16,7 +17,6 @@
     "message": "No matching bookmark."
   },
 
-  // contextmenu
   "openInNewTab":
   {
     "message": "Open in new tab"
@@ -50,7 +50,6 @@
     "message": "Rename"
   },
   
-  // dialog
   "editBookmark":
   {
     "message": "Edit bookmark"
@@ -76,7 +75,6 @@
     "message": "URL"
   },
 
-  // options.html
   "themeColor":
   {
     "message": "Theme color:"
