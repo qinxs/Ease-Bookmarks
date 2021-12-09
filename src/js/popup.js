@@ -20,13 +20,16 @@ var $lastListView = $bookmarkList;
 var $fromTarget = null;
 var $curContextMenu = null;
 
+var layoutCols;
+
 const dataSetting = {
   init: function() {
+    layoutCols = BM.data.layoutCols;
     this.layout();
     this.switchTheme();
   },
   layout: function() {
-    document.body.style.width = BM.bodyWidth[BM.data.layoutCols];
+    document.body.style.width = BM.bodyWidth[layoutCols];
     $('#customCSS').textContent = BM.data.customCSS;
   },
   switchTheme: function() {
@@ -309,7 +312,6 @@ function template(treeData) {
   var favicon;
   var url;
   var attributeStr;
-  var layoutCols = BM.data.layoutCols;
   treeData.forEach(ele => {
     url = ele.url;
     if (typeof url === 'undefined') {
@@ -444,16 +446,22 @@ function dragToMove() {
   }).on('drop', (el, target, source, sibling, isHover) => {
     // console.log(el, target, source, sibling, isHover);
     // return
+    var lastFlag = 0;
     var id = el.lastElementChild.dataset.id;
+    if (sibling === null) {
+      lastFlag = 1;
+      // 此时，lastElementChild 为拖动元素本身
+      sibling = source.lastElementChild.previousElementSibling;
+    }
     var id_sibling = sibling.lastElementChild.dataset.id;
     if (isHover) {
       chrome.bookmarks.move(id, {parentId: id_sibling});
       delete $subList.dataset.folder_id;
-      return;
+    } else {
+      chrome.bookmarks.get(id_sibling.toString(), item => {
+        chrome.bookmarks.move(id, {index: item[0].index + lastFlag});
+      })
     }
-    chrome.bookmarks.get(id_sibling.toString(), item => {
-      chrome.bookmarks.move(id, {index: item[0].index});
-    })
   });
 }
 
