@@ -46,7 +46,7 @@ header {
 main {
   position: relative;
   max-height: 480px;
-  min-height: 300px;
+  min-height: 360px;
   overflow: auto;
 }
 footer {
@@ -111,7 +111,8 @@ nav a {
   transform: translateY(-1px);
   cursor: pointer;
 }
-.nodata {
+.nodata,
+.noresult {
   opacity: .8;
 }
 .item {
@@ -207,6 +208,34 @@ nav a {
   background-color: #eee;
   pointer-events: none;
 }
+
+#context-menu[type=link] > #bookmark-edit-folder {
+  display: none;
+}
+#context-menu[type=folder] > #bookmark-new-tab,
+#context-menu[type=folder] > #bookmark-new-tab-background,
+#context-menu[type=folder] > #bookmark-new-incognito-window,
+#context-menu[type=folder] > #bookmark-edit,
+#context-menu[type=folder] > #bookmark-update-url,
+#context-menu[type=folder] > hr:first-of-type {
+  display: none;
+}
+#context-menu.search > #bookmark-add-bookmark,
+#context-menu.search > #bookmark-add-folder,
+#context-menu.search > #bookmark-add-folder + hr {
+  display: none;
+}
+#context-menu[type=nodata] > #bookmark-new-tab,
+#context-menu[type=nodata] > #bookmark-new-tab-background,
+#context-menu[type=nodata] > #bookmark-new-incognito-window,
+#context-menu[type=nodata] > #bookmark-edit,
+#context-menu[type=nodata] > #bookmark-update-url,
+#context-menu[type=nodata] > #bookmark-edit-folder,
+#context-menu[type=nodata] > #bookmark-delete,
+#context-menu[type=nodata] > hr {
+  display: none;
+}
+
 #dialog input,
 #dialog textarea {
   margin: 8px 0;

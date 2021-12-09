@@ -29,6 +29,14 @@
   {
     "message": "在隐身窗口中打开"
   },
+  "addBookmark":
+  {
+    "message": "新建书签"
+  },
+  "addFolder":
+  {
+    "message": "新建文件夹"
+  },
   "updateToCurrentURL":
   {
     "message": "更新为当前网址"

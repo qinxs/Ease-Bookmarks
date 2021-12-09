@@ -16,9 +16,11 @@ var inputFlag = false;
 var isSeachView = false;
 // 上一个视图
 var $lastListView = $bookmarkList;
+var $contextMenu = null;
 // 中间变量
 var $fromTarget = null;
-var $curContextMenu = null;
+
+var curContextMenuID;
 
 var layoutCols;
 
@@ -106,7 +108,7 @@ const search = {
   },
   _loadSearchView: function(keyword) {
     chrome.bookmarks.search(keyword, (results) => {
-      var html = `<div class="item nodata">${L("seachNoResultTip")}<div>`;
+      var html = `<div class="item noresult">${L("seachNoResultTip")}<div>`;
       if (results.length) {
         html = template(results);
       }
@@ -123,9 +125,9 @@ const contextMenu = {
   },
   init: function() {
     $main.insertAdjacentHTML('beforeend', this.html);
+    $contextMenu = $('#context-menu');
     $main.addEventListener('contextmenu', this, false);
-    $('#context-menu').addEventListener('click', this, false);
-    $('#context-menu-folder').addEventListener('click', this, false);
+    $contextMenu.addEventListener('click', this, false);
     document.addEventListener('click', this.close, false);
     $('footer').addEventListener('contextmenu', (event) => {
       event.preventDefault();
@@ -137,27 +139,27 @@ const contextMenu = {
     <li id="bookmark-new-tab-background">${L("openInBackgroundTab")}</li>
     <li id="bookmark-new-incognito-window">${L("openInIncognitoWindow")}</li>
     <hr>
+    <li id="bookmark-add-bookmark">${L("addBookmark")}</li>
+    <li id="bookmark-add-folder">${L("addFolder")}</li>
+    <hr>
     <li id="bookmark-update-url">${L("updateToCurrentURL")}</li>
     <li id="bookmark-edit">${L("edit")} ...</li>
+    <li id="bookmark-edit-folder">${L("rename")} ...</li>
     <li id="bookmark-delete">${L("delete")}</li>
-  </ul>
-  <ul id="context-menu-folder" style="opacity: 0; left:-999px; top:0">
-    <li id="folder-edit">${L("rename")} ...</li>
-    <li id="folder-delete">${L("delete")}</li>
   </ul>
   `,
   show: function () {
-    $curContextMenu.style.opacity = 1;
-    $curContextMenu.style.left = this.pos.x + 'px';
-    $curContextMenu.style.top = this.pos.y + 'px';
+    $contextMenu.style.opacity = 1;
+    $contextMenu.style.left = this.pos.x + 'px';
+    $contextMenu.style.top = this.pos.y + 'px';
     $('.item.active') && $('.item.active').classList.remove('active');
     $fromTarget.closest('.item').classList.add('active');
   },
   close: function () {
-    if ($curContextMenu && !$curContextMenu.hidden) {
-      $curContextMenu.style.opacity = 0;
-      $curContextMenu.style.left = -999 + 'px';
-      $curContextMenu.style.top = 0;
+    if ($contextMenu && !$contextMenu.hidden) {
+      $contextMenu.style.opacity = 0;
+      $contextMenu.style.left = -999 + 'px';
+      $contextMenu.style.top = 0;
       $('.item.active') && $('.item.active').classList.remove('active');
     }
   },
@@ -166,18 +168,20 @@ const contextMenu = {
       case "contextmenu":
         e.preventDefault();
         this.close();
-        if(e.target.nodeName === 'A') {
+        if(e.target.nodeName === 'A' || e.target.classList.contains('nodata')) {
           // console.log(e);
           // console.log(this);
           $fromTarget = e.target;
-          $curContextMenu = $fromTarget.type === 'folder' ? $('#context-menu-folder') : $('#context-menu');
+          $contextMenu.type = $fromTarget.type || 'nodata';
+          $contextMenu.className = isSeachView ? 'search' : '';
           this.pos.x = e.pageX - $main.offsetLeft  + $main.scrollLeft;
-          if (this.pos.x + $curContextMenu.offsetWidth > $main.offsetWidth) {
-            this.pos.x = $main.offsetWidth - $curContextMenu.offsetWidth - 6;
+          if (this.pos.x + $contextMenu.offsetWidth > $main.offsetWidth) {
+            // 6: 右键菜单的边距
+            this.pos.x = $main.offsetWidth - $contextMenu.offsetWidth - 6;
           }
           this.pos.y = e.pageY - $main.offsetTop + $main.scrollTop;
-          if (this.pos.y + $curContextMenu.offsetHeight > $main.offsetHeight) {
-            this.pos.y -= $curContextMenu.offsetHeight;
+          if (this.pos.y + $contextMenu.offsetHeight > $main.offsetHeight) {
+            this.pos.y -= $contextMenu.offsetHeight;
           }
           this.show();
         }
@@ -216,21 +220,24 @@ const contextMenu = {
           });
         });
         break;
+      case "bookmark-add-bookmark":
+      case "bookmark-add-folder":
       case "bookmark-edit":
-      case "folder-edit": 
-        chrome.bookmarks.update(id, {}, () => {
-          dialog.show();
-        });
+      case "bookmark-edit-folder":
+        curContextMenuID = target.id;
+        dialog.show();
         break;
-      case "bookmark-delete": 
-        chrome.bookmarks.remove(id, () => {
-          $fromTarget.closest('.item').remove();
-        });
-        break;
-      case "folder-delete": 
-        confirm(L("deleteFolderConfirm")) && chrome.bookmarks.removeTree(id, () => {
-          $fromTarget.closest('.item').remove();
-        });
+      case "bookmark-delete":
+      case "folder-delete":
+        if ($fromTarget.type === 'folder') {
+          confirm(L("deleteFolderConfirm")) && chrome.bookmarks.removeTree(id, () => {
+            $fromTarget.closest('.item').remove();
+          });
+        } else {
+          chrome.bookmarks.remove(id, () => {
+            $fromTarget.closest('.item').remove();
+          });
+        } 
         break;
       default: break;
     }
@@ -242,6 +249,12 @@ const dialog = {
     $main.insertAdjacentHTML('beforeend', this.html);
     $('#edit-cancel').addEventListener('click', this.close, false);
     $('#edit-save').addEventListener('click', this.save, false);
+  },
+  title: {
+    'bookmark-add-bookmark': L("addBookmark"),
+    'bookmark-add-folder': L("addFolder"),
+    'bookmark-edit': L("editBookmark"),
+    'bookmark-edit-folder': L("editFolderName"),
   },
   html: `
   <form id="dialog" hidden>
@@ -255,15 +268,29 @@ const dialog = {
   </form>
   `,
   show: function() {
-    $('#edit-dialog-name').value = $fromTarget.textContent;
-    if ($fromTarget.type === 'folder') {
-      $('#edit-dialog-text').textContent = L("editFolderName");
-      $('#edit-dialog-url').hidden = true;
-    } else {
-      $('#edit-dialog-text').textContent = L("editBookmark");
-      $('#edit-dialog-url').hidden = false;
-      $('#edit-dialog-url').value = $fromTarget.dataset.url;
-      // $('#edit-dialog-name').select();
+    $('#edit-dialog-text').textContent = dialog.title[curContextMenuID];
+    switch(curContextMenuID) {
+      case "bookmark-add-bookmark":
+        chrome.tabs.query({active: true, currentWindow: true}, (tabs) => {
+          $('#edit-dialog-name').value = tabs[0].title;
+          $('#edit-dialog-url').hidden = false;
+          $('#edit-dialog-url').value = tabs[0].url;
+        });
+        break;
+      case "bookmark-add-folder":
+        $('#edit-dialog-name').value = '';
+        $('#edit-dialog-url').hidden = true;
+        break;
+      case "bookmark-edit":
+        $('#edit-dialog-name').value = $fromTarget.textContent;
+        $('#edit-dialog-url').hidden = false;
+        $('#edit-dialog-url').value = $fromTarget.dataset.url;
+        break;
+      case "bookmark-edit-folder":
+        $('#edit-dialog-name').value = $fromTarget.textContent;
+        $('#edit-dialog-url').hidden = true;
+        break;
+      default: break;
     }
     $('#dialog').hidden = false;
     $('#edit-dialog-name').focus();
@@ -273,20 +300,54 @@ const dialog = {
     var ele = $fromTarget;
     var id = ele.dataset.id;
     var title = $('#edit-dialog-name').value;
-    var url = $('#edit-dialog-url').value;
+    var url = $('#edit-dialog-url').hidden ? null : $('#edit-dialog-url').value;
     // console.log($('#edit-dialog-name').value);
-    chrome.bookmarks.update(id, {
-      title: title,
-      url: url
-    }, () => {
-      ele.textContent = title;
-      if ($fromTarget.type === 'link') {
-        ele.dataset.url = url;
-        ele.title = title + '\n' + url;
-        $fromTarget.previousElementSibling.src = 'chrome://favicon/' + url;
-      }
-      $('#dialog').hidden = true;
-    });
+    switch(curContextMenuID) {
+      case "bookmark-add-bookmark":
+      case "bookmark-add-folder":
+        // @TODO
+        if ($fromTarget.classList.contains('nodata')) {
+          chrome.bookmarks.create({
+            'parentId': id,
+            'title': title,
+            'url': url
+          }, results => {
+            // console.log(results);
+            $fromTarget.closest('.item').insertAdjacentHTML('afterend', templateItem(results));
+            handleFolderEvent($fromTarget.closest('.item').nextElementSibling.querySelectorAll('[type="folder"]'));
+            $fromTarget.remove();
+          });
+        } else {
+          chrome.bookmarks.get(id, item => {
+            chrome.bookmarks.create({
+              'parentId': item[0].parentId,
+              'index': item[0].index + 1,
+              'title': title,
+              'url': url
+            }, results => {
+              // console.log(results);
+              $fromTarget.closest('.item').insertAdjacentHTML('afterend', templateItem(results));
+              handleFolderEvent($fromTarget.closest('.item').nextElementSibling.querySelectorAll('[type="folder"]'));
+            });
+          });
+        }
+        break;
+      case "bookmark-edit":
+      case "bookmark-edit-folder":
+        chrome.bookmarks.update(id, {
+          title: title,
+          url: url
+        }, () => {
+          ele.textContent = title;
+          if ($fromTarget.type === 'link') {
+            ele.dataset.url = url;
+            ele.title = title + '\n' + url;
+            $fromTarget.previousElementSibling.src = 'chrome://favicon/' + url;
+          }
+        });
+        break;
+    }
+    $('#dialog').hidden = true;
   },
   close: function(e) {
     e.preventDefault();
@@ -297,7 +358,7 @@ const dialog = {
 function loadChildrenView(id, $list) {
   chrome.bookmarks.getChildren(id.toString(), (results) => {
     // console.log(results);
-    var html = `<div class="item nodata">${L("noBookmarksTip")}<div>`;
+    var html = `<div class="item nodata" data-id="${id}">${L("noBookmarksTip")}<div>`;
     if (results.length) {
       html = template(results);
     }
@@ -309,34 +370,37 @@ function loadChildrenView(id, $list) {
 
 function template(treeData) {
   var insertHtml = '';
-  var favicon;
-  var url;
-  var attributeStr;
   treeData.forEach(ele => {
-    url = ele.url;
-    if (typeof url === 'undefined') {
-      favicon = 'icons/favicon/folder.png';
-      attributeStr = `type="folder"`;
-    } else if (url.trim().startsWith('javascript:')) {
-      favicon = 'icons/favicon/js.png';
-      // @TODO 小书签可能解码失败; 太长还是特殊字符？
-      try {
-        url = decodeURI(ele.url).replaceAll("\"", "&quot;");
-      } catch {}
-      var _url = url.length > 300 ? url.substring(0, 300) + '...' : url;
-      attributeStr = `type="link" data-url="${url}" title="${ele.title}&#10;${_url}"`;
-    } else {
-      favicon = `chrome://favicon/${url}`;
-      attributeStr = `type="link" data-url="${url}" title="${ele.title}&#10;${url}"`;
-    }
-    insertHtml += `
-      <div class="item cols-${layoutCols}">
-      <img class="favicon" src="${favicon}"></img>
-      <a data-id="${ele.id}" ${attributeStr}>${ele.title}</a>
-      </div>
-    `;
+    insertHtml += templateItem(ele);
   });
   return insertHtml;
+}
+
+function templateItem(ele) {
+  var favicon;
+  var url = ele.url;
+  var attributeStr;
+  if (typeof url === 'undefined') {
+    favicon = 'icons/favicon/folder.png';
+    attributeStr = `type="folder"`;
+  } else if (url.trim().startsWith('javascript:')) {
+    favicon = 'icons/favicon/js.png';
+    // @TODO 小书签可能解码失败; 太长还是特殊字符？
+    try {
+      url = decodeURI(ele.url).replaceAll("\"", "&quot;");
+    } catch {}
+    var _url = url.length > 300 ? url.substring(0, 300) + '...' : url;
+    attributeStr = `type="link" data-url="${url}" title="${ele.title}&#10;${_url}"`;
+  } else {
+    favicon = `chrome://favicon/${url}`;
+    attributeStr = `type="link" data-url="${url}" title="${ele.title}&#10;${url}"`;
+  }
+  return `
+    <div class="item cols-${layoutCols}">
+    <img class="favicon" src="${favicon}"></img>
+    <a data-id="${ele.id}" ${attributeStr}>${ele.title}</a>
+    </div>
+  `;
 }
 
 // 视图切换
@@ -415,7 +479,7 @@ function openFolder(event) {
   var id = parseInt(target.dataset.id)
   // 路径最末级不在打开文件夹
   if (target.dataset.role === 'path' && !target.nextElementSibling) return;
-  if ($curContextMenu && $curContextMenu.style.opacity == 1) return;
+  if ($contextMenu && $contextMenu.style.opacity == 1) return;
   if ($('#edit-dialog') && !$('#edit-dialog').hidden) return;
   var folderName = event.target.textContent;
   window.funcDelay = setTimeout(() => {

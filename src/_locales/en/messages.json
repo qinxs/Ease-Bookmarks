@@ -29,6 +29,14 @@
   {
     "message": "Open in Incognito window"
   },
+  "addBookmark":
+  {
+    "message": "Add bookmark"
+  },
+  "addFolder":
+  {
+    "message": "Add folder"
+  },
   "updateToCurrentURL":
   {
     "message": "Update to current URL"
