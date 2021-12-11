@@ -23,6 +23,8 @@ var $fromTarget = null;
 var curContextMenuID;
 
 var layoutCols;
+var curItemslength;
+var itemHeight = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--height-item'));
 
 const dataSetting = {
   init: function() {
@@ -108,9 +110,10 @@ const search = {
   },
   _loadSearchView: function(keyword) {
     chrome.bookmarks.search(keyword, (results) => {
-      var html = `<div class="item noresult">${L("seachNoResultTip")}<div>`;
+      var html = `<div class="item cols-${layoutCols} noresult">${L("seachNoResultTip")}<div>`;
       if (results.length) {
         html = template(results);
+        setListHeight($searchList, results.length);
       }
       $searchList.innerHTML = html;
       handleFolderEvent($$('#search-list [type="folder"]'));
@@ -176,7 +179,7 @@ const contextMenu = {
           $contextMenu.className = isSeachView ? 'search' : '';
           this.pos.x = e.pageX - $main.offsetLeft  + $main.scrollLeft;
           if (this.pos.x + $contextMenu.offsetWidth > $main.offsetWidth) {
-            // 6: 右键菜单的边距
+            // 数值6: 右键菜单的边距
             this.pos.x = $main.offsetWidth - $contextMenu.offsetWidth - 6;
           }
           this.pos.y = e.pageY - $main.offsetTop + $main.scrollTop;
@@ -232,10 +235,12 @@ const contextMenu = {
         if ($fromTarget.type === 'folder') {
           confirm(L("deleteFolderConfirm")) && chrome.bookmarks.removeTree(id, () => {
             $fromTarget.closest('.item').remove();
+            setListHeight($lastListView, --curItemslength);
           });
         } else {
           chrome.bookmarks.remove(id, () => {
             $fromTarget.closest('.item').remove();
+            setListHeight($lastListView, --curItemslength);
           });
         } 
         break;
@@ -305,7 +310,6 @@ const dialog = {
     switch(curContextMenuID) {
       case "bookmark-add-bookmark":
       case "bookmark-add-folder":
-        // @TODO
         if ($fromTarget.classList.contains('nodata')) {
           chrome.bookmarks.create({
             'parentId': id,
@@ -313,6 +317,7 @@ const dialog = {
             'url': url
           }, results => {
             // console.log(results);
+            setListHeight($lastListView, ++curItemslength);
             $fromTarget.closest('.item').insertAdjacentHTML('afterend', templateItem(results));
             handleFolderEvent($fromTarget.closest('.item').nextElementSibling.querySelectorAll('[type="folder"]'));
             $fromTarget.remove();
@@ -326,6 +331,7 @@ const dialog = {
               'url': url
             }, results => {
               // console.log(results);
+              setListHeight($lastListView, ++curItemslength);
               $fromTarget.closest('.item').insertAdjacentHTML('afterend', templateItem(results));
               handleFolderEvent($fromTarget.closest('.item').nextElementSibling.querySelectorAll('[type="folder"]'));
             });
@@ -358,9 +364,11 @@ const dialog = {
 function loadChildrenView(id, $list) {
   chrome.bookmarks.getChildren(id.toString(), (results) => {
     // console.log(results);
-    var html = `<div class="item nodata" data-id="${id}">${L("noBookmarksTip")}<div>`;
+    var html = `<div class="item cols-${layoutCols} nodata" data-id="${id}">${L("noBookmarksTip")}<div>`;
+    setListHeight($list, results.length);
     if (results.length) {
       html = template(results);
+      curItemslength = results.length;
     }
     // @TODO 优化它
     $list.innerHTML = html;
@@ -403,6 +411,12 @@ function templateItem(ele) {
   `;
 }
 
+function setListHeight($_list, length) {
+  var count = Math.ceil(length / layoutCols);
+  count = count < 10 ? 10 : count;
+  $_list.style.height = count * itemHeight + 'px';
+}
+
 // 视图切换
 function toggleList($list) {
   // 防止切换时出现抖动
@@ -422,11 +436,10 @@ function toggleList($list) {
 }
 
 function handleMainClick(event) {
+  var target = event.target;
+  // console.log(target);
+  if (typeof target.dataset.url === `undefined`) return;
   chrome.tabs.query({active: true, currentWindow: true}, (tabs) => {
-    var target = event.target;
-    if (typeof target.dataset.url === `undefined`) return;
-    // console.log(target);
-    
     openUrl(target.dataset.url, event, tabs)
   })
 }
