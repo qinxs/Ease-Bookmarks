@@ -3,6 +3,7 @@
 var $bookmarksBar = $('#bookmarksBar');
 var $otherBookmarks = $('#otherBookmarks');
 var $customCSS = $('#customCSS');
+var $minItemsPerCol = $('#minItemsPerCol');
 
 function bookmarksAlias() {
   var rootInfo = {
@@ -24,6 +25,7 @@ dataReady(() => {
       // console.log(`[未设置选项] ${key}: ${value}`)
     }
   }
+  $minItemsPerCol.value = BM.data.minItemsPerCol;
   $bookmarksBar.value = BM.data.rootInfo[1];
   $otherBookmarks.value = BM.data.rootInfo[2];
   $customCSS.value = BM.data.customCSS || '';
@@ -40,6 +42,14 @@ dataReady(() => {
       }
     }, false);
   }
+  $minItemsPerCol.addEventListener('input', function() {
+    this.value = this.value.replace(/[^0-9]/g, '');
+  });
+  $minItemsPerCol.addEventListener('change', function() {
+    if (this.value < 1) this.value = 1;
+    if (this.value > 16) this.value = 16;
+    chrome.storage.sync.set({minItemsPerCol: $minItemsPerCol.value}, () => {});
+  });
   $bookmarksBar.addEventListener('change', bookmarksAlias);
   $otherBookmarks.addEventListener('change', bookmarksAlias);
   $customCSS.addEventListener('change', () => {

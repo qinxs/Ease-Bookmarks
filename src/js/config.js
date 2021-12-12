@@ -13,6 +13,7 @@ window.BM = {
     openIn: 3, // 0b11, 0-3 详细说明参见 openUrl 方法
     hoverEnter: 500, // {0,300,500,800}
     layoutCols: 1,
+    minItemsPerCol: 1, // 1-16；避免滚动条
   },
   bodyWidth: {
     1: '280px',

@@ -133,6 +133,12 @@
   "layoutCols": {
       "message": "Layout column(s):"
   },
+  "minItemsEachCol": {
+      "message": "Items each col:"
+  },
+  "minItemsEachColTips": {
+      "message": "Note: valid if the number of Layout columns is multiple. 1, 10 or 16(range: 1-16) are recommended"
+  },
   "alias": {
       "message": "Alias:"
   },

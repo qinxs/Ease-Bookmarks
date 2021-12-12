@@ -5,6 +5,7 @@
   --color-border: #ddd;
   --color-hover: #d3ece7;
   --height-item: 28px;
+  --width-item: 100%;
 
   --color-text-dark: #adaaa6;
   --color-background-dark: #3a3a3a;
@@ -46,8 +47,8 @@ header {
 }
 main {
   position: relative;
-  max-height: 480px;
-  min-height: 360px;
+  max-height: 500px;
+  min-height: 400px;
   overflow: auto;
 }
 footer {
@@ -135,6 +136,7 @@ nav a {
   float: left;
   padding-left: 8px;
   height: var(--height-item);
+  width: var(--width-item);
   line-height: var(--height-item);
   font-size: 13px;
 }
@@ -143,21 +145,7 @@ nav a {
 .item.active {
   background-color: var(--color-hover);
 }
-.cols-1 {
-  width: 100%;
-}
-.cols-2 {
-  width: 50%;
-}
-.cols-3 {
-  width: 33%;
-}
-.cols-4 {
-  width: 25%;
-}
-.cols-5 {
-  width: 20%;
-}
+
 .favicon {
   position: absolute;
   width: 16px;

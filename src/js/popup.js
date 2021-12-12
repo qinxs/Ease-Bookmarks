@@ -22,18 +22,21 @@ var $fromTarget = null;
 
 var curContextMenuID;
 
+// 宽度只变大 不缩小
 var layoutCols;
+var curMaxCols = 1;
 var curItemslength;
+var minItemsPerCol;
 var itemHeight = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--height-item'));
 
 const dataSetting = {
   init: function() {
     layoutCols = BM.data.layoutCols;
+    minItemsPerCol = BM.data.minItemsPerCol;
     this.layout();
     this.switchTheme();
   },
   layout: function() {
-    document.body.style.width = BM.bodyWidth[layoutCols];
     $('#customCSS').textContent = BM.data.customCSS;
   },
   switchTheme: function() {
@@ -110,11 +113,11 @@ const search = {
   },
   _loadSearchView: function(keyword) {
     chrome.bookmarks.search(keyword, (results) => {
-      var html = `<div class="item cols-${layoutCols} noresult">${L("seachNoResultTip")}<div>`;
+      var html = `<div class="item noresult">${L("seachNoResultTip")}<div>`;
       if (results.length) {
         html = template(results);
-        setListHeight($searchList, results.length);
       }
+      setListSize($searchList, results.length);
       $searchList.innerHTML = html;
       handleFolderEvent($$('#search-list [type="folder"]'));
     })
@@ -235,12 +238,12 @@ const contextMenu = {
         if ($fromTarget.type === 'folder') {
           confirm(L("deleteFolderConfirm")) && chrome.bookmarks.removeTree(id, () => {
             $fromTarget.closest('.item').remove();
-            setListHeight($lastListView, --curItemslength);
+            setListSize($lastListView, --curItemslength);
           });
         } else {
           chrome.bookmarks.remove(id, () => {
             $fromTarget.closest('.item').remove();
-            setListHeight($lastListView, --curItemslength);
+            setListSize($lastListView, --curItemslength);
           });
         } 
         break;
@@ -317,7 +320,7 @@ const dialog = {
             'url': url
           }, results => {
             // console.log(results);
-            setListHeight($lastListView, ++curItemslength);
+            setListSize($lastListView, ++curItemslength);
             $fromTarget.closest('.item').insertAdjacentHTML('afterend', templateItem(results));
             handleFolderEvent($fromTarget.closest('.item').nextElementSibling.querySelectorAll('[type="folder"]'));
             $fromTarget.remove();
@@ -331,7 +334,7 @@ const dialog = {
               'url': url
             }, results => {
               // console.log(results);
-              setListHeight($lastListView, ++curItemslength);
+              setListSize($lastListView, ++curItemslength);
               $fromTarget.closest('.item').insertAdjacentHTML('afterend', templateItem(results));
               handleFolderEvent($fromTarget.closest('.item').nextElementSibling.querySelectorAll('[type="folder"]'));
             });
@@ -364,12 +367,12 @@ const dialog = {
 function loadChildrenView(id, $list) {
   chrome.bookmarks.getChildren(id.toString(), (results) => {
     // console.log(results);
-    var html = `<div class="item cols-${layoutCols} nodata" data-id="${id}">${L("noBookmarksTip")}<div>`;
-    setListHeight($list, results.length);
+    var html = `<div class="item nodata" data-id="${id}">${L("noBookmarksTip")}<div>`;
     if (results.length) {
       html = template(results);
-      curItemslength = results.length;
     }
+    curItemslength = results.length;
+    setListSize($list, curItemslength || 1);
     // @TODO 优化它
     $list.innerHTML = html;
     handleFolderEvent($$('main [type="folder"]'));
@@ -404,17 +407,30 @@ function templateItem(ele) {
     attributeStr = `type="link" data-url="${url}" title="${ele.title}&#10;${url}"`;
   }
   return `
-    <div class="item cols-${layoutCols}">
+    <div class="item">
     <img class="favicon" src="${favicon}"></img>
     <a data-id="${ele.id}" ${attributeStr}>${ele.title}</a>
     </div>
   `;
 }
 
-function setListHeight($_list, length) {
-  var count = Math.ceil(length / layoutCols);
-  count = count < 10 ? 10 : count;
-  $_list.style.height = count * itemHeight + 'px';
+function setListSize($_list, length) {
+  if (layoutCols === 1) return;
+  var rowsCount, colsCount;
+  if ($_list === $searchList) {
+    rowsCount = Math.ceil(length / curMaxCols);
+  } else {
+    colsCount = length > layoutCols * minItemsPerCol ? layoutCols : Math.ceil(length / minItemsPerCol);
+    rowsCount = Math.ceil(length / colsCount);
+
+    if (curMaxCols < colsCount) {
+      curMaxCols = colsCount;
+      document.body.style.width = BM.bodyWidth[curMaxCols];
+      document.documentElement.style.setProperty('--width-item', parseInt(100 / curMaxCols) + "%");
+    }
+  }
+  rowsCount = rowsCount < minItemsPerCol ? minItemsPerCol : rowsCount;
+  $_list.style.height = rowsCount * itemHeight + 'px';
 }
 
 // 视图切换
