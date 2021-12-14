@@ -71,8 +71,9 @@ const nav = {
         target.nextElementSibling.remove();
       }
     } else {
+      var symbol = isSeachView ? '?' : '>';
       var html = `
-      <span>></span> <a type="folder" data-id="${id}" data-role="path">${folderName}</a>
+      <span>${symbol}</span> <a type="folder" data-id="${id}" data-role="path">${folderName}</a>
       `;
       $nav.header.insertAdjacentHTML('beforeend', html)
       handleFolderEvent($$('nav > [type="folder"]'))
