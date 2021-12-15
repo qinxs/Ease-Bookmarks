@@ -3,8 +3,10 @@
 # Ease Bookmarks
 
 [![Source Code](https://img.shields.io/badge/Source_Code-GitHub-blue)](https://github.com/qinxs/Ease-Bookmarks)
-[![Chrome Web Store](https://img.shields.io/chrome-web-store/v/poefceffmekhjoadknillcbdifahongk.svg)](https://chrome.google.com/webstore/detail/ease-bookmarks/poefceffmekhjoadknillcbdifahongk)
-[![Donate](https://img.shields.io/badge/Donate-blueviolet)](https://7bxing.com/donate/)
+[![Chrome Web Store](https://img.shields.io/chrome-web-store/v/poefceffmekhjoadknillcbdifahongk.svg)](https://chrome.google.com/webstore/detail/ease-bookmarks/poefceffmekhjoadknillcbdifahongk "注：兼容 Edge 浏览器")
+[![Donate](https://img.shields.io/badge/Donate-blueviolet)](https://7bxing.com/donate/ "欢迎捐赠")
+
+> 简单易用的书签管理器
 
 Ease Bookmarks 是一款为了替代浏览器原有书签栏的扩展
 
