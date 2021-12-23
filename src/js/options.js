@@ -48,7 +48,11 @@ dataReady(() => {
   $minItemsPerCol.addEventListener('change', function() {
     if (this.value < 1) this.value = 1;
     if (this.value > 16) this.value = 16;
-    chrome.storage.sync.set({minItemsPerCol: $minItemsPerCol.value}, () => {});
+    if (this.value == BM.default['minItemsPerCol']) {
+      chrome.storage.sync.remove('minItemsPerCol', () => {});
+    } else {
+      chrome.storage.sync.set({minItemsPerCol: $minItemsPerCol.value}, () => {});
+    }
   });
   $bookmarksBar.addEventListener('change', bookmarksAlias);
   $otherBookmarks.addEventListener('change', bookmarksAlias);
