@@ -3,8 +3,9 @@
 # Ease Bookmarks
 
 [![Source Code](https://img.shields.io/badge/Source_Code-GitHub-blue)](https://github.com/qinxs/Ease-Bookmarks)
-[![Chrome Web Store](https://img.shields.io/chrome-web-store/v/poefceffmekhjoadknillcbdifahongk.svg)](https://chrome.google.com/webstore/detail/ease-bookmarks/poefceffmekhjoadknillcbdifahongk "注：兼容 Edge 浏览器")
-[![Donate](https://img.shields.io/badge/Donate-blueviolet)](https://7bxing.com/donate/ "欢迎捐赠")
+[![Chrome Web Store](https://img.shields.io/chrome-web-store/v/poefceffmekhjoadknillcbdifahongk.svg)](https://chrome.google.com/webstore/detail/ease-bookmarks/poefceffmekhjoadknillcbdifahongk)
+[![Microsoft Edge Add-on](https://img.shields.io/badge/dynamic/json?label=microsoft%20edge%20add-on&query=%24.version&url=https%3A%2F%2Fmicrosoftedge.microsoft.com%2Faddons%2Fgetproductdetailsbycrxid%2Faddbgeibeffkokpabpbpmdpehfbegchl)](https://microsoftedge.microsoft.com/addons/detail/ease-bookmarks/addbgeibeffkokpabpbpmdpehfbegchl)
+[![Donate](https://img.shields.io/badge/Donate-blueviolet)](https://7bxing.com/donate/ "欢迎捐赠~")
 
 > 简单易用的书签管理器
 

@@ -41,4 +41,4 @@
 邮件：qin_xs#qq.com（# 替换为 @）
 
 [GitHub Star](https://github.com/qinxs/Ease-Bookmarks "方便的话，给个 Star，感谢！") - 
-[捐赠](https://7bxing.com/donate/)
+[欢迎捐赠](https://7bxing.com/donate/)
