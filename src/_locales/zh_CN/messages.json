@@ -147,5 +147,8 @@
   },
   "example": {
       "message": "例如:"
+  },
+  "setInvalidTips": {
+      "message": "无效选项！可选设置:"
   }
 }

@@ -461,6 +461,26 @@ function handleMainClick(event) {
   })
 }
 
+function handleMainMiddleClick(event) {
+  if (event.button !== 1) return;
+  var target = event.target;
+  if (target.classList.contains('favicon')) {
+    var a = target.nextElementSibling;
+    if (a.type === 'folder') {
+      // console.log(target);
+      chrome.tabs.query({active: true, currentWindow: true}, (tabs) => {
+        chrome.bookmarks.create({
+          'parentId': a.dataset.id,
+          'title': tabs[0].title,
+          'url': tabs[0].url
+        }, results => {
+          a.dataset.id === $subList.dataset.folder_id && delete $subList.dataset.folder_id;
+        });
+      });
+    }
+  }
+}
+
 /**
   @flag [0b]00-11
   高位1 在新标签打开; 0当前标签打开
@@ -566,6 +586,7 @@ dataReady(() => {
   loadChildrenView(BM.startup, $bookmarkList);
   nav.init();
   $main.addEventListener('click', handleMainClick, false);
+  BM.data.fastCreate > 0 && $main.addEventListener('mousedown', handleMainMiddleClick, false);
   search.init();
   contextMenu.init();
   dialog.init();

@@ -15,6 +15,9 @@ window.BM = {
     layoutCols: 1,
     minItemsPerCol: 1, // 1-16；避免滚动条
   },
+  defaultSys: {
+    fastCreate: 0, // 0-2
+  },
   bodyWidth: {
     1: '280px',
     2: '400px',
@@ -22,13 +25,25 @@ window.BM = {
     4: '660px',
     5: '800px',
   },
+  set: function (name, value) {
+    if (this.defaultSys.hasOwnProperty(name)) {
+      if (value == BM.defaultSys[name]) {
+        chrome.storage.sync.remove(name, () => {});
+      } else {
+        chrome.storage.sync.set({[name]: value}, () => {});
+      }
+      location.reload();
+    } else {
+      console.log(L('setInvalidTips'), Object.keys(BM.defaultSys).join());
+    }
+  },
   dataReady: false
 }
 
 chrome.storage.sync.get(null, function(items) {
   // console.log(items);
   BM.options = items;
-  BM.data = Object.assign({}, BM.default, items);
+  BM.data = Object.assign({}, BM.default, BM.defaultSys, items);
   BM.dataReady = true;
 });
 

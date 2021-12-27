@@ -147,5 +147,8 @@
   },
   "example": {
       "message": "For example:"
+  },
+  "setInvalidTips": {
+      "message": "Invalid option! Optional Settings:"
   }
 }
