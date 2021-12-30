@@ -77,7 +77,7 @@ const nav = {
       <span>${symbol}</span> <a type="folder" data-id="${id}" data-role="path">${folderName}</a>
       `;
       $nav.header.insertAdjacentHTML('beforeend', html)
-      handleFolderEvent($$('nav > [type="folder"]'))
+      handleFolderEvent($$('nav > [type=folder]'))
     }
   }
 }
@@ -121,7 +121,7 @@ const search = {
       }
       setListSize($searchList, results.length);
       $searchList.innerHTML = html;
-      handleFolderEvent($$('#search-list [type="folder"]'));
+      handleFolderEvent($$('#search-list [type=folder]'));
     })
   }
 }
@@ -324,7 +324,7 @@ const dialog = {
             // console.log(results);
             setListSize($lastListView, ++curItemslength);
             $fromTarget.closest('.item').insertAdjacentHTML('afterend', templateItem(results));
-            handleFolderEvent($fromTarget.closest('.item').nextElementSibling.querySelectorAll('[type="folder"]'));
+            handleFolderEvent($fromTarget.closest('.item').nextElementSibling.querySelectorAll('[type=folder]'));
             $fromTarget.remove();
           });
         } else {
@@ -338,7 +338,7 @@ const dialog = {
               // console.log(results);
               setListSize($lastListView, ++curItemslength);
               $fromTarget.closest('.item').insertAdjacentHTML('afterend', templateItem(results));
-              handleFolderEvent($fromTarget.closest('.item').nextElementSibling.querySelectorAll('[type="folder"]'));
+              handleFolderEvent($fromTarget.closest('.item').nextElementSibling.querySelectorAll('[type=folder]'));
             });
           });
         }
@@ -377,7 +377,7 @@ function loadChildrenView(id, $list) {
     setListSize($list, curItemslength || 1);
     // @TODO 优化它
     $list.innerHTML = html;
-    handleFolderEvent($$('main [type="folder"]'));
+    handleFolderEvent($$('main [type=folder]'));
   })
 }
 
