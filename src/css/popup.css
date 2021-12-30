@@ -155,6 +155,7 @@ nav a {
 .item a {
   display: block;
   padding-left: 24px;
+  height: var(--height-item);
   color: var(--color-text);
   overflow:hidden;
   text-overflow:ellipsis;

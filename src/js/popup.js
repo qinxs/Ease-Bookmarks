@@ -56,6 +56,7 @@ const nav = {
     handleFolderEvent($$('.nav'));
   },
   setNavPath: function(id, folderName, target) {
+    folderName = folderName ? folderName : ' ';
     // console.log(target);
     if (id < 3) {
       $nav.header.innerHTML = `<a type="folder" data-id="${id}">${folderName}</a>`;
