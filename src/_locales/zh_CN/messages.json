@@ -37,6 +37,10 @@
   {
     "message": "新建文件夹"
   },
+  "location":
+  {
+    "message": "打开所在目录"
+  },
   "updateToCurrentURL":
   {
     "message": "更新为当前网址"

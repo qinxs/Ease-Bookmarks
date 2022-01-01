@@ -19,6 +19,7 @@ var $lastListView = $bookmarkList;
 var $contextMenu = null;
 // 中间变量
 var $fromTarget = null;
+window.funcDelay = null;
 
 var curContextMenuID;
 
@@ -50,6 +51,7 @@ const dataSetting = {
 }
 
 const nav = {
+  pathHtml: '',
   init: function() {
     // console.log(BM.data.rootInfo);
     this.setNavPath(BM.startup, BM.data.rootInfo[BM.startup]);
@@ -78,6 +80,31 @@ const nav = {
       `;
       $nav.header.insertAdjacentHTML('beforeend', html)
       handleFolderEvent($$('nav > [type=folder]'))
+    }
+  },
+  resetNavPath: function(id, itemId) {
+    if (id < 3) {
+      chrome.bookmarks.get(id.toString(), (item) => {
+        this.pathHtml = `<a type="folder" data-id="${id}">${item[0].title}</a>` + this.pathHtml;
+        $nav.header.innerHTML = this.pathHtml;
+        handleFolderEvent($$('nav > [type=folder]'));
+        var $item = $(`[data-id="${itemId}"]`).closest('.item');
+        $item.classList.add('active');
+        $item.scrollIntoView();
+        this.pathHtml = '';
+        var _id = 3 - id;
+        chrome.bookmarks.getChildren(_id.toString(), (results) => {
+          if (!results.length) return;
+          $nav.footer.dataset.id = _id;
+          $nav.footer.textContent = BM.data.rootInfo[_id];
+        });
+      })
+    } else {
+      chrome.bookmarks.get(id.toString(), (item) => {
+        this.pathHtml = `
+        <span>></span> <a type="folder" data-id="${id}" data-role="path">${item[0].title}</a>` + this.pathHtml;
+        this.resetNavPath(item[0].parentId, itemId);
+      })
     }
   }
 }
@@ -149,6 +176,7 @@ const contextMenu = {
     <hr>
     <li id="bookmark-add-bookmark">${L("addBookmark")}</li>
     <li id="bookmark-add-folder">${L("addFolder")}</li>
+    <li id="bookmark-location">${L("location")}</li>
     <hr>
     <li id="bookmark-update-url">${L("updateToCurrentURL")}</li>
     <li id="bookmark-edit">${L("edit")} ...</li>
@@ -234,6 +262,12 @@ const contextMenu = {
       case "bookmark-edit-folder":
         curContextMenuID = target.id;
         dialog.show();
+        break;
+      case "bookmark-location":
+        // console.log($fromTarget);
+        var parentId = $fromTarget.dataset.parentId;
+        locationFolder(parentId);
+        nav.resetNavPath(parentId, id);
         break;
       case "bookmark-delete":
       case "folder-delete":
@@ -355,6 +389,7 @@ const dialog = {
             ele.title = title + '\n' + url;
             $fromTarget.previousElementSibling.src = 'chrome://favicon/' + url;
           }
+          delete $subList.dataset.folder_id;
         });
         break;
     }
@@ -408,6 +443,7 @@ function templateItem(ele) {
     favicon = `chrome://favicon/${url}`;
     attributeStr = `type="link" data-url="${url}" title="${ele.title}&#10;${url}"`;
   }
+  if (isSeachView) attributeStr = `data-parent-id="${ele.parentId}"` + attributeStr;
   return `
     <div class="item">
     <img class="favicon" src="${favicon}"></img>
@@ -537,7 +573,7 @@ function openFolder(event) {
     // console.log(event.target);
     contextMenu.close();
     nav.setNavPath(id, folderName, target);
-    if (id === BM.startup) {
+    if (id == BM.startup) {
       toggleList($bookmarkList);
       return
     }
@@ -547,6 +583,23 @@ function openFolder(event) {
       $subList.dataset.folder_id = id;
     }
   }, BM.data.hoverEnter);
+}
+
+function locationFolder(id) {
+  // console.log(event.target);
+  contextMenu.close();
+  // nav.setNavPath(id, folderName, target);
+  // debugger
+  if (id == BM.startup) {
+    toggleList($bookmarkList);
+    return
+  }
+  toggleList($subList);
+  if(id !== parseInt($subList.dataset.folder_id)) {
+    loadChildrenView(id, $subList);
+    $subList.dataset.folder_id = id;
+  }
+  
 }
 
 function dragToMove() {

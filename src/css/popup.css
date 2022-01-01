@@ -239,6 +239,12 @@ nav a {
 #context-menu[type=nodata] > hr {
   display: none;
 }
+#bookmark-location {
+  display: none !important;
+}
+#context-menu.search > #bookmark-location {
+  display: block !important;
+}
 
 #dialog input,
 #dialog textarea {

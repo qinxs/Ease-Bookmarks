@@ -37,6 +37,11 @@
   {
     "message": "Add folder"
   },
+  "location":
+  {
+    "message": "Open the directory"
+  },
+
   "updateToCurrentURL":
   {
     "message": "Update to current URL"
