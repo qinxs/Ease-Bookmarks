@@ -37,7 +37,7 @@
 ## 支持
 
 [GitHub Issues](https://github.com/qinxs/Ease-Bookmarks/issues) - 
-[博客留言](https://7bxing.com/message/) - 
+[博客留言](https://7bxing.com/posts/beb3fd2a/) - 
 邮件：qin_xs#qq.com（# 替换为 @）
 
 [GitHub Star](https://github.com/qinxs/Ease-Bookmarks "方便的话，给个 Star，感谢！") - 

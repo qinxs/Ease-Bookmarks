@@ -46,6 +46,21 @@ Ease Bookmarks 是一款为了替代浏览器原有书签栏的扩展
 - 别名（书签栏和其他书签，其他语言可能会需要）
 - 自定义样式（popup 页面，DOM 结构可在 header 区域 `右键 -> 检查` 查看）
 
+## 特别设置
+
+不常用选项没有展现在选项页面，需通过浏览器控制台开启
+
+如何操作：popup 页面，在 header 区域 `右键 -> 检查` 打开开发者工具，然后点击控制台
+
+然后通过执行 BM.set(name, value) 以改变配置，如：`BM.set('fastCreate', 2)`
+
+### fastCreate
+
+> 功能：中键点击**书签图标**，快速把当前网址添加到书签
+
+- `0`：默认值，不启用
+- `2`：启用，只对文件夹有效，书签添加到该文件夹中
+
 ## 第三方库
 
 [dragula.js](https://github.com/bevacqua/dragula)（进行了细微调整 [改动内容](https://github.com/qinxs/dragula)）
