@@ -405,16 +405,20 @@ const dialog = {
 function loadChildrenView(id, $list) {
   chrome.bookmarks.getChildren(id.toString(), (results) => {
     // console.log(results);
-    var html = `<div class="item nodata" data-id="${id}">${L("noBookmarksTip")}<div>`;
-    if (results.length) {
-      html = template(results);
-    }
-    curItemslength = results.length;
-    setListSize($list, curItemslength || 1);
-    // @TODO 优化它
-    $list.innerHTML = html;
-    handleFolderEvent($$('main [type=folder]'));
+    renderListView(id, $list, results);
   })
+}
+
+function renderListView(id, $list, items) {
+  var html = `<div class="item nodata" data-id="${id}">${L("noBookmarksTip")}<div>`;
+  if (items.length) {
+    html = template(items);
+  }
+  curItemslength = items.length;
+  setListSize($list, curItemslength || 1);
+  // @TODO 优化它
+  $list.innerHTML = html;
+  handleFolderEvent($$('main [type=folder]'));
 }
 
 function template(treeData) {
@@ -661,7 +665,11 @@ function dragToMove() {
 dataReady(() => {
   // console.log(BM.data);
   dataSetting.init();
-  loadChildrenView(BM.startup, $bookmarkList);
+  if (BM.preItems) {
+    renderListView(BM.startup, $bookmarkList, BM.preItems);
+  } else {
+    loadChildrenView(BM.startup, $bookmarkList);
+  }
   nav.init();
   $main.addEventListener('click', handleMainClick, false);
   BM.data.fastCreate > 0 && $main.addEventListener('mousedown', handleMainMiddleClick, false);

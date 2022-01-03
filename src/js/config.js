@@ -7,6 +7,7 @@ const L = name => chrome.i18n.getMessage(name);
 window.BM = {
   // 1 书签栏 2 其他书签（根目录为0）
   startup: 1,
+  preItems: null,
   // 选项必须与input的name和value一致
   default: {
     themeColor: 'auto',
@@ -45,6 +46,12 @@ chrome.storage.sync.get(null, function(items) {
   BM.options = items;
   BM.data = Object.assign({}, BM.default, BM.defaultSys, items);
   BM.dataReady = true;
+});
+
+location.pathname === '/popup.html' &&
+chrome.bookmarks.getChildren(BM.startup.toString(), (results) => {
+  // console.log(results);
+  BM.preItems = results;
 });
 
 // 选项数据（异步）加载完成
