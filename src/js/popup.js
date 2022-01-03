@@ -19,6 +19,7 @@ var $lastListView = $bookmarkList;
 var $contextMenu = null;
 // 中间变量
 var $fromTarget = null;
+var pathTitle = '';
 window.funcDelay = null;
 
 var curContextMenuID;
@@ -518,6 +519,29 @@ function handleMainMiddleClick(event) {
   }
 }
 
+function handleSearchResultsHover(event) {
+  var target = event.target;
+  if (target.tagName === 'A' && target.dataset.path !== 'done') {
+    // @TODO
+    // console.log(target);
+    addPathTitle(target.dataset.parentId, target);
+  }
+}
+
+function addPathTitle(id, target) {
+  if (id < 3) {
+    pathTitle = BM.data.rootInfo[id] + pathTitle;
+    target.title += '\n\n' + '[ ' + pathTitle + ' ]';
+    target.dataset.path = 'done';
+    pathTitle = '';
+  } else {
+    chrome.bookmarks.get(id.toString(), (item) => {
+      pathTitle = ' > '+ item[0].title + pathTitle;
+      addPathTitle(item[0].parentId, target);
+    });
+  }
+}
+
 /**
   @flag [0b]00-11
   高位1 在新标签打开; 0当前标签打开
@@ -645,4 +669,5 @@ dataReady(() => {
   contextMenu.init();
   dialog.init();
   dragToMove();
+  $searchList.addEventListener('mouseover', handleSearchResultsHover, false);
 });
