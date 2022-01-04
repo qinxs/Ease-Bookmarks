@@ -9,6 +9,8 @@ const $main = $('main');
 const $bookmarkList = $('#bookmark-list');
 const $subList = $('#sub-list');
 const $searchList = $('#search-list');
+const $contextMenu = $('#context-menu');
+const $dialog = $('#dialog');
 // 搜索框
 const $seachInput = $('#search-input');
 // 中文拼音输入中，但未合成汉字
@@ -16,12 +18,11 @@ var inputFlag = false;
 var isSeachView = false;
 // 上一个视图
 var $lastListView = $bookmarkList;
-var $contextMenu = null;
 // 中间变量
 var $fromTarget = null;
 var pathTitle = '';
 window.funcDelay = null;
-
+// 点击的右键菜单ID
 var curContextMenuID;
 
 // 宽度只变大 不缩小
@@ -32,16 +33,16 @@ var minItemsPerCol;
 var itemHeight = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--height-item'));
 
 const dataSetting = {
-  init: function() {
+  init() {
     layoutCols = BM.data.layoutCols;
     minItemsPerCol = BM.data.minItemsPerCol;
     this.layout();
     this.switchTheme();
   },
-  layout: function() {
+  layout() {
     $('#customCSS').textContent = BM.data.customCSS;
   },
-  switchTheme: function() {
+  switchTheme() {
     // 媒体查询，用户系统是否启动暗色模式
     if (BM.data.themeColor === 'light') return;
     if (BM.data.themeColor === 'dark' ||
@@ -53,12 +54,12 @@ const dataSetting = {
 
 const nav = {
   pathHtml: '',
-  init: function() {
+  init() {
     // console.log(BM.data.rootInfo);
     this.setNavPath(BM.startup, BM.data.rootInfo[BM.startup]);
     handleFolderEvent($$('.nav'));
   },
-  setNavPath: function(id, folderName, target) {
+  setNavPath(id, folderName, target) {
     folderName = folderName ? folderName : ' ';
     // console.log(target);
     if (id < 3) {
@@ -83,12 +84,13 @@ const nav = {
       handleFolderEvent($$('nav > [type=folder]'))
     }
   },
-  resetNavPath: function(id, itemId) {
+  resetNavPath(id, itemId) {
     if (id < 3) {
       chrome.bookmarks.get(id.toString(), (item) => {
         this.pathHtml = `<a type="folder" data-id="${id}">${item[0].title}</a>` + this.pathHtml;
         $nav.header.innerHTML = this.pathHtml;
         handleFolderEvent($$('nav > [type=folder]'));
+        // main区域下有两个对应item，此处用$选择第一个
         var $item = $(`[data-id="${itemId}"]`).closest('.item');
         $item.classList.add('active');
         $item.scrollIntoView();
@@ -111,11 +113,11 @@ const nav = {
 }
 
 const search = {
-  init: function() {
+  init() {
     $seachInput.placeholder = L("seachPlaceholder");
     this.handleEvent();
   },
-  handleEvent: function() {
+  handleEvent() {
     // 实时搜索 兼容中文
     $seachInput.addEventListener('compositionstart', () => {
       inputFlag = true;
@@ -132,7 +134,7 @@ const search = {
       if (event.code === 'Escape' && !$seachInput.value) window.close();
     });
   },
-  loadSearchView: function(keyword) {
+  loadSearchView(keyword) {
     if (keyword) {
       // console.log($seachInput.value);
       !isSeachView && toggleList($searchList);
@@ -141,7 +143,7 @@ const search = {
       toggleList($lastListView)
     }
   },
-  _loadSearchView: function(keyword) {
+  _loadSearchView(keyword) {
     chrome.bookmarks.search(keyword, (results) => {
       var html = `<div class="item noresult">${L("seachNoResultTip")}<div>`;
       if (results.length) {
@@ -159,9 +161,8 @@ const contextMenu = {
     x: 0,
     y:0,
   },
-  init: function() {
-    $main.insertAdjacentHTML('beforeend', this.html);
-    $contextMenu = $('#context-menu');
+  init() {
+    $contextMenu.insertAdjacentHTML('beforeend', this.html);
     $main.addEventListener('contextmenu', this, false);
     $contextMenu.addEventListener('click', this, false);
     document.addEventListener('click', this.close, false);
@@ -170,7 +171,6 @@ const contextMenu = {
     }, false);
   },
   html: `
-  <ul id="context-menu" style="opacity: 0; left:-999px; top:0">
     <li id="bookmark-new-tab">${L("openInNewTab")}</li>
     <li id="bookmark-new-tab-background">${L("openInBackgroundTab")}</li>
     <li id="bookmark-new-incognito-window">${L("openInIncognitoWindow")}</li>
@@ -183,16 +183,15 @@ const contextMenu = {
     <li id="bookmark-edit">${L("edit")} ...</li>
     <li id="bookmark-edit-folder">${L("rename")} ...</li>
     <li id="bookmark-delete">${L("delete")}</li>
-  </ul>
   `,
-  show: function () {
+  show() {
     $contextMenu.style.opacity = 1;
     $contextMenu.style.left = this.pos.x + 'px';
     $contextMenu.style.top = this.pos.y + 'px';
     $('.item.active') && $('.item.active').classList.remove('active');
     $fromTarget.closest('.item').classList.add('active');
   },
-  close: function () {
+  close() {
     if ($contextMenu && !$contextMenu.hidden) {
       $contextMenu.style.opacity = 0;
       $contextMenu.style.left = -999 + 'px';
@@ -200,7 +199,7 @@ const contextMenu = {
       $('.item.active') && $('.item.active').classList.remove('active');
     }
   },
-  handleEvent: function(e) {
+  handleEvent(e) {
     switch(e.type) {
       case "contextmenu":
         e.preventDefault();
@@ -228,7 +227,7 @@ const contextMenu = {
         break;
     }
   },
-  handleMenuItem: function (target) {
+  handleMenuItem(target) {
     // console.log($fromTarget);
     // console.log(target);
     var id = $fromTarget.dataset.id;
@@ -290,8 +289,8 @@ const contextMenu = {
 }
 
 const dialog = {
-  init: function() {
-    $main.insertAdjacentHTML('beforeend', this.html);
+  init() {
+    $dialog.insertAdjacentHTML('beforeend', this.html);
     $('#edit-cancel').addEventListener('click', this.close, false);
     $('#edit-save').addEventListener('click', this.save, false);
   },
@@ -302,7 +301,6 @@ const dialog = {
     'bookmark-edit-folder': L("editFolderName"),
   },
   html: `
-  <form id="dialog" hidden>
     <div id="edit-dialog-text" class="title"></div>
     <input id="edit-dialog-name" placeholder="${L("name")}">
     <textarea type="url" id="edit-dialog-url" placeholder="${L("URL")}"></textarea>
@@ -310,10 +308,9 @@ const dialog = {
       <button id="edit-save">${L("save")}</button>
       <button id="edit-cancel">${L("cancel")}</button>
     </div>
-  </form>
   `,
-  show: function() {
-    $('#edit-dialog-text').textContent = dialog.title[curContextMenuID];
+  show() {
+    $('#edit-dialog-text').textContent = this.title[curContextMenuID];
     switch(curContextMenuID) {
       case "bookmark-add-bookmark":
         chrome.tabs.query({active: true, currentWindow: true}, (tabs) => {
@@ -337,10 +334,10 @@ const dialog = {
         break;
       default: break;
     }
-    $('#dialog').hidden = false;
+    $dialog.hidden = false;
     $('#edit-dialog-name').focus();
   },
-  save: function(e) {
+  save(e) {
     e.preventDefault();
     var ele = $fromTarget;
     var id = ele.dataset.id;
@@ -394,11 +391,11 @@ const dialog = {
         });
         break;
     }
-    $('#dialog').hidden = true;
+    $dialog.hidden = true;
   },
-  close: function(e) {
+  close(e) {
     e.preventDefault();
-    $('#dialog').hidden = true;
+    $dialog.hidden = true;
   },
 }
 
@@ -416,17 +413,17 @@ function renderListView(id, $list, items) {
   }
   curItemslength = items.length;
   setListSize($list, curItemslength || 1);
-  // @TODO 优化它
+  // @TODO 如何优化？
   $list.innerHTML = html;
   handleFolderEvent($$('main [type=folder]'));
 }
 
 function template(treeData) {
-  var insertHtml = '';
+  var insertHtml = [];
   treeData.forEach(ele => {
-    insertHtml += templateItem(ele);
+    insertHtml.push(templateItem(ele));
   });
-  return insertHtml;
+  return insertHtml.join('');
 }
 
 function templateItem(ele) {
@@ -457,10 +454,10 @@ function templateItem(ele) {
   `;
 }
 
-function setListSize($_list, length) {
+function setListSize($list, length) {
   if (layoutCols === 1) return;
   var rowsCount, colsCount;
-  if ($_list === $searchList) {
+  if ($list === $searchList) {
     rowsCount = Math.ceil(length / curMaxCols);
   } else {
     colsCount = length > layoutCols * minItemsPerCol ? layoutCols : Math.ceil(length / minItemsPerCol);
@@ -473,7 +470,7 @@ function setListSize($_list, length) {
     }
   }
   rowsCount = rowsCount < minItemsPerCol ? minItemsPerCol : rowsCount;
-  $_list.style.height = rowsCount * itemHeight + 'px';
+  $list.style.height = rowsCount * itemHeight + 'px';
 }
 
 // 视图切换
@@ -526,7 +523,6 @@ function handleMainMiddleClick(event) {
 function handleSearchResultsHover(event) {
   var target = event.target;
   if (target.tagName === 'A' && target.dataset.path !== 'done') {
-    // @TODO
     // console.log(target);
     addPathTitle(target.dataset.parentId, target);
   }
@@ -595,7 +591,7 @@ function openFolder(event) {
   // 路径最末级不在打开文件夹
   if (target.dataset.role === 'path' && !target.nextElementSibling) return;
   if ($contextMenu && $contextMenu.style.opacity == 1) return;
-  if ($('#edit-dialog') && !$('#edit-dialog').hidden) return;
+  if ($dialog && !$dialog.hidden) return;
   var folderName = event.target.textContent;
   window.funcDelay = setTimeout(() => {
     // console.log(event.target);
@@ -635,7 +631,6 @@ function dragToMove() {
     setTimeout(dragToMove);
     return
   }
-  // @TODO 优化移动到文件夹中
   var drake = dragula([$bookmarkList, $subList], {
     // spilling will put the element back where it was dragged from, if this is true
     revertOnSpill: true,

@@ -1,8 +1,8 @@
 "use strict";
 
-const $ = css => document.querySelector(css);
-const $$ = css => document.querySelectorAll(css);
-const L = name => chrome.i18n.getMessage(name);
+const $ = document.querySelector.bind(document);
+const $$ = document.querySelectorAll.bind(document);
+const L = chrome.i18n.getMessage;
 
 window.BM = {
   // 1 书签栏 2 其他书签（根目录为0）
@@ -26,7 +26,7 @@ window.BM = {
     4: '660px',
     5: '800px',
   },
-  set: function (name, value) {
+  set(name, value) {
     if (this.defaultSys.hasOwnProperty(name)) {
       if (value == BM.defaultSys[name]) {
         chrome.storage.sync.remove(name, () => {});
