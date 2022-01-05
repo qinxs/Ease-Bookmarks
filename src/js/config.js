@@ -41,6 +41,8 @@ window.BM = {
   dataReady: false
 }
 
+// @TODO 改为 localStorage？
+// option页面自动同步到 storage，实现有点麻烦
 chrome.storage.sync.get(null, function(items) {
   // console.log(items);
   BM.options = items;

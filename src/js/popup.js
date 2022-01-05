@@ -626,6 +626,27 @@ function locationFolder(id) {
   
 }
 
+function loadJS(url, callback) {
+  var script = document.createElement('script');
+  script.src = url;
+  if(typeof(callback) === 'function'){
+    script.onload = script.onreadystatechange = function () {
+      if (!this.readyState || this.readyState === "loaded" || this.readyState === "complete"){
+        callback();
+        script.onload = script.onreadystatechange = null;
+      }
+    };
+  }
+  document.head.appendChild(script);
+}
+
+function loadCSS(url) {
+  var link = document.createElement('link');
+  link.rel = 'stylesheet';
+  link.href = url;
+  document.head.appendChild(link);
+}
+
 function dragToMove() {
   if (typeof dragula !== 'function') {
     setTimeout(dragToMove);
@@ -667,11 +688,15 @@ dataReady(() => {
   }
   $('footer').classList.remove('hidden');
   nav.init();
-  $main.addEventListener('click', handleMainClick, false);
-  BM.data.fastCreate > 0 && $main.addEventListener('mousedown', handleMainMiddleClick, false);
-  search.init();
-  contextMenu.init();
-  dialog.init();
-  dragToMove();
-  $searchList.addEventListener('mouseover', handleSearchResultsHover, false);
+  // 优化 FCP
+  setTimeout(() => {
+    $main.addEventListener('click', handleMainClick, false);
+    BM.data.fastCreate > 0 && $main.addEventListener('mousedown', handleMainMiddleClick, false);
+    search.init();
+    contextMenu.init();
+    dialog.init();
+    $searchList.addEventListener('mouseover', handleSearchResultsHover, false);
+    loadCSS('libs/dragula.css');
+    loadJS('libs/dragula.min.js', dragToMove);
+  }, 40)
 });
