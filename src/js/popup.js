@@ -665,6 +665,7 @@ dataReady(() => {
   } else {
     loadChildrenView(BM.startup, $bookmarkList);
   }
+  $('footer').classList.remove('hidden');
   nav.init();
   $main.addEventListener('click', handleMainClick, false);
   BM.data.fastCreate > 0 && $main.addEventListener('mousedown', handleMainMiddleClick, false);
