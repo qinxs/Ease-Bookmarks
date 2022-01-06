@@ -161,11 +161,12 @@ const contextMenu = {
     x: 0,
     y:0,
   },
+  showing: false,
   init() {
     $contextMenu.insertAdjacentHTML('beforeend', this.html);
     $main.addEventListener('contextmenu', this, false);
     $contextMenu.addEventListener('click', this, false);
-    document.addEventListener('click', this.close, false);
+    document.addEventListener('click', () => this.close(), false);
     $('footer').addEventListener('contextmenu', (event) => {
       event.preventDefault();
     }, false);
@@ -185,17 +186,17 @@ const contextMenu = {
     <li id="bookmark-delete">${L("delete")}</li>
   `,
   show() {
-    $contextMenu.style.opacity = 1;
     $contextMenu.style.left = this.pos.x + 'px';
     $contextMenu.style.top = this.pos.y + 'px';
+    $contextMenu.classList.remove('hidden');
+    this.showing = true;
     $('.item.active') && $('.item.active').classList.remove('active');
     $fromTarget.closest('.item').classList.add('active');
   },
   close() {
-    if ($contextMenu && !$contextMenu.hidden) {
-      $contextMenu.style.opacity = 0;
-      $contextMenu.style.left = -999 + 'px';
-      $contextMenu.style.top = 0;
+    if (this.showing) {
+      $contextMenu.classList.add('hidden');
+      this.showing = false;
       $('.item.active') && $('.item.active').classList.remove('active');
     }
   },
@@ -203,7 +204,6 @@ const contextMenu = {
     switch(e.type) {
       case "contextmenu":
         e.preventDefault();
-        this.close();
         if(e.target.nodeName === 'A' || e.target.classList.contains('nodata')) {
           // console.log(e);
           // console.log(this);
@@ -289,10 +289,11 @@ const contextMenu = {
 }
 
 const dialog = {
+  showing: false,
   init() {
     $dialog.insertAdjacentHTML('beforeend', this.html);
-    $('#edit-cancel').addEventListener('click', this.close, false);
-    $('#edit-save').addEventListener('click', this.save, false);
+    $('#edit-cancel').addEventListener('click', () => this.close(event), false);
+    $('#edit-save').addEventListener('click', () => this.save(event), false);
   },
   title: {
     'bookmark-add-bookmark': L("addBookmark"),
@@ -335,6 +336,7 @@ const dialog = {
       default: break;
     }
     $dialog.hidden = false;
+    this.showing = true;
     $('#edit-dialog-name').focus();
   },
   save(e) {
@@ -392,10 +394,12 @@ const dialog = {
         break;
     }
     $dialog.hidden = true;
+    this.showing = false;
   },
   close(e) {
     e.preventDefault();
     $dialog.hidden = true;
+    this.showing = false;
   },
 }
 
@@ -586,16 +590,14 @@ function handleFolderEvent(nodelist) {
 }
 
 function openFolder(event) {
+  if (contextMenu.showing || dialog.showing) return;
   var target = event.target;
-  var id = parseInt(target.dataset.id)
   // 路径最末级不在打开文件夹
   if (target.dataset.role === 'path' && !target.nextElementSibling) return;
-  if ($contextMenu && $contextMenu.style.opacity == 1) return;
-  if ($dialog && !$dialog.hidden) return;
-  var folderName = event.target.textContent;
+  var id = parseInt(target.dataset.id)
+  var folderName = target.textContent;
   window.funcDelay = setTimeout(() => {
     // console.log(event.target);
-    contextMenu.close();
     nav.setNavPath(id, folderName, target);
     if (id == BM.startup) {
       toggleList($bookmarkList);
