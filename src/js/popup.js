@@ -387,7 +387,11 @@ const dialog = {
           if ($fromTarget.type === 'link') {
             ele.dataset.url = url;
             ele.title = title + '\n' + url;
-            $fromTarget.previousElementSibling.src = 'chrome://favicon/' + url;
+            if (!url.trim().startsWith('javascript:')) {
+              $fromTarget.previousElementSibling.src = 'chrome://favicon/' + url;
+            } else {
+              $fromTarget.previousElementSibling.src = 'icons/favicon/js.png';
+            }
           }
           delete $subList.dataset.folder_id;
         });
