@@ -27,6 +27,8 @@ Ease Bookmarks 是一款为了替代浏览器原有书签栏的扩展
 
 另外，本扩展对 `JS 小书签` 进行了特别支持~
 
+> 更新日志：[ChangeLog.md](ChangeLog.md)
+
 ## 使用快捷键
 
 ### 打开/关闭 本扩展
