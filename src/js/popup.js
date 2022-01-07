@@ -512,6 +512,8 @@ function handleMainClick(event) {
 
 function handleMainMiddleClick(event) {
   if (event.button !== 1) return;
+  event.preventDefault();
+  event.stopPropagation();
   var $fromTarget = event.target;
   // console.log($fromTarget)
   if ($fromTarget.type === 'link') {
