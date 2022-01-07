@@ -22,7 +22,7 @@ var $lastListView = $bookmarkList;
 var $fromTarget = null;
 var pathTitle = '';
 window.funcDelay = null;
-// 点击的右键菜单ID
+// 点击的右键菜单ID，需要弹出dialog时动态改变
 var curContextMenuID;
 
 // 宽度只变大 不缩小
@@ -30,7 +30,9 @@ var layoutCols;
 var curMaxCols = 1;
 var curItemslength;
 var minItemsPerCol;
-var itemHeight = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--height-item'));
+const itemHeight = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--height-item'));
+
+const isBookmarklet = url => url.trim().startsWith('javascript:');
 
 const dataSetting = {
   init() {
@@ -387,7 +389,7 @@ const dialog = {
           if ($fromTarget.type === 'link') {
             ele.dataset.url = url;
             ele.title = title + '\n' + url;
-            if (!url.trim().startsWith('javascript:')) {
+            if (!isBookmarklet(url)) {
               $fromTarget.previousElementSibling.src = 'chrome://favicon/' + url;
             } else {
               $fromTarget.previousElementSibling.src = 'icons/favicon/js.png';
@@ -441,7 +443,7 @@ function templateItem(ele) {
   if (typeof url === 'undefined') {
     favicon = 'icons/favicon/folder.png';
     attributeStr = `type="folder"`;
-  } else if (url.trim().startsWith('javascript:')) {
+  } else if (isBookmarklet(url)) {
     favicon = 'icons/favicon/js.png';
     // @TODO 小书签可能解码失败; 太长还是特殊字符？
     try {
@@ -510,9 +512,15 @@ function handleMainClick(event) {
 
 function handleMainMiddleClick(event) {
   if (event.button !== 1) return;
-  var target = event.target;
-  if (target.classList.contains('favicon')) {
-    var a = target.nextElementSibling;
+  var $fromTarget = event.target;
+  // console.log($fromTarget)
+  if ($fromTarget.type === 'link') {
+    chrome.tabs.create({
+      url: $fromTarget.dataset.url,
+      active: false
+    });
+  } else if (BM.data.fastCreate === 2 && $fromTarget.classList.contains('favicon')) {
+    var a = $fromTarget.nextElementSibling;
     if (a.type === 'folder') {
       // console.log(target);
       chrome.tabs.query({active: true, currentWindow: true}, (tabs) => {
@@ -561,7 +569,7 @@ function openUrl(url, event, tabs) {
   if(event.shiftKey) flag ^= 0b01;
   // console.log(event);
   // return
-  if (url.trim().startsWith('javascript:')) {
+  if (isBookmarklet(url)) {
     // 官方页面 不能直接执行js
     var pageUrl = tabs[0].url;
     // console.log(pageUrl);
@@ -697,7 +705,7 @@ dataReady(() => {
   // 优化 FCP
   setTimeout(() => {
     $main.addEventListener('click', handleMainClick, false);
-    BM.data.fastCreate > 0 && $main.addEventListener('mousedown', handleMainMiddleClick, false);
+    $main.addEventListener('mousedown', handleMainMiddleClick, false);
     search.init();
     contextMenu.init();
     dialog.init();
