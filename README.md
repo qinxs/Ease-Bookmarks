@@ -4,7 +4,7 @@
 
 [![Source Code](https://img.shields.io/badge/Source_Code-GitHub-blue)](https://github.com/qinxs/Ease-Bookmarks)
 [![Chrome Web Store](https://img.shields.io/chrome-web-store/v/poefceffmekhjoadknillcbdifahongk.svg)](https://chrome.google.com/webstore/detail/ease-bookmarks/poefceffmekhjoadknillcbdifahongk)
-[![Microsoft Edge Add-on](https://img.shields.io/badge/dynamic/json?label=microsoft%20edge%20add-on&query=%24.version&url=https%3A%2F%2Fmicrosoftedge.microsoft.com%2Faddons%2Fgetproductdetailsbycrxid%2Faddbgeibeffkokpabpbpmdpehfbegchl)](https://microsoftedge.microsoft.com/addons/detail/ease-bookmarks/addbgeibeffkokpabpbpmdpehfbegchl)
+[![Microsoft Edge Add-on](https://img.shields.io/badge/dynamic/json?label=microsoft%20edge%20add-on&prefix=v&query=%24.version&url=https%3A%2F%2Fmicrosoftedge.microsoft.com%2Faddons%2Fgetproductdetailsbycrxid%2Faddbgeibeffkokpabpbpmdpehfbegchl)](https://microsoftedge.microsoft.com/addons/detail/ease-bookmarks/addbgeibeffkokpabpbpmdpehfbegchl)
 [![Donate](https://img.shields.io/badge/Donate-blueviolet)](https://7bxing.com/donate/ "欢迎捐赠~")
 
 > 简单易用的书签管理器
@@ -34,8 +34,8 @@ Ease Bookmarks 是一款为了替代浏览器原有书签栏的扩展
 ### 打开/关闭 本扩展
 
 默认快捷键是 `Ctrl + Q`，你可以在如下管理页面进行修改：
-
 - Chrome：`chrome://extensions/shortcuts`
+- Edge：`edge://extensions/shortcuts`
 <!-- - Firefox：`about:addons` -> 扩展 -> 设置图标 -> 管理扩展快捷键 -->
 
 ### 功能键
@@ -56,7 +56,7 @@ Ease Bookmarks 是一款为了替代浏览器原有书签栏的扩展
 
 然后通过执行 BM.set(name, value) 以改变配置，如：`BM.set('fastCreate', 2)`
 
-### fastCreate
+### `fastCreate`
 
 > 功能：中键点击**书签图标**，快速把当前网址添加到书签
 

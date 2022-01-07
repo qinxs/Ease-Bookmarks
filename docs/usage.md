@@ -22,6 +22,7 @@
 
 默认快捷键是 `Ctrl + Q`，你可以在如下管理页面进行修改：
 - Chrome：`chrome://extensions/shortcuts`
+- Edge：`edge://extensions/shortcuts`
 <!-- - Firefox：`about:addons` -> 扩展 -> 设置图标 -> 管理扩展快捷键 -->
 
 ### 功能键
