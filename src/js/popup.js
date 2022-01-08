@@ -429,11 +429,11 @@ function renderListView(id, $list, items) {
 }
 
 function template(treeData) {
-  var insertHtml = [];
+  var insertHtml = '';
   treeData.forEach(ele => {
-    insertHtml.push(templateItem(ele));
+    insertHtml += templateItem(ele);
   });
-  return insertHtml.join('');
+  return insertHtml;
 }
 
 function templateItem(ele) {
@@ -445,10 +445,14 @@ function templateItem(ele) {
     attributeStr = `type="folder"`;
   } else if (isBookmarklet(url)) {
     favicon = 'icons/favicon/js.png';
-    // @TODO 小书签可能解码失败; 太长还是特殊字符？
     try {
       url = decodeURI(ele.url).replaceAll("\"", "&quot;");
-    } catch {}
+    } catch {
+      // console.log(`[${ele.title}]:`, e);
+      // % 转义；比如css中的 width: 40%;
+      // https://stackoverflow.com/questions/20700393/urierror-malformed-uri-sequence
+      url = decodeURI(ele.url.replace(/%([^0-9A-E])/g, "%25$1")).replaceAll("\"", "&quot;");
+    }
     var _url = url.length > 300 ? url.substring(0, 300) + '...' : url;
     attributeStr = `type="link" data-url="${url}" title="${ele.title}&#10;${_url}"`;
   } else {
@@ -575,12 +579,11 @@ function openUrl(url, event, tabs) {
     // 官方页面 不能直接执行js
     var pageUrl = tabs[0].url;
     // console.log(pageUrl);
+    // @TODO 空白页点击 在新页面后不能执行
     if (/^(about|chrome|chrome-extension|moz-extension|https:\/\/chrome.google.com)/.test(pageUrl) || !pageUrl) {
       !pageUrl && chrome.tabs.remove(tabs[0].id);
       chrome.tabs.create({ url: url, active: true });
-    } else {
-      // @TODO 编解码问题
-      // 可能不能执行（但书签栏直接点击能执行） 
+    } else { 
       chrome.tabs.executeScript({ code: url });
     }
   } else if(flag >> 1 == 0) {
