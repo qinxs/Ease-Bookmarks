@@ -31,6 +31,7 @@ var layoutCols;
 var curMaxCols = 1;
 var curItemslength;
 var minItemsPerCol;
+const rootStyle = document.documentElement.style;
 const itemHeight = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--height-item'));
 
 const isBookmarklet = url => url.trim().startsWith('javascript:');
@@ -481,7 +482,7 @@ function setListSize($list, length) {
     if (colsCount > curMaxCols) {
       curMaxCols = colsCount;
       document.body.style.width = BM.bodyWidth[curMaxCols];
-      document.documentElement.style.setProperty('--width-item', parseInt(100 / curMaxCols) + "%");
+      rootStyle.setProperty('--width-item', parseInt(100 / curMaxCols) + "%");
     }
   }
   rowsCount = rowsCount < minItemsPerCol ? minItemsPerCol : rowsCount;
@@ -493,6 +494,13 @@ function toggleList($list) {
   // 防止切换时出现抖动
   setTimeout(() => {
     // console.log($lastListView);
+    if ($main.scrollTop) {
+      rootStyle.setProperty('--color-scrollbar-thumb-hidden', '#fff');
+      $main.scrollTop = 0;
+      window.requestAnimationFrame(() => {
+        rootStyle.removeProperty('--color-scrollbar-thumb-hidden');
+      });
+    }
     $lastListView.hidden = true;
     $list.hidden = false;
     // SeachView 会多次调用 单独处理
