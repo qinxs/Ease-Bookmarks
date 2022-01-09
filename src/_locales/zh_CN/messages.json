@@ -134,6 +134,15 @@
   "fast": {
       "message": "快速"
   },
+  "startupFromLast": {
+      "message": "从上次位置启动:"
+  },
+  "folder": {
+      "message": "目录"
+  },
+  "folderAndScrollBar": {
+      "message": "目录和滚动条"
+  },
   "layoutCols": {
       "message": "布局列数:"
   },

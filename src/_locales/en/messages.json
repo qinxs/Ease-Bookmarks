@@ -135,6 +135,15 @@
   "fast": {
       "message": "Fast"
   },
+  "startupFromLast": {
+      "message": "Startup from last:"
+  },
+  "folder": {
+      "message": "Folder"
+  },
+  "folderAndScrollBar": {
+      "message": "Folder and scrollbar"
+  },
   "layoutCols": {
       "message": "Layout column(s):"
   },

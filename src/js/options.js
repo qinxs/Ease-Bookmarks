@@ -13,9 +13,15 @@ function bookmarksAlias() {
   chrome.storage.sync.set({rootInfo: rootInfo}, () => {});
 }
 
+function startupFromLast(ele) {
+  localStorage.setItem('startupFromLast', this.value);
+  this.value > -1 && localStorage.removeItem('LastFolderID');
+  this.value > -2 && localStorage.removeItem('LastScrollTop');
+}
+
 settingsReady(() => {
   // 读数据
-  // console.log(BM.data);
+  // console.log(BM.settings);
   for (var [key, value] of Object.entries(BM.settings)) {
     // console.log(`${key}: ${value}`);
     var ele = $(`input[name=${key}][value="${value}"]`);
@@ -60,6 +66,9 @@ settingsReady(() => {
     // console.log($customCSS.value);
     chrome.storage.sync.set({customCSS: $customCSS.value}, () => {});
   });
+  $$('input[name=startupFromLast]').forEach((ele) => {
+    ele.addEventListener('change', startupFromLast);
+  })
 })
 
 // 多语言

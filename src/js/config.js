@@ -15,6 +15,7 @@ window.BM = {
     hoverEnter: 500, // {0,300,500,800}
     layoutCols: 1,
     minItemsPerCol: 1, // 1-16；避免滚动条
+    startupFromLast: 0, // 从上次位置启动； 0 关闭，-1 目录，-2 目录和滚动条
   },
   defaultSys: {
     fastCreate: 0, // 0-2
@@ -50,11 +51,14 @@ chrome.storage.sync.get(null, function(items) {
   BM.settingsReady = true;
 });
 
-location.pathname === '/popup.html' &&
-chrome.bookmarks.getChildren(BM.startup.toString(), (results) => {
-  // console.log(results);
-  if (!BM.preItems) BM.preItems = results;
-});
+BM.startupReal = localStorage.getItem('LastFolderID') || BM.startup;
+
+if (location.pathname === '/popup.html') {
+  chrome.bookmarks.getChildren(BM.startupReal.toString(), (results) => {
+    // console.log(results);
+    if (!BM.preItems) BM.preItems = results;
+  });
+}
 
 // 选项数据（异步）加载完成
 function settingsReady(callback) {
