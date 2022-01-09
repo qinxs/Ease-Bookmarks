@@ -13,10 +13,10 @@ function bookmarksAlias() {
   chrome.storage.sync.set({rootInfo: rootInfo}, () => {});
 }
 
-dataReady(() => {
+settingsReady(() => {
   // 读数据
   // console.log(BM.data);
-  for (var [key, value] of Object.entries(BM.data)) {
+  for (var [key, value] of Object.entries(BM.settings)) {
     // console.log(`${key}: ${value}`);
     var ele = $(`input[name=${key}][value="${value}"]`);
     if (ele) {
@@ -25,10 +25,10 @@ dataReady(() => {
       // console.log(`[未设置选项] ${key}: ${value}`)
     }
   }
-  $minItemsPerCol.value = BM.data.minItemsPerCol;
-  $bookmarksBar.value = BM.data.rootInfo[1];
-  $otherBookmarks.value = BM.data.rootInfo[2];
-  $customCSS.value = BM.data.customCSS || '';
+  $minItemsPerCol.value = BM.settings.minItemsPerCol;
+  $bookmarksBar.value = BM.settings.rootInfo[1];
+  $otherBookmarks.value = BM.settings.rootInfo[2];
+  $customCSS.value = BM.settings.customCSS || '';
 
   // 写数据
   for (var ele of $$('input[type=radio]')) {

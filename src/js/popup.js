@@ -1,6 +1,7 @@
 "use strict";
 // console.log("popup");
 
+var settings;
 const $nav = {
   header: $('nav'),
   footer: $('.nav > a')
@@ -36,18 +37,18 @@ const isBookmarklet = url => url.trim().startsWith('javascript:');
 
 const dataSetting = {
   init() {
-    layoutCols = BM.data.layoutCols;
-    minItemsPerCol = BM.data.minItemsPerCol;
+    layoutCols = settings.layoutCols;
+    minItemsPerCol = settings.minItemsPerCol;
     this.layout();
     this.switchTheme();
   },
   layout() {
-    $('#customCSS').textContent = BM.data.customCSS;
+    $('#customCSS').textContent = settings.customCSS;
   },
   switchTheme() {
     // 媒体查询，用户系统是否启动暗色模式
-    if (BM.data.themeColor === 'light') return;
-    if (BM.data.themeColor === 'dark' ||
+    if (settings.themeColor === 'light') return;
+    if (settings.themeColor === 'dark' ||
       window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
       document.body.classList.add("dark");
     }
@@ -57,8 +58,8 @@ const dataSetting = {
 const nav = {
   pathHtml: '',
   init() {
-    // console.log(BM.data.rootInfo);
-    this.setNavPath(BM.startup, BM.data.rootInfo[BM.startup]);
+    // console.log(settings.rootInfo);
+    this.setNavPath(BM.startup, settings.rootInfo[BM.startup]);
     handleFolderEvent($$('.nav'));
   },
   setNavPath(id, folderName, target) {
@@ -71,7 +72,7 @@ const nav = {
       chrome.bookmarks.getChildren(_id.toString(), (results) => {
         if (!results.length) return;
         $nav.footer.dataset.id = _id;
-        $nav.footer.textContent = BM.data.rootInfo[_id];
+        $nav.footer.textContent = settings.rootInfo[_id];
       });
     } else if (target.dataset.role === 'path') {
       while (target.nextElementSibling) {
@@ -101,7 +102,7 @@ const nav = {
         chrome.bookmarks.getChildren(_id.toString(), (results) => {
           if (!results.length) return;
           $nav.footer.dataset.id = _id;
-          $nav.footer.textContent = BM.data.rootInfo[_id];
+          $nav.footer.textContent = settings.rootInfo[_id];
         });
       })
     } else {
@@ -477,7 +478,7 @@ function setListSize($list, length) {
     colsCount = length > layoutCols * minItemsPerCol ? layoutCols : Math.ceil(length / minItemsPerCol);
     rowsCount = Math.ceil(length / colsCount);
 
-    if (curMaxCols < colsCount) {
+    if (colsCount > curMaxCols) {
       curMaxCols = colsCount;
       document.body.style.width = BM.bodyWidth[curMaxCols];
       document.documentElement.style.setProperty('--width-item', parseInt(100 / curMaxCols) + "%");
@@ -525,7 +526,7 @@ function handleMainMiddleClick(event) {
       url: $fromTarget.dataset.url,
       active: false
     });
-  } else if (BM.data.fastCreate === 2 && $fromTarget.classList.contains('favicon')) {
+  } else if (settings.fastCreate === 2 && $fromTarget.classList.contains('favicon')) {
     var a = $fromTarget.nextElementSibling;
     if (a.type === 'folder') {
       // console.log(target);
@@ -552,7 +553,7 @@ function handleSearchResultsHover(event) {
 
 function addPathTitle(id, target) {
   if (id < 3) {
-    pathTitle = BM.data.rootInfo[id] + pathTitle;
+    pathTitle = settings.rootInfo[id] + pathTitle;
     target.title += '\n\n' + '[ ' + pathTitle + ' ]';
     target.dataset.path = 'done';
     pathTitle = '';
@@ -570,7 +571,7 @@ function addPathTitle(id, target) {
   低位1 在前台打开; 0在后台
  */
 function openUrl(url, event, tabs) {
-  var flag = BM.data.openIn;
+  var flag = settings.openIn;
   if(event.metaKey || event.ctrlKey) flag ^= 0b10; 
   if(event.shiftKey) flag ^= 0b01;
   // console.log(event);
@@ -596,7 +597,7 @@ function openUrl(url, event, tabs) {
 
 function handleFolderEvent(nodelist) {
   for (var ele of nodelist) {
-    if (BM.data.hoverEnter == 0) {
+    if (settings.hoverEnter == 0) {
       ele.addEventListener('click', openFolder, false);
     } else {
       ele.addEventListener('mouseover', openFolder, false);
@@ -625,7 +626,7 @@ function openFolder(event) {
       loadChildrenView(id, $subList);
       $subList.dataset.folder_id = id;
     }
-  }, BM.data.hoverEnter);
+  }, settings.hoverEnter);
 }
 
 function locationFolder(id) {
@@ -697,13 +698,16 @@ function dragToMove() {
 }
 
 /******************************************************/
-dataReady(() => {
+settingsReady(() => {
   // console.log(BM.data);
+  settings = BM.settings;
   dataSetting.init();
   if (BM.preItems) {
     renderListView(BM.startup, $bookmarkList, BM.preItems);
+    BM.preItems = 'done';
   } else {
     loadChildrenView(BM.startup, $bookmarkList);
+    BM.preItems = 'nowait';
   }
   $('footer').classList.remove('hidden');
   nav.init();

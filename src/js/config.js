@@ -38,31 +38,31 @@ window.BM = {
       console.log(L('setInvalidTips'), Object.keys(BM.defaultSys).join());
     }
   },
-  dataReady: false
+  settingsReady: false
 }
 
 // @TODO 改为 localStorage？
 // option页面自动同步到 storage，实现有点麻烦
 chrome.storage.sync.get(null, function(items) {
   // console.log(items);
-  BM.options = items;
-  BM.data = Object.assign({}, BM.default, BM.defaultSys, items);
-  BM.dataReady = true;
+  BM.userOptions = items;
+  BM.settings = Object.assign({}, BM.default, BM.defaultSys, items);
+  BM.settingsReady = true;
 });
 
 location.pathname === '/popup.html' &&
 chrome.bookmarks.getChildren(BM.startup.toString(), (results) => {
   // console.log(results);
-  BM.preItems = results;
+  if (!BM.preItems) BM.preItems = results;
 });
 
 // 选项数据（异步）加载完成
-function dataReady(callback) {
-  if (BM.dataReady) {
+function settingsReady(callback) {
+  if (BM.settingsReady) {
     callback();
   } else {
     setTimeout(() => {
-      dataReady(callback);
+      settingsReady(callback);
     }, 0);
   }
 }
