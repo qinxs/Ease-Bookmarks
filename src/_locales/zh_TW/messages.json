@@ -1,0 +1,167 @@
+{
+  "pluginDesc":
+  {
+    "message": "簡單易用的書籤管理器"
+  },
+
+  "noBookmarksTip":
+  {
+    "message": "這裏沒有書籤呢~"
+  },
+  "seachPlaceholder":
+  {
+    "message": "搜索書籤..."
+  },
+  "seachNoResultTip":
+  {
+    "message": "沒有匹配的書籤~"
+  },
+
+  "openInNewTab":
+  {
+    "message": "在新標籤中打開"
+  },
+  "openInBackgroundTab":
+  {
+    "message": "在後台打開"
+  },
+  "openInIncognitoWindow":
+  {
+    "message": "在隱身窗口中打開"
+  },
+  "addBookmark":
+  {
+    "message": "新建書籤"
+  },
+  "addFolder":
+  {
+    "message": "新建文件夾"
+  },
+  "location":
+  {
+    "message": "打開所在目錄"
+  },
+  "updateToCurrentURL":
+  {
+    "message": "更新為當前網址"
+  },
+  "edit":
+  {
+    "message": "編輯"
+  },
+  "delete":
+  {
+    "message": "刪除"
+  },
+  "deleteFolderConfirm":
+  {
+    "message": "這還將刪除此目錄下的所有書籤, 確定嗎?"
+  },
+  "rename":
+  {
+    "message": "重命名"
+  },
+
+  "editBookmark":
+  {
+    "message": "編輯書籤"
+  },
+  "editFolderName":
+  {
+    "message": "修改文件夾名"
+  },
+  "save":
+  {
+    "message": "保存"
+  },
+  "cancel":
+  {
+    "message": "取消"
+  },
+  "name":
+  {
+    "message": "名稱"
+  },
+  "URL":
+  {
+    "message": "網址"
+  },
+
+  "themeColor":
+  {
+    "message": "主題色:"
+  },
+  "auto":
+  {
+    "message": "跟隨系統"
+  },
+  "light":
+  {
+    "message": "淺色"
+  },
+  "dark":
+  {
+    "message": "深色"
+  },
+  "openIn":
+  {
+    "message": "書籤打開方式:"
+  },
+  "currentTab":
+  {
+    "message": "當前頁"
+  },
+  "newTab":
+  {
+    "message": "新標籤"
+  },
+  "backgroundTab":
+  {
+    "message": "新標籤（後臺）"
+  },
+  "hoverEnter": {
+      "message": "目錄懸停進入:"
+  },
+  "off": {
+      "message": "關閉"
+  },
+  "slow": {
+      "message": "緩慢"
+  },
+  "moderate": {
+      "message": "適中"
+  },
+  "fast": {
+      "message": "快速"
+  },
+  "startupFromLast": {
+      "message": "從上次位置啟動:"
+  },
+  "folder": {
+      "message": "目錄"
+  },
+  "folderAndScrollBar": {
+      "message": "目錄和滾動條"
+  },
+  "layoutCols": {
+      "message": "佈局列數:"
+  },
+  "minItemsEachCol": {
+      "message": "每列條數:"
+  },
+  "minItemsEachColTips": {
+      "message": "注：佈局列數為多列時有效，推薦1、10或者16（範圍: 1-16）"
+  },
+  "alias": {
+      "message": "別名:"
+  },
+  "customCSS": {
+      "message": "自定義樣式:"
+  },
+  "example": {
+      "message": "例如:"
+  },
+  "setInvalidTips": {
+      "message": "無效選項！可選設置:"
+  }
+}
