@@ -91,7 +91,7 @@ const nav = {
   resetNavPath(id, itemId) {
     if (id < 3) {
       chrome.bookmarks.get(id.toString(), (item) => {
-        this.pathHtml = `<a type="folder" data-id="${id}">${item[0].title}</a>` + this.pathHtml;
+        this.pathHtml = `<a type="folder" data-id="${id}">${settings.rootInfo[id]}</a>` + this.pathHtml;
         $nav.header.innerHTML = this.pathHtml;
         handleFolderEvent($$('nav > [type=folder]'));
         // main区域下有两个对应item，此处用$选择第一个
