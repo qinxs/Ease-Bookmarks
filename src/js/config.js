@@ -60,6 +60,13 @@ if (location.pathname === '/popup.html') {
   });
 }
 
+function setUsageLink() {
+  var UsageLang = chrome.i18n.getUILanguage();
+  if (!UsageLang.startsWith('zh')) {
+    $('#usage').href = `usage/en.html`;
+  }
+}
+
 // 选项数据（异步）加载完成
 function settingsReady(callback) {
   if (BM.settingsReady) {

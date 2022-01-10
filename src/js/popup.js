@@ -760,5 +760,6 @@ settingsReady(() => {
     loadCSS('libs/dragula.css');
     loadJS('libs/dragula.min.js', dragToMove);
     window.addEventListener('unload', setLastData);
+    setUsageLink();
   }, 40)
 });
