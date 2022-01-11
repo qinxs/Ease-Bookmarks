@@ -494,7 +494,7 @@ function toggleList($list) {
   setTimeout(() => {
     // console.log($lastListView);
     if ($main.scrollTop) {
-      rootStyle.setProperty('--color-scrollbar-thumb-hidden', '#fff');
+      rootStyle.setProperty('--color-scrollbar-thumb-hidden', 'none');
       $main.scrollTop = 0;
       window.requestAnimationFrame(() => {
         rootStyle.removeProperty('--color-scrollbar-thumb-hidden');

@@ -1,17 +1,23 @@
 :root {
   --color-theme: #75c3b4;
-  --color-text: #333;
-  --color-background: #fff;
-  --color-border: #ddd;
-  --color-hover: #d3ece7;
   --height-item: 28px;
   --width-item: 100%;
-
-  --color-text-dark: #adaaa6;
-  --color-background-dark: #3a3a3a;
+  /* 浅色模式 */
+  --color-text: #333;
+  --color-background: #fff;
+  --color-background-dialog: rgba(255, 255, 255, .96);
+  --color-border: #ddd;
+  --color-hover: #d3ece7;
+}
+.dark {
+  --color-text: #adaaa6;
+  --color-background: #3a3a3a;
+  --color-background-dialog: #3a3a3a;
+  --color-border: #666;
+  --color-hover: #545454;
+  /* 深色模式独有 */
   --color-footer-background-dark: #333;
   --color-input-background-dark: #171a1a;
-  --color-hover-dark: #545454;
 }
 ::-webkit-scrollbar {
   width: 3px;
@@ -36,6 +42,7 @@ body {
   padding: 0;
   width: 280px;
   max-height: 600px;
+  color: var(--color-text);
   background-color: var(--color-background);
   overflow: hidden;
   user-select: none;
@@ -114,7 +121,6 @@ nav a {
   flex-direction: column;
   flex-wrap: wrap;
   align-content: flex-start;
-  /*height: 250px;*/
 }
 #bookmark-list[hidden],
 #sub-list[hidden],
@@ -180,7 +186,7 @@ nav a {
   max-width: 100%;
   border: 1px solid #bbb;
   border-radius: 5px;
-  background-color: rgba(255, 255, 255, .96);
+  background-color: var(--color-background-dialog);
   box-shadow: 0 2px 6px rgba(0, 0, 0, .2);
   list-style: none;
   outline: 0;
@@ -264,38 +270,16 @@ nav a {
   font-size: 1.4em;
 }
 
-/* 夜间模式 */
+/* 深色模式 */
 .dark ::-webkit-scrollbar-thumb {
-  background-color: var(--color-scrollbar-thumb-hidden, rgba(255, 255, 255, .7));
-}
-.dark {
-  color: var(--color-text-dark);
-  background-color: var(--color-background-dark);
+  background-color: var(--color-scrollbar-thumb-hidden, rgba(200, 200, 200, .3));
 }
 .dark footer {
   background-color: var(--color-footer-background-dark);
 }
 .dark input,
 .dark textarea {
-  color: var(--color-text-dark);
   background-color: var(--color-input-background-dark);
-}
-.dark .item a {
-  color: var(--color-text-dark);
-}
-.dark .item:hover,
-.dark .item:focus,
-.dark .item.active {
-  background-color: var(--color-hover-dark);
-}
-.dark #context-menu,
-.dark #context-menu-folder,
-.dark #dialog {
-  background-color: var(--color-background-dark);
-}
-.dark #context-menu li:hover,
-.dark #context-menu-folder li:hover {
-  background-color: var(--color-hover-dark);
 }
 .dark img {
   filter: brightness(0.9);
