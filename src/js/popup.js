@@ -161,8 +161,8 @@ const search = {
 
 const contextMenu = {
   pos: {
-    x: 0,
-    y:0,
+    left: 0,
+    top:0,
   },
   showing: false,
   init() {
@@ -189,8 +189,8 @@ const contextMenu = {
     <li id="bookmark-delete">${L("delete")}</li>
   `,
   show() {
-    $contextMenu.style.left = this.pos.x + 'px';
-    $contextMenu.style.top = this.pos.y + 'px';
+    $contextMenu.style.left = this.pos.left + 'px';
+    $contextMenu.style.top = this.pos.top + 'px';
     $contextMenu.classList.remove('hidden');
     this.showing = true;
     $('.item.active') && $('.item.active').classList.remove('active');
@@ -213,15 +213,16 @@ const contextMenu = {
           $fromTarget = e.target;
           $contextMenu.type = $fromTarget.type || 'nodata';
           $contextMenu.className = isSeachView ? 'search' : '';
-          this.pos.x = e.pageX - $main.offsetLeft  + $main.scrollLeft;
-          if (this.pos.x + $contextMenu.offsetWidth > $main.offsetWidth) {
+          this.pos.left = e.clientX;
+          if (this.pos.left + $contextMenu.clientWidth > $main.clientWidth) {
             // 数值6: 右键菜单的边距
-            this.pos.x = $main.offsetWidth - $contextMenu.offsetWidth - 6;
+            this.pos.left = $main.clientWidth - $contextMenu.clientWidth - 6;
           }
-          this.pos.y = e.pageY - $main.offsetTop + $main.scrollTop;
-          if (this.pos.y + $contextMenu.offsetHeight > $main.offsetHeight) {
-            this.pos.y -= $contextMenu.offsetHeight;
+          this.pos.top = e.clientY - $main.offsetTop;
+          if (this.pos.top + $contextMenu.clientHeight > $main.clientHeight) {
+            this.pos.top -= $contextMenu.clientHeight;
           }
+          this.pos.top += $main.scrollTop
           this.show();
         }
         break;
