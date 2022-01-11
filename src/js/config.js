@@ -1,9 +1,5 @@
 "use strict";
 
-const $ = document.querySelector.bind(document);
-const $$ = document.querySelectorAll.bind(document);
-const L = chrome.i18n.getMessage;
-
 window.BM = {
   // 1 书签栏 2 其他书签（根目录为0）
   startup: 1,
@@ -59,6 +55,10 @@ if (location.pathname === '/popup.html') {
     if (!BM.preItems) BM.preItems = results;
   });
 }
+
+const $ = document.querySelector.bind(document);
+const $$ = document.querySelectorAll.bind(document);
+const L = chrome.i18n.getMessage;
 
 function setUsageLink() {
   var UsageLang = chrome.i18n.getUILanguage();

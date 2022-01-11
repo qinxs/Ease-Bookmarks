@@ -61,7 +61,7 @@ const nav = {
   init(id) {
     // console.log(settings.rootInfo);
     this.setNavPath(id, settings.rootInfo[id]);
-    handleFolderEvent($$('.nav'));
+    handleFolderEvent($$('.nav > [type=folder]'));
   },
   setNavPath(id, folderName, target) {
     folderName = folderName ? folderName : ' ';
@@ -69,12 +69,7 @@ const nav = {
     if (id < 3) {
       $nav.header.innerHTML = `<a type="folder" data-id="${id}">${folderName}</a>`;
       // 底部其他书签（与书签栏切换使用）
-      var _id = 3 - id;
-      chrome.bookmarks.getChildren(_id.toString(), (results) => {
-        if (!results.length) return;
-        $nav.footer.dataset.id = _id;
-        $nav.footer.textContent = settings.rootInfo[_id];
-      });
+      this.setFooterNav(id);
     } else if (target.dataset.role === 'path') {
       while (target.nextElementSibling) {
         target.nextElementSibling.remove();
@@ -88,33 +83,35 @@ const nav = {
       handleFolderEvent($$('nav > [type=folder]'))
     }
   },
-  resetNavPath(id, itemId) {
+  // activeItemId 搜索结果定位目录时 激活来源id
+  resetNavPath(id, activeItemId) {
     if (id < 3) {
-      chrome.bookmarks.get(id.toString(), (item) => {
-        this.pathHtml = `<a type="folder" data-id="${id}">${settings.rootInfo[id]}</a>` + this.pathHtml;
-        $nav.header.innerHTML = this.pathHtml;
-        handleFolderEvent($$('nav > [type=folder]'));
-        // main区域下有两个对应item，此处用$选择第一个
-        if (itemId) {
-          var $item = $(`[data-id="${itemId}"]`).closest('.item');
-          $item.classList.add('active');
-          $item.scrollIntoView();
-        }
-        this.pathHtml = '';
-        var _id = 3 - id;
-        chrome.bookmarks.getChildren(_id.toString(), (results) => {
-          if (!results.length) return;
-          $nav.footer.dataset.id = _id;
-          $nav.footer.textContent = settings.rootInfo[_id];
-        });
-      })
+      this.pathHtml = `<a type="folder" data-id="${id}">${settings.rootInfo[id]}</a>` + this.pathHtml;
+      $nav.header.innerHTML = this.pathHtml;
+      handleFolderEvent($$('nav > [type=folder]'));
+      // main区域下有两个对应item，此处用$选择第一个
+      if (activeItemId) {
+        var $item = $(`[data-id="${activeItemId}"]`).closest('.item');
+        $item.classList.add('active');
+        $item.scrollIntoView();
+      }
+      this.setFooterNav(id);
+      this.pathHtml = '';
     } else {
       chrome.bookmarks.get(id.toString(), (item) => {
         this.pathHtml = `
         <span>></span> <a type="folder" data-id="${id}" data-role="path">${item[0].title}</a>` + this.pathHtml;
-        this.resetNavPath(item[0].parentId, itemId);
+        this.resetNavPath(item[0].parentId, activeItemId);
       })
     }
+  },
+  setFooterNav(id) {
+    var _id = 3 - id;
+    chrome.bookmarks.getChildren(_id.toString(), (results) => {
+      if (!results.length) return;
+      $nav.footer.dataset.id = _id;
+      $nav.footer.textContent = settings.rootInfo[_id];
+    });
   }
 }
 
@@ -644,18 +641,16 @@ function openFolder(event) {
 function locationFolder(id) {
   // console.log(event.target);
   contextMenu.close();
-  // nav.setNavPath(id, folderName, target);
   // debugger
-  if (id == BM.startup) {
+  if (id == $('nav a:first-child').dataset.id) {
     toggleList($bookmarkList);
-    return
+  } else {
+    toggleList($subList);
+    if(id !== parseInt($subList.dataset.folder_id)) {
+      loadChildrenView(id, $subList);
+      $subList.dataset.folder_id = id;
+    }
   }
-  toggleList($subList);
-  if(id !== parseInt($subList.dataset.folder_id)) {
-    loadChildrenView(id, $subList);
-    $subList.dataset.folder_id = id;
-  }
-  
 }
 
 function loadJS(url, callback) {
@@ -747,12 +742,12 @@ settingsReady(() => {
     $lastListView = $subList;
   }
   $('footer').classList.remove('hidden');
+  var LastScrollTop = localStorage.getItem('LastScrollTop') || 0;
+  if (LastScrollTop) $main.scrollTop = LastScrollTop;
+  $main.addEventListener('click', handleMainClick, false);
+  $main.addEventListener('mousedown', handleMainMiddleClick, false);
   // 优化 FCP
   setTimeout(() => {
-    var LastScrollTop = localStorage.getItem('LastScrollTop') || 0;
-    if (LastScrollTop) $main.scrollTop = LastScrollTop;
-    $main.addEventListener('click', handleMainClick, false);
-    $main.addEventListener('mousedown', handleMainMiddleClick, false);
     search.init();
     contextMenu.init();
     dialog.init();
