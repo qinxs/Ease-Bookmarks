@@ -265,6 +265,9 @@ nav a {
 }
 
 /* 夜间模式 */
+.dark ::-webkit-scrollbar-thumb {
+  background-color: var(--color-scrollbar-thumb-hidden, rgba(255, 255, 255, .7));
+}
 .dark {
   color: var(--color-text-dark);
   background-color: var(--color-background-dark);

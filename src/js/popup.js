@@ -466,7 +466,7 @@ function templateItem(ele) {
   if (isSeachView) attributeStr = `data-parent-id="${ele.parentId}"` + attributeStr;
   return `
     <div class="item">
-    <img class="favicon" src="${favicon}"></img>
+    <img class="favicon" src="${favicon}" alt=""></img>
     <a data-id="${ele.id}" ${attributeStr}>${ele.title}</a>
     </div>
   `;
