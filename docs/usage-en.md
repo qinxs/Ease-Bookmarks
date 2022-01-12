@@ -23,6 +23,7 @@ In addition, this extension has special support for `JS bookmarklet`~
 The default shortcut is `Ctrl + Q`, you can modify it in the following management page:
 - Chrome: `chrome://extensions/shortcuts`
 - Edge: `edge://extensions/shortcuts`
+
 <!-- - Firefox: `about:addons` -> Extensions -> Settings Icons -> Manage Extension Shortcuts -->
 
 ### Function keys
