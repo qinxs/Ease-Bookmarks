@@ -152,7 +152,8 @@ nav a {
 }
 .item:hover,
 .item:focus,
-.item.active {
+.item.active,
+.item.seleted {
   background-color: var(--color-hover);
 }
 

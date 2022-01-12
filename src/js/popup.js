@@ -276,9 +276,19 @@ const contextMenu = {
       case "bookmark-delete":
       case "folder-delete":
         if ($fromTarget.type === 'folder') {
-          confirm(L("deleteFolderConfirm")) && chrome.bookmarks.removeTree(id, () => {
-            $fromTarget.closest('.item').remove();
-            setListSize($lastListView, --curItemslength);
+          $fromTarget.closest('.item').classList.add('seleted');
+          // 防止hover其他元素
+          $main.style.pointerEvents = 'none';
+          chrome.bookmarks.getChildren(id, results => {
+            if (!results.length || confirm(`[ ${$fromTarget.textContent} - ${results.length} ]:\n${L("deleteFolderConfirm")}`)) {
+              chrome.bookmarks.removeTree(id, () => {
+                $fromTarget.closest('.item').remove();
+                setListSize($lastListView, --curItemslength);
+              });
+            } else {
+              $fromTarget.closest('.item').classList.remove('seleted');
+            }
+            $main.style.pointerEvents = 'auto';
           });
         } else {
           chrome.bookmarks.remove(id, () => {
@@ -425,7 +435,7 @@ function renderListView(id, $list, items) {
   }
   curItemslength = items.length;
   setListSize($list, curItemslength || 1);
-  // @TODO 如何优化？
+  // @TODO 能优化吗？
   $list.innerHTML = html;
   handleFolderEvent($$('main [type=folder]'));
 }
@@ -589,7 +599,7 @@ function openUrl(url, event, tabs) {
     var pageUrl = tabs[0].url;
     // console.log(pageUrl);
     // @TODO 空白页点击 在新页面后不能执行
-    if (/^(about|chrome|chrome-extension|moz-extension|https:\/\/chrome.google.com)/.test(pageUrl) || !pageUrl) {
+    if (/^(about|chrome|chrome-extension|edge|extension|https:\/\/chrome\.google\.com)/.test(pageUrl) || !pageUrl) {
       !pageUrl && chrome.tabs.remove(tabs[0].id);
       chrome.tabs.create({ url: url, active: true });
     } else { 
