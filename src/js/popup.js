@@ -22,7 +22,7 @@ var $lastListView = $bookmarkList;
 // 中间变量
 var $fromTarget = null;
 var pathTitle = '';
-window.funcDelay = null;
+window.openFolderDelay = null;
 // 点击的右键菜单ID，需要弹出dialog时动态改变
 var curContextMenuID;
 
@@ -154,7 +154,7 @@ const search = {
       }
       setListSize($searchList, results.length);
       $searchList.innerHTML = html;
-      handleFolderEvent($$('#search-list [type=folder]'));
+      handleFolderEvent($$('[type=folder]', $searchList));
     })
   }
 }
@@ -372,7 +372,7 @@ const dialog = {
             // console.log(results);
             setListSize($lastListView, ++curItemslength);
             $fromTarget.closest('.item').insertAdjacentHTML('afterend', templateItem(results));
-            handleFolderEvent($fromTarget.closest('.item').nextElementSibling.querySelectorAll('[type=folder]'));
+            handleFolderEvent($$('[type=folder]', $fromTarget.closest('.item').nextElementSibling));
             $fromTarget.remove();
           });
         } else {
@@ -386,7 +386,7 @@ const dialog = {
               // console.log(results);
               setListSize($lastListView, ++curItemslength);
               $fromTarget.closest('.item').insertAdjacentHTML('afterend', templateItem(results));
-              handleFolderEvent($fromTarget.closest('.item').nextElementSibling.querySelectorAll('[type=folder]'));
+              handleFolderEvent($$('[type=folder]', $fromTarget.closest('.item').nextElementSibling));
             });
           });
         }
@@ -437,7 +437,7 @@ function renderListView(id, $list, items) {
   setListSize($list, curItemslength || 1);
   // @TODO 能优化吗？
   $list.innerHTML = html;
-  handleFolderEvent($$('main [type=folder]'));
+  handleFolderEvent($$('[type=folder]', $list));
 }
 
 function template(treeData) {
@@ -619,10 +619,13 @@ function handleFolderEvent(nodelist) {
       ele.addEventListener('click', openFolder, false);
     } else {
       ele.addEventListener('mouseover', openFolder, false);
-      ele.addEventListener('mouseout', () => clearTimeout(funcDelay), false);
-      ele.addEventListener('contextmenu', () => clearTimeout(funcDelay), false);
+      ele.addEventListener('mouseout', clearOpenFolderDelay, false);
     }
   }
+}
+
+function clearOpenFolderDelay() {
+  clearTimeout(openFolderDelay);
 }
 
 function openFolder(event) {
@@ -632,7 +635,7 @@ function openFolder(event) {
   if (target.dataset.role === 'path' && !target.nextElementSibling) return;
   var id = parseInt(target.dataset.id)
   var folderName = target.textContent;
-  window.funcDelay = setTimeout(() => {
+  window.openFolderDelay = setTimeout(() => {
     // console.log(event.target);
     var curRootID = $('nav a:first-child').dataset.id;
     nav.setNavPath(id, folderName, target);
