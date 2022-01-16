@@ -44,7 +44,7 @@ const dataSetting = {
     this.switchTheme();
   },
   layout() {
-    $('#customCSS').textContent = settings.customCSS;
+    if(settings.customCSS) $('#customCSS').textContent = settings.customCSS;
   },
   switchTheme() {
     // 媒体查询，用户系统是否启动暗色模式
@@ -175,6 +175,7 @@ const contextMenu = {
   showing: false,
   init() {
     $contextMenu.insertAdjacentHTML('beforeend', this.html);
+    delete this.html;
     $main.addEventListener('contextmenu', this, false);
     $contextMenu.addEventListener('click', this, false);
     document.addEventListener('click', () => this.close(), false);
@@ -283,7 +284,6 @@ const contextMenu = {
         nav.lastPathID = parentId;
         break;
       case "bookmark-delete":
-      case "folder-delete":
         if ($fromTarget.type === 'folder') {
           $fromTarget.closest('.item').classList.add('seleted');
           // 防止hover其他元素
@@ -315,6 +315,7 @@ const dialog = {
   showing: false,
   init() {
     $dialog.insertAdjacentHTML('beforeend', this.html);
+    delete this.html;
     $('#edit-cancel').addEventListener('click', () => this.close(event), false);
     $('#edit-save').addEventListener('click', () => this.save(event), false);
   },
@@ -452,9 +453,9 @@ function renderListView(id, $list, items) {
 
 function template(treeData) {
   var insertHtml = '';
-  treeData.forEach(ele => {
+  for (let ele of treeData) {
     insertHtml += templateItem(ele);
-  });
+  };
   return insertHtml;
 }
 
@@ -468,15 +469,14 @@ function templateItem(ele) {
   } else if (isBookmarklet(url)) {
     favicon = 'icons/favicon/js.png';
     try {
-      url = decodeURI(ele.url).replaceAll("\"", "&quot;");
+      url = decodeURI(url).replaceAll("\"", "&quot;");
     } catch {
       // console.log(`[${ele.title}]:`, e);
       // % 转义；比如css中的 width: 40%;
       // https://stackoverflow.com/questions/20700393/urierror-malformed-uri-sequence
-      url = decodeURI(ele.url.replace(/%([^0-9A-E])/g, "%25$1")).replaceAll("\"", "&quot;");
+      url = decodeURI(url.replace(/%([^0-9A-E])/g, "%25$1")).replaceAll("\"", "&quot;");
     }
-    var _url = url.length > 300 ? url.substring(0, 300) + '...' : url;
-    attributeStr = `type="link" data-url="${url}" title="${ele.title}&#10;${_url}"`;
+    attributeStr = `type="link" data-url="${url}" title="${ele.title}&#10;${url}"`;
   } else {
     favicon = `chrome://favicon/${url}`;
     attributeStr = `type="link" data-url="${url}" title="${ele.title}&#10;${url}"`;
@@ -514,13 +514,7 @@ function toggleList($list) {
   // 防止切换时出现抖动
   setTimeout(() => {
     // console.log($lastListView);
-    if ($main.scrollTop) {
-      rootStyle.setProperty('--color-scrollbar-thumb-hidden', 'none');
-      $main.scrollTop = 0;
-      window.requestAnimationFrame(() => {
-        rootStyle.removeProperty('--color-scrollbar-thumb-hidden');
-      });
-    }
+    $main.scrollTop = 0;
     $lastListView.hidden = true;
     $list.hidden = false;
     // SeachView 会多次调用 单独处理
@@ -746,6 +740,9 @@ function setLastData(event) {
 }
 
 /******************************************************/
+$main.addEventListener('click', handleMainClick, false);
+$main.addEventListener('mousedown', handleMainMiddleClick, false);
+
 settingsReady(() => {
   // console.log(BM.settings);
   settings = BM.settings;
@@ -770,8 +767,6 @@ settingsReady(() => {
   $('footer').classList.remove('hidden');
   var LastScrollTop = localStorage.getItem('LastScrollTop') || 0;
   if (LastScrollTop) $main.scrollTop = LastScrollTop;
-  $main.addEventListener('click', handleMainClick, false);
-  $main.addEventListener('mousedown', handleMainMiddleClick, false);
   // 优化 FCP
   setTimeout(() => {
     search.init();
@@ -782,5 +777,5 @@ settingsReady(() => {
     loadJS('libs/dragula.min.js', dragToMove);
     window.addEventListener('unload', setLastData);
     setUsageLink();
-  }, 40)
+  }, 60)
 });

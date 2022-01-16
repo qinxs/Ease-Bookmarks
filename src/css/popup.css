@@ -8,6 +8,7 @@
   --color-background-dialog: rgba(255, 255, 255, .96);
   --color-border: #ddd;
   --color-hover: #d3ece7;
+  --color-scrollbar-thumb: rgba(50, 50, 50, .3);
 }
 .dark {
   --color-text: #adaaa6;
@@ -15,6 +16,7 @@
   --color-background-dialog: #3a3a3a;
   --color-border: #666;
   --color-hover: #545454;
+  --color-scrollbar-thumb: rgba(200, 200, 200, .3);
   /* 深色模式独有 */
   --color-footer-background-dark: #333;
   --color-input-background-dark: #171a1a;
@@ -28,7 +30,7 @@
 ::-webkit-scrollbar-thumb {
   -webkit-border-radius: 10px;
   border-radius: 10px;
-  background-color: var(--color-scrollbar-thumb-hidden, rgba(50, 50, 50, .3));
+  background-color: var(--color-scrollbar-thumb);
 }
 * {
   box-sizing: border-box;
@@ -272,9 +274,6 @@ nav a {
 }
 
 /* 深色模式 */
-.dark ::-webkit-scrollbar-thumb {
-  background-color: var(--color-scrollbar-thumb-hidden, rgba(200, 200, 200, .3));
-}
 .dark footer {
   background-color: var(--color-footer-background-dark);
 }
