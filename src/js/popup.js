@@ -57,6 +57,8 @@ const dataSetting = {
 }
 
 const nav = {
+  rootID: -1,
+  lastPathID: -1,
   pathHtml: '',
   init(id) {
     // console.log(settings.rootInfo);
@@ -64,11 +66,12 @@ const nav = {
     handleFolderEvent($$('.nav > [type=folder]'));
   },
   setNavPath(id, folderName, target) {
-    folderName = folderName ? folderName : ' ';
+    folderName = this.replaceEmptyString(folderName);
     // console.log(target);
     if (id < 3) {
-      $nav.header.innerHTML = `<a type="folder" data-id="${id}">${folderName}</a>`;
+      $nav.header.innerHTML = `<a type="folder" data-id="${id}" data-role="path">${folderName}</a>`;
       // 底部其他书签（与书签栏切换使用）
+      this.rootID = id;
       this.setFooterNav(id);
     } else if (target.dataset.role === 'path') {
       while (target.nextElementSibling) {
@@ -79,14 +82,14 @@ const nav = {
       var html = `
       <span>${symbol}</span> <a type="folder" data-id="${id}" data-role="path">${folderName}</a>
       `;
-      $nav.header.insertAdjacentHTML('beforeend', html)
-      handleFolderEvent($$('nav > [type=folder]'))
+      $nav.header.insertAdjacentHTML('beforeend', html);
+      handleFolderEvent($$('nav > [type=folder]'));
     }
   },
   // activeItemId 搜索结果定位目录时 激活来源id
   resetNavPath(id, activeItemId) {
     if (id < 3) {
-      this.pathHtml = `<a type="folder" data-id="${id}">${settings.rootInfo[id]}</a>` + this.pathHtml;
+      this.pathHtml = `<a type="folder" data-id="${id}" data-role="path">${settings.rootInfo[id]}</a>` + this.pathHtml;
       $nav.header.innerHTML = this.pathHtml;
       handleFolderEvent($$('nav > [type=folder]'));
       // main区域下有两个对应item，此处用$选择第一个
@@ -95,15 +98,20 @@ const nav = {
         $item.classList.add('active');
         $item.scrollIntoView();
       }
+      this.rootID = id;
       this.setFooterNav(id);
       this.pathHtml = '';
     } else {
       chrome.bookmarks.get(id.toString(), (item) => {
+        var folderName = this.replaceEmptyString(item[0].title);
         this.pathHtml = `
-        <span>></span> <a type="folder" data-id="${id}" data-role="path">${item[0].title}</a>` + this.pathHtml;
+        <span>></span> <a type="folder" data-id="${id}" data-role="path">${folderName}</a>` + this.pathHtml;
         this.resetNavPath(item[0].parentId, activeItemId);
       })
     }
+  },
+  replaceEmptyString(folderName) {
+    return folderName ? folderName : ' ';
   },
   setFooterNav(id) {
     var _id = 3 - id;
@@ -272,6 +280,7 @@ const contextMenu = {
         var parentId = $fromTarget.dataset.parentId;
         locationFolder(parentId);
         nav.resetNavPath(parentId, id);
+        nav.lastPathID = parentId;
         break;
       case "bookmark-delete":
       case "folder-delete":
@@ -437,6 +446,7 @@ function renderListView(id, $list, items) {
   setListSize($list, curItemslength || 1);
   // @TODO 能优化吗？
   $list.innerHTML = html;
+  if ($list == $subList) $subList.dataset.folder_id = id;
   handleFolderEvent($$('[type=folder]', $list));
 }
 
@@ -632,22 +642,23 @@ function openFolder(event) {
   if (contextMenu.showing || dialog.showing) return;
   var target = event.target;
   // 路径最末级不在打开文件夹
-  if (target.dataset.role === 'path' && !target.nextElementSibling) return;
-  var id = parseInt(target.dataset.id)
-  var folderName = target.textContent;
+  var id = parseInt(target.dataset.id);
+  if (id == nav.lastPathID) return;
   window.openFolderDelay = setTimeout(() => {
+    var folderName = target.textContent;
     // console.log(event.target);
-    var curRootID = $('nav a:first-child').dataset.id;
+    var curRootID = nav.rootID;
     nav.setNavPath(id, folderName, target);
+    nav.lastPathID = id;
     toggleList(id < 3 ? $bookmarkList : $subList);
     // 切换书签栏/其他书签，或者从上次位置启动
+    // debugger
     if (id < 3 && (id != curRootID || !$bookmarkList.childNodes.length)) {
       loadChildrenView(id, $bookmarkList);
       return
     }
-    if(id !== parseInt($subList.dataset.folder_id)) {
+    if(id > 3 && id != parseInt($subList.dataset.folder_id)) {
       loadChildrenView(id, $subList);
-      $subList.dataset.folder_id = id;
     }
   }, settings.hoverEnter);
 }
@@ -660,7 +671,7 @@ function locationFolder(id) {
     toggleList($bookmarkList);
   } else {
     toggleList($subList);
-    if(id !== parseInt($subList.dataset.folder_id)) {
+    if(id != parseInt($subList.dataset.folder_id)) {
       loadChildrenView(id, $subList);
       $subList.dataset.folder_id = id;
     }
@@ -755,6 +766,7 @@ settingsReady(() => {
     handleFolderEvent($$('.nav > [type=folder]'));
     $lastListView = $subList;
   }
+  nav.lastPathID = startupReal;
   $('footer').classList.remove('hidden');
   var LastScrollTop = localStorage.getItem('LastScrollTop') || 0;
   if (LastScrollTop) $main.scrollTop = LastScrollTop;
