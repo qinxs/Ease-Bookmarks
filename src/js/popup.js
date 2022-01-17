@@ -7,18 +7,24 @@ const $nav = {
   footer: $('.nav > a')
 };
 const $main = $('main');
-const $bookmarkList = $('#bookmark-list');
-const $subList = $('#sub-list');
 const $searchList = $('#search-list');
 const $contextMenu = $('#context-menu');
 const $dialog = $('#dialog');
+const containers = [];
+Array.prototype.remove = function(val) {  
+  var index = this.indexOf(val);  
+  if (index > -1) {  
+    this.splice(index, 1);  
+  }  
+};
+
 // 搜索框
 const $seachInput = $('#search-input');
 // 中文拼音输入中，但未合成汉字
 var inputFlag = false;
 var isSeachView = false;
 // 上一个视图
-var $lastListView = $bookmarkList;
+var $lastListView;
 // 中间变量
 var $fromTarget = null;
 var pathTitle = '';
@@ -148,10 +154,12 @@ const search = {
   loadSearchView(keyword) {
     if (keyword) {
       // console.log($seachInput.value);
-      !isSeachView && toggleList($searchList);
       this._loadSearchView($seachInput.value);
+      setTimeout(() => {
+        !isSeachView && toggleList(null, true);
+      });
     } else {
-      toggleList($lastListView)
+      toggleList($lastListView.id.replace('_', ''));
     }
   },
   _loadSearchView(keyword) {
@@ -417,7 +425,7 @@ const dialog = {
               $fromTarget.previousElementSibling.src = 'icons/favicon/js.png';
             }
           }
-          delete $subList.dataset.folder_id;
+          isSeachView && clearFolderList($fromTarget.dataset.parentId);
         });
         break;
     }
@@ -431,23 +439,25 @@ const dialog = {
   },
 }
 
-function loadChildrenView(id, $list) {
+function loadChildrenView(id, doToggle = true) {
   chrome.bookmarks.getChildren(id.toString(), (results) => {
     // console.log(results);
-    renderListView(id, $list, results);
+    renderListView(id, results);
+    doToggle && toggleList(id);
   })
 }
 
-function renderListView(id, $list, items) {
+function renderListView(id, items) {
   var html = `<div class="item nodata" data-id="${id}">${L("noBookmarksTip")}<div>`;
   if (items.length) {
     html = template(items);
   }
-  curItemslength = items.length;
-  setListSize($list, curItemslength || 1);
   // @TODO 能优化吗？
-  $list.innerHTML = html;
-  if ($list == $subList) $subList.dataset.folder_id = id;
+  $searchList.insertAdjacentHTML('beforebegin', `<div class="folder-list" id=_${id}>${html}<div>`);
+  curItemslength = items.length;
+  var $list = $(`#_${id}`);
+  setListSize($list, curItemslength || 1);
+  containers.push($list);
   handleFolderEvent($$('[type=folder]', $list));
 }
 
@@ -510,22 +520,22 @@ function setListSize($list, length) {
 }
 
 // 视图切换
-function toggleList($list) {
+function toggleList(id, searchMode = false) {
   // 防止切换时出现抖动
-  setTimeout(() => {
-    // console.log($lastListView);
-    $main.scrollTop = 0;
-    $lastListView.hidden = true;
+  // console.log($lastListView);
+  $main.scrollTop = 0;
+  $lastListView.hidden = true;
+  // SeachView 会多次调用 单独处理
+  if (searchMode) {
+    $searchList.hidden = false;
+    isSeachView = true;
+  } else {
+    var $list = $(`#_${id}`);
     $list.hidden = false;
-    // SeachView 会多次调用 单独处理
-    if ($list === $searchList) {
-      isSeachView = true
-    } else {
-      $searchList.hidden = true;
-      isSeachView = false;
-      $lastListView = $list;
-    }
-  }, 0)
+    $searchList.hidden = true;
+    isSeachView = false;
+    $lastListView = $list;
+  }
 }
 
 function handleMainClick(event) {
@@ -558,7 +568,7 @@ function handleMainMiddleClick(event) {
           'title': tabs[0].title,
           'url': tabs[0].url
         }, results => {
-          a.dataset.id === $subList.dataset.folder_id && delete $subList.dataset.folder_id;
+          clearFolderList(a.dataset.id);
         });
       });
     }
@@ -639,36 +649,37 @@ function openFolder(event) {
   var id = parseInt(target.dataset.id);
   if (id == nav.lastPathID) return;
   window.openFolderDelay = setTimeout(() => {
+    if (contextMenu.showing || dialog.showing) return;
     var folderName = target.textContent;
     // console.log(event.target);
-    var curRootID = nav.rootID;
     nav.setNavPath(id, folderName, target);
     nav.lastPathID = id;
-    toggleList(id < 3 ? $bookmarkList : $subList);
-    // 切换书签栏/其他书签，或者从上次位置启动
     // debugger
-    if (id < 3 && (id != curRootID || !$bookmarkList.childNodes.length)) {
-      loadChildrenView(id, $bookmarkList);
-      return
-    }
-    if(id > 3 && id != parseInt($subList.dataset.folder_id)) {
-      loadChildrenView(id, $subList);
+    if(!$(`#_${id}`)) {
+      loadChildrenView(id);
+    } else {
+      toggleList(id);
     }
   }, settings.hoverEnter);
+}
+
+// 清除已存在的list，保持数据一致
+function clearFolderList(id) {
+  var $list = $(`#_${id}`);
+  if ($list) {
+    $list.remove();
+    containers.remove($list);
+  }
 }
 
 function locationFolder(id) {
   // console.log(event.target);
   contextMenu.close();
   // debugger
-  if (id == $('nav a:first-child').dataset.id) {
-    toggleList($bookmarkList);
+  if(!$(`#_${id}`)) {
+    loadChildrenView(id);
   } else {
-    toggleList($subList);
-    if(id != parseInt($subList.dataset.folder_id)) {
-      loadChildrenView(id, $subList);
-      $subList.dataset.folder_id = id;
-    }
+    toggleList(id);
   }
 }
 
@@ -698,7 +709,7 @@ function dragToMove() {
     setTimeout(dragToMove);
     return
   }
-  var drake = dragula([$bookmarkList, $subList], {
+  window.drake = dragula(containers, {
     // spilling will put the element back where it was dragged from, if this is true
     revertOnSpill: true,
   }).on('drop', (el, target, source, sibling, isHover) => {
@@ -714,7 +725,7 @@ function dragToMove() {
     var id_sibling = sibling.lastElementChild.dataset.id;
     if (isHover) {
       chrome.bookmarks.move(id, {parentId: id_sibling});
-      delete $subList.dataset.folder_id;
+      clearFolderList(id_sibling);
     } else {
       chrome.bookmarks.get(id_sibling.toString(), item => {
         chrome.bookmarks.move(id, {index: item[0].index + lastFlag});
@@ -738,7 +749,6 @@ function setLastData(event) {
     localStorage.setItem('LastFolderID', $('nav a:last-child').dataset.id);
   }
 }
-
 /******************************************************/
 $main.addEventListener('click', handleMainClick, false);
 $main.addEventListener('mousedown', handleMainMiddleClick, false);
@@ -749,10 +759,10 @@ settingsReady(() => {
   dataSetting.init();
   var startupReal = BM.startupReal;
   if (BM.preItems) {
-    renderListView(startupReal, startupReal < 3 ? $bookmarkList : $subList, BM.preItems);
+    renderListView(startupReal, BM.preItems);
     BM.preItems = 'done';
   } else {
-    loadChildrenView(startupReal, startupReal < 3 ? $bookmarkList : $subList);
+    loadChildrenView(startupReal, false);
     BM.preItems = 'nowait';
   }
   if (startupReal < 3) {
@@ -761,12 +771,13 @@ settingsReady(() => {
     nav.resetNavPath(startupReal);
     // resetNavPath 未改变footer的DOM结构
     handleFolderEvent($$('.nav > [type=folder]'));
-    $lastListView = $subList;
   }
+  $lastListView = $(`#_${startupReal}`);
   nav.lastPathID = startupReal;
   $('footer').classList.remove('hidden');
   var LastScrollTop = localStorage.getItem('LastScrollTop') || 0;
   if (LastScrollTop) $main.scrollTop = LastScrollTop;
+
   // 优化 FCP
   setTimeout(() => {
     search.init();

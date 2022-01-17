@@ -116,16 +116,14 @@ nav a {
   background-color: var(--color-theme);
 }
 
-#bookmark-list,
-#sub-list,
+.folder-list,
 #search-list {
   display: flex;
   flex-direction: column;
   flex-wrap: wrap;
   align-content: flex-start;
 }
-#bookmark-list[hidden],
-#sub-list[hidden],
+.folder-list[hidden],
 #search-list[hidden] {
   display: none;
 }
