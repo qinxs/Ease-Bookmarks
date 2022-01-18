@@ -58,6 +58,10 @@
   {
     "message": "This will also delete all bookmarks in this directory, is it sure?"
   },
+  "openAll":
+  {
+    "message": "Open all"
+  },
   "rename":
   {
     "message": "Rename"

@@ -200,6 +200,7 @@ const contextMenu = {
     <li id="bookmark-add-folder">${L("addFolder")}</li>
     <li id="bookmark-location">${L("location")}</li>
     <hr>
+    <li id="bookmark-open-all">${L("openAll")}</li>
     <li id="bookmark-update-url">${L("updateToCurrentURL")}</li>
     <li id="bookmark-edit">${L("edit")} ...</li>
     <li id="bookmark-edit-folder">${L("rename")} ...</li>
@@ -275,6 +276,13 @@ const contextMenu = {
             $fromTarget.title = $fromTarget.textContent + '\n' + pageUrl;
             $fromTarget.previousElementSibling.src = 'chrome://favicon/' + pageUrl;
           });
+        });
+        break;
+      case "bookmark-open-all":
+        chrome.bookmarks.getChildren(id, results => {
+          for (let item of results) {
+            item.url && chrome.tabs.create({ url: item.url, active: false });
+          }
         });
         break;
       case "bookmark-add-bookmark":

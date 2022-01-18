@@ -57,6 +57,10 @@
   {
     "message": "這還將刪除此目錄下的所有書籤, 確定嗎?"
   },
+  "openAll":
+  {
+    "message": "打開全部"
+  },
   "rename":
   {
     "message": "重命名"

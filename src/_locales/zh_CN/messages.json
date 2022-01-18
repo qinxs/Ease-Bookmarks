@@ -57,6 +57,10 @@
   {
     "message": "这还将删除此目录下的所有书签, 确定吗?"
   },
+  "openAll":
+  {
+    "message": "打开全部"
+  },
   "rename":
   {
     "message": "重命名"

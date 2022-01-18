@@ -224,6 +224,7 @@ nav a {
   pointer-events: none;
 }
 
+#context-menu[type=link] > #bookmark-open-all,
 #context-menu[type=link] > #bookmark-edit-folder {
   display: none;
 }
@@ -247,6 +248,7 @@ nav a {
 #context-menu[type=nodata] > #bookmark-update-url,
 #context-menu[type=nodata] > #bookmark-edit-folder,
 #context-menu[type=nodata] > #bookmark-delete,
+#context-menu[type=nodata] > #bookmark-open-all,
 #context-menu[type=nodata] > hr {
   display: none;
 }
