@@ -716,11 +716,15 @@ function dragToMove() {
     // console.log(el, target, source, sibling, isHover);
     // return
     var lastFlag = 0;
+    // debugger
     var id = el.lastElementChild.dataset.id;
     if (sibling === null) {
       lastFlag = 1;
       // 此时，lastElementChild 为拖动元素本身
       sibling = source.lastElementChild.previousElementSibling;
+    } else if (sibling.childElementCount === 0) {
+      lastFlag = 1;
+      sibling = source.lastElementChild.previousElementSibling.previousElementSibling;
     }
     var id_sibling = sibling.lastElementChild.dataset.id;
     if (isHover) {
