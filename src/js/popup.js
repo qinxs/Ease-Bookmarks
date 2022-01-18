@@ -447,11 +447,15 @@ const dialog = {
   },
 }
 
-function loadChildrenView(id, doToggle = true) {
+function loadChildrenView(id, isStartup = false) {
   chrome.bookmarks.getChildren(id.toString(), (results) => {
     // console.log(results);
     renderListView(id, results);
-    doToggle && toggleList(id);
+    if (!isStartup) {
+      toggleList(id);
+    } else {
+      $lastListView = $(`#_${id}`);
+    }
   })
 }
 
@@ -773,8 +777,9 @@ settingsReady(() => {
   if (BM.preItems) {
     renderListView(startupReal, BM.preItems);
     BM.preItems = 'done';
+    $lastListView = $(`#_${startupReal}`);
   } else {
-    loadChildrenView(startupReal, false);
+    loadChildrenView(startupReal, true);
     BM.preItems = 'nowait';
   }
   if (startupReal < 3) {
@@ -784,7 +789,6 @@ settingsReady(() => {
     // resetNavPath 未改变footer的DOM结构
     handleFolderEvent($$('.nav > [type=folder]'));
   }
-  $lastListView = $(`#_${startupReal}`);
   nav.lastPathID = startupReal;
   $('footer').classList.remove('hidden');
   var LastScrollTop = localStorage.getItem('LastScrollTop') || 0;
