@@ -621,7 +621,7 @@ function openUrl(url, event, tabs) {
     var pageUrl = tabs[0].url;
     // console.log(pageUrl);
     // @TODO 空白页点击 在新页面后不能执行
-    if (/^(about|chrome|chrome-extension|edge|extension|https:\/\/chrome\.google\.com)/.test(pageUrl) || !pageUrl) {
+    if (/^(about|chrome|chrome-extension|https:\/\/chrome\.google\.com|edge|extension|https:\/\/microsoftedge\.microsoft\.com)/.test(pageUrl) || !pageUrl) {
       !pageUrl && chrome.tabs.remove(tabs[0].id);
       chrome.tabs.create({ url: url, active: true });
     } else { 
