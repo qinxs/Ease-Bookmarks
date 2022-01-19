@@ -38,7 +38,6 @@ var curMaxCols = 1;
 var curItemslength;
 var minItemsPerCol;
 const rootStyle = document.documentElement.style;
-const itemHeight = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--height-item'));
 
 const isBookmarklet = url => url.trim().startsWith('javascript:');
 
@@ -540,7 +539,7 @@ function setListSize($list, length) {
     }
   }
   rowsCount = rowsCount < minItemsPerCol ? minItemsPerCol : rowsCount;
-  $list.style.height = rowsCount * itemHeight + 'px';
+  $list.style.height = rowsCount * settings.itemHeight + 'px';
 }
 
 // 视图切换

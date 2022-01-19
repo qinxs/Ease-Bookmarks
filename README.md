@@ -63,6 +63,12 @@ Ease Bookmarks 是一款为了替代浏览器原有书签栏的扩展
 - `0`：默认值，不启用
 - `2`：启用，只对文件夹有效，书签添加到该文件夹中
 
+### `itemHeight`
+
+> 功能：书签行高（与css变量 --height-item 一致）
+
+- `28`：默认值（如果通过自定义样式改变了行高，则需要修改此值）
+
 ## 第三方库
 
 [dragula.js](https://github.com/bevacqua/dragula)（进行了细微调整 [改动内容](https://github.com/qinxs/dragula)）
