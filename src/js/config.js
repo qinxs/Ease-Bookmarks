@@ -56,7 +56,7 @@ if (location.pathname === '/popup.html') {
   });
 }
 
-const $ = document.querySelector.bind(document);
+const $ = (css, d = document) => d.querySelector(css);
 const $$ = (css, d = document) => d.querySelectorAll(css);
 const L = chrome.i18n.getMessage;
 

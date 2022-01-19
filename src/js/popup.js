@@ -320,7 +320,10 @@ const contextMenu = {
             $fromTarget.closest('.item').remove();
             setListSize($lastListView, --curItemslength);
           });
-        } 
+        }
+        isSeachView && updateFolderList($fromTarget.dataset.parentId, 'delete', {
+          id: id
+        });
         break;
       default: break;
     }
@@ -433,7 +436,11 @@ const dialog = {
               $fromTarget.previousElementSibling.src = 'icons/favicon/js.png';
             }
           }
-          isSeachView && clearFolderList($fromTarget.dataset.parentId);
+          isSeachView && updateFolderList($fromTarget.dataset.parentId, 'edit', {
+            id: id,
+            title: title,
+            url: url
+          });
         });
         break;
     }
@@ -490,14 +497,7 @@ function templateItem(ele) {
     attributeStr = `type="folder"`;
   } else if (isBookmarklet(url)) {
     favicon = 'icons/favicon/js.png';
-    try {
-      url = decodeURI(url).replaceAll("\"", "&quot;");
-    } catch {
-      // console.log(`[${ele.title}]:`, e);
-      // % 转义；比如css中的 width: 40%;
-      // https://stackoverflow.com/questions/20700393/urierror-malformed-uri-sequence
-      url = decodeURI(url.replace(/%([^0-9A-E])/g, "%25$1")).replaceAll("\"", "&quot;");
-    }
+    url = decodeBookmarklet(url);
     attributeStr = `type="link" data-url="${url}" title="${ele.title}&#10;${url}"`;
   } else {
     favicon = `chrome://favicon/${url}`;
@@ -510,6 +510,18 @@ function templateItem(ele) {
     <a data-id="${ele.id}" ${attributeStr}>${ele.title}</a>
     </div>
   `;
+}
+
+function decodeBookmarklet(url) {
+  try {
+    url = decodeURI(url).replaceAll("\"", "&quot;");
+  } catch {
+    // console.log(`[${ele.title}]:`, e);
+    // % 转义；比如css中的 width: 40%;
+    // https://stackoverflow.com/questions/20700393/urierror-malformed-uri-sequence
+    url = decodeURI(url.replace(/%([^0-9A-E])/g, "%25$1")).replaceAll("\"", "&quot;");
+  }
+  return url;
 }
 
 function setListSize($list, length) {
@@ -580,7 +592,7 @@ function handleMainMiddleClick(event) {
           'title': tabs[0].title,
           'url': tabs[0].url
         }, results => {
-          clearFolderList(a.dataset.id);
+          updateFolderList(a.dataset.id, 'add');
         });
       });
     }
@@ -675,12 +687,36 @@ function openFolder(event) {
   }, settings.hoverEnter);
 }
 
-// 清除已存在的list，保持数据一致
-function clearFolderList(id) {
+/**
+ * 清除已存在的list，保持数据一致
+ * @param  {[type]} id   folder-list ID
+ * @param  {[type]} type 书签操作类型：add、edit、delete
+ * @param  {Object} data edit 数据
+ */
+function updateFolderList(id, type, data = {}) {
   var $list = $(`#_${id}`);
-  if ($list) {
+  if (!$list) return;
+
+  if (type === 'add') {
     $list.remove();
     containers.remove($list);
+  } else if (type === 'delete') {
+    $(`[data-id="${data.id}"]`, $list).closest('.item').remove();
+  } else {
+    var a = $(`[data-id="${data.id}"]`, $list);
+    if (data.url) {
+      var url = data.url;
+      var favicon = `chrome://favicon/${url}`;
+      if (isBookmarklet(data.url)) {
+        favicon = 'icons/favicon/js.png';
+        url = decodeBookmarklet(data.url);
+      }
+      a.textContent = data.title;
+      a.dataset.url = url;
+      a.previousElementSibling.src = favicon;
+    } else if (data.title) {
+      a.textContent = data.title;
+    }
   }
 }
 
@@ -741,7 +777,7 @@ function dragToMove() {
     var id_sibling = sibling.lastElementChild.dataset.id;
     if (isHover) {
       chrome.bookmarks.move(id, {parentId: id_sibling});
-      clearFolderList(id_sibling);
+      updateFolderList(id_sibling, 'add');
     } else {
       chrome.bookmarks.get(id_sibling.toString(), item => {
         chrome.bookmarks.move(id, {index: item[0].index + lastFlag});
