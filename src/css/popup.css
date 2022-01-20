@@ -178,7 +178,6 @@ nav a {
 }
 
 #context-menu,
-#context-menu-folder,
 #dialog {
   position: absolute;
   padding: 5px;
@@ -200,9 +199,8 @@ nav a {
   line-height: 2em;
   left: calc(50% - 140px) !important;
 }
-#context-menu li,
-#context-menu-folder li {
-  display: block;
+#context-menu li {
+  display: none;
   padding: 0 8px;
   line-height: 22px;
   overflow: hidden;
@@ -210,46 +208,45 @@ nav a {
   text-overflow: ellipsis;
   text-shadow: none;
 }
-#context-menu li:hover,
-#context-menu-folder li:hover {
+#context-menu li:hover {
   background: var(--color-hover);
 }
-#context-menu hr,
-#context-menu-folder hr {
+#context-menu hr {
+  display: none;
   border: 0;
   padding: 0;
   height: 1px;
   margin: 2px 0;
-  background-color: #eee;
+  background-color: var(--color-border);
   pointer-events: none;
 }
 
-#context-menu[type=link] > #bookmark-open-all,
-#context-menu[type=link] > #bookmark-edit-folder {
-  display: none;
+#context-menu[type=folder] > #bookmark-add-bookmark,
+#context-menu[type=folder] > #bookmark-add-folder,
+#context-menu[type=folder] > #bookmark-open-all,
+#context-menu[type=folder] > #bookmark-edit-folder,
+#context-menu[type=folder] > #bookmark-delete,
+#context-menu[type=folder] > #bookmark-location + hr {
+  display: block;
 }
-#context-menu[type=folder] > #bookmark-new-tab,
-#context-menu[type=folder] > #bookmark-new-tab-background,
-#context-menu[type=folder] > #bookmark-new-incognito-window,
-#context-menu[type=folder] > #bookmark-edit,
-#context-menu[type=folder] > #bookmark-update-url,
-#context-menu[type=folder] > hr:first-of-type {
-  display: none;
+#context-menu[type=link] > #bookmark-new-tab,
+#context-menu[type=link] > #bookmark-new-tab-background,
+#context-menu[type=link] > #bookmark-new-incognito-window,
+#context-menu[type=link] > #bookmark-add-bookmark,
+#context-menu[type=link] > #bookmark-add-folder,
+#context-menu[type=link] > #bookmark-update-url,
+#context-menu[type=link] > #bookmark-edit,
+#context-menu[type=link] > #bookmark-delete,
+#context-menu[type=link] > hr {
+  display: block;
 }
+#context-menu[type=nodata] > #bookmark-add-bookmark,
+#context-menu[type=nodata] > #bookmark-add-folder {
+  display: block;
+}
+
 #context-menu.search > #bookmark-add-bookmark,
-#context-menu.search > #bookmark-add-folder,
-#context-menu.search > #bookmark-add-folder + hr {
-  display: none;
-}
-#context-menu[type=nodata] > #bookmark-new-tab,
-#context-menu[type=nodata] > #bookmark-new-tab-background,
-#context-menu[type=nodata] > #bookmark-new-incognito-window,
-#context-menu[type=nodata] > #bookmark-edit,
-#context-menu[type=nodata] > #bookmark-update-url,
-#context-menu[type=nodata] > #bookmark-edit-folder,
-#context-menu[type=nodata] > #bookmark-delete,
-#context-menu[type=nodata] > #bookmark-open-all,
-#context-menu[type=nodata] > hr {
+#context-menu.search > #bookmark-add-folder {
   display: none;
 }
 #bookmark-location {
