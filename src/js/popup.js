@@ -40,6 +40,7 @@ var minItemsPerCol;
 const rootStyle = document.documentElement.style;
 
 const isBookmarklet = url => url.trim().startsWith('javascript:');
+const nodataHtml = `<div class="item nodata">${L("noBookmarksTip")}<div>`;
 
 const dataSetting = {
   init() {
@@ -306,8 +307,12 @@ const contextMenu = {
           chrome.bookmarks.getChildren(id, results => {
             if (!results.length || confirm(`[ ${$fromTarget.textContent} - ${results.length} ]:\n${L("deleteFolderConfirm")}`)) {
               chrome.bookmarks.removeTree(id, () => {
-                $fromTarget.closest('.item').remove();
-                setListSize($lastListView, --curItemslength);
+                if ($lastListView.childElementCount === 1) {
+                  $lastListView.innerHTML = nodataHtml;
+                } else {
+                  $fromTarget.closest('.item').remove();
+                  setListSize($lastListView, --curItemslength);
+                }
               });
             } else {
               $fromTarget.closest('.item').classList.remove('seleted');
@@ -316,8 +321,12 @@ const contextMenu = {
           });
         } else {
           chrome.bookmarks.remove(id, () => {
-            $fromTarget.closest('.item').remove();
-            setListSize($lastListView, --curItemslength);
+            if ($lastListView.childElementCount === 1) {
+              $lastListView.innerHTML = nodataHtml;
+            } else {
+              $fromTarget.closest('.item').remove();
+              setListSize($lastListView, --curItemslength);
+            }
           });
         }
         isSeachView && updateFolderList($fromTarget.dataset.parentId, 'delete', {
@@ -392,6 +401,7 @@ const dialog = {
       case "bookmark-add-bookmark":
       case "bookmark-add-folder":
         if ($fromTarget.classList.contains('nodata')) {
+          id = $lastListView.id.replace('_', '');
           chrome.bookmarks.create({
             'parentId': id,
             'title': title,
@@ -466,12 +476,12 @@ function loadChildrenView(id, isStartup = false) {
 }
 
 function renderListView(id, items) {
-  var html = `<div class="item nodata" data-id="${id}">${L("noBookmarksTip")}<div>`;
+  var html = nodataHtml;
   if (items.length) {
     html = template(items);
   }
   // @TODO 能优化吗？
-  $searchList.insertAdjacentHTML('beforebegin', `<div class="folder-list" id=_${id}>${html}<div>`);
+  $searchList.insertAdjacentHTML('beforebegin', `<div class="folder-list" id=_${id}>${html}</div>`);
   curItemslength = items.length;
   var $list = $(`#_${id}`);
   setListSize($list, curItemslength || 1);
@@ -632,10 +642,9 @@ function openUrl(url, event, tabs) {
   // console.log(event);
   // return
   if (isBookmarklet(url)) {
-    // 官方页面 不能直接执行js
     var pageUrl = tabs[0].url;
+    // 官方页面 不能直接执行js
     // console.log(pageUrl);
-    // @TODO 空白页点击 在新页面后不能执行
     if (/^(about|chrome|chrome-extension|https:\/\/chrome\.google\.com|edge|extension|https:\/\/microsoftedge\.microsoft\.com)/.test(pageUrl) || !pageUrl) {
       !pageUrl && chrome.tabs.remove(tabs[0].id);
       chrome.tabs.create({ url: url, active: true });
@@ -700,7 +709,11 @@ function updateFolderList(id, type, data = {}) {
     $list.remove();
     containers.remove($list);
   } else if (type === 'delete') {
-    $(`[data-id="${data.id}"]`, $list).closest('.item').remove();
+    if ($list.childElementCount === 1) {
+      $list.innerHTML = nodataHtml;
+    } else {
+      $(`[data-id="${data.id}"]`, $list).closest('.item').remove();
+    }
   } else {
     var a = $(`[data-id="${data.id}"]`, $list);
     if (data.url) {
@@ -769,9 +782,6 @@ function dragToMove() {
       lastFlag = 1;
       // 此时，lastElementChild 为拖动元素本身
       sibling = source.lastElementChild.previousElementSibling;
-    } else if (sibling.childElementCount === 0) {
-      lastFlag = 1;
-      sibling = source.lastElementChild.previousElementSibling.previousElementSibling;
     }
     var id_sibling = sibling.lastElementChild.dataset.id;
     if (isHover) {
