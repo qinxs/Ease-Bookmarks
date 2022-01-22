@@ -74,10 +74,10 @@ const nav = {
   setNavPath(id, folderName, target) {
     folderName = this.replaceEmptyString(folderName);
     // console.log(target);
-    if (id < 3) {
+    if (id < 3 && id != this.rootID) {
       $nav.header.innerHTML = `<a type="folder" data-id="${id}" data-role="path">${folderName}</a>`;
-      // 底部其他书签（与书签栏切换使用）
       this.rootID = id;
+      // 底部其他书签（与书签栏切换使用）
       this.setFooterNav(id);
     } else if (target.dataset.role === 'path') {
       while (target.nextElementSibling) {
