@@ -22,8 +22,9 @@ function startupFromLast(ele) {
 settingsReady(() => {
   // 读数据
   // console.log(BM.settings);
-  for (var [key, value] of Object.entries(BM.settings)) {
+  for (var key in BM.default) {
     // console.log(`${key}: ${value}`);
+    var value = BM.settings[key];
     var ele = $(`input[name=${key}][value="${value}"]`);
     if (ele) {
       ele.checked = true;
