@@ -53,6 +53,11 @@ BM.startupReal = localStorage.getItem('LastFolderID') || BM.startup;
 if (location.pathname === '/popup.html') {
   chrome.bookmarks.getChildren(BM.startupReal.toString(), (results) => {
     // console.log(results);
+    // 通过其他方式删除了文件夹
+    if (typeof results === 'undefined') {
+      localStorage.removeItem('LastFolderID');
+      location.reload();
+    }
     if (!BM.preItems) BM.preItems = results;
   });
 }
