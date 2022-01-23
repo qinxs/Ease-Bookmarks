@@ -232,8 +232,8 @@ const contextMenu = {
           $contextMenu.type = $fromTarget.type || 'nodata';
           $contextMenu.className = isSeachView ? 'search' : '';
           this.pos.left = e.clientX;
-          if (this.pos.left + $contextMenu.clientWidth > $main.clientWidth) {
-            // 数值6: 右键菜单的边距
+          // 数值6: 右键菜单的边距
+          if (this.pos.left + $contextMenu.clientWidth > $main.clientWidth - 6) {
             this.pos.left = $main.clientWidth - $contextMenu.clientWidth - 6;
           }
           this.pos.top = e.clientY - $main.offsetTop;
@@ -617,6 +617,7 @@ function handleSearchResultsHover(event) {
 }
 
 function addPathTitle(id, target) {
+  if (typeof id === 'undefined') return;
   if (id < 3) {
     pathTitle = settings.rootInfo[id] + pathTitle;
     target.title += '\n\n' + '[ ' + pathTitle + ' ]';
