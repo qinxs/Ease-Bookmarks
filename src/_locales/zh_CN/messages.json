@@ -17,6 +17,10 @@
     "message": "没有匹配的书签~"
   },
 
+  "openAll":
+  {
+    "message": "打开全部"
+  },
   "openInNewTab":
   {
     "message": "在新标签中打开"
@@ -41,6 +45,10 @@
   {
     "message": "打开所在目录"
   },
+  "setAsStartupFolder":
+  {
+    "message": "设为启动目录"
+  },
   "updateToCurrentURL":
   {
     "message": "更新为当前网址"
@@ -56,10 +64,6 @@
   "deleteFolderConfirm":
   {
     "message": "这还将删除此目录下的所有书签, 确定吗?"
-  },
-  "openAll":
-  {
-    "message": "打开全部"
   },
   "rename":
   {
@@ -138,14 +142,17 @@
   "fast": {
       "message": "快速"
   },
-  "startupFromLast": {
-      "message": "从上次位置启动:"
+  "startupFolder": {
+      "message": "启动位置:"
   },
-  "folder": {
-      "message": "目录"
+  "folderXTitle": {
+      "message": "请通过文件夹右键菜单设置或更改从子目录启动..."
   },
-  "folderAndScrollBar": {
-      "message": "目录和滚动条"
+  "lastFolder": {
+      "message": "上次目录"
+  },
+  "lastFolderAndScrollBar": {
+      "message": "上次目录和滚动条"
   },
   "layoutCols": {
       "message": "布局列数:"

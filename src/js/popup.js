@@ -192,6 +192,7 @@ const contextMenu = {
     }, false);
   },
   html: `
+    <li id="bookmark-open-all">${L("openAll")}</li>
     <li id="bookmark-new-tab">${L("openInNewTab")}</li>
     <li id="bookmark-new-tab-background">${L("openInBackgroundTab")}</li>
     <li id="bookmark-new-incognito-window">${L("openInIncognitoWindow")}</li>
@@ -200,7 +201,7 @@ const contextMenu = {
     <li id="bookmark-add-folder">${L("addFolder")}</li>
     <li id="bookmark-location">${L("location")}</li>
     <hr>
-    <li id="bookmark-open-all">${L("openAll")}</li>
+    <li id="bookmark-set-as-startup">${L("setAsStartupFolder")}</li>
     <li id="bookmark-update-url">${L("updateToCurrentURL")}</li>
     <li id="bookmark-edit">${L("edit")} ...</li>
     <li id="bookmark-edit-folder">${L("rename")} ...</li>
@@ -298,6 +299,11 @@ const contextMenu = {
         locationFolder(parentId);
         nav.resetNavPath(parentId, id);
         nav.lastPathID = parentId;
+        break;
+      case "bookmark-set-as-startup":
+        // console.log($fromTarget);
+        setStartupLocal(null, id);
+        chrome.storage.sync.set({startup: id}, () => {});
         break;
       case "bookmark-delete":
         if ($fromTarget.type === 'folder') {
@@ -808,7 +814,7 @@ function setLastData(event) {
     localStorage.setItem('LastScrollTop', $main.scrollTop);
   }
   if (curStartupFromLast < 0) {
-    localStorage.setItem('LastFolderID', $('nav a:last-child').dataset.id);
+    localStorage.setItem('startupID', $('nav a:last-child').dataset.id);
   }
 }
 /******************************************************/

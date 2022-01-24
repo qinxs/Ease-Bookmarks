@@ -60,6 +60,16 @@ body {
     overflow: hidden;
     position: relative;
 }
+.two_line {
+    height: 80px;
+    line-height: 80px;
+}
+.clear {
+    clear: both;
+}
+.disabled {
+    background-color: #ccc;
+}
 .label_box > label > input:checked + span {
     border: 1px solid var(--primary-color);
     color: var(--primary-color) !important;

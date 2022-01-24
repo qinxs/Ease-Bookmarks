@@ -222,10 +222,11 @@ nav a {
 
 #context-menu[type=folder] > #bookmark-add-bookmark,
 #context-menu[type=folder] > #bookmark-add-folder,
+#context-menu[type=folder] > #bookmark-set-as-startup,
 #context-menu[type=folder] > #bookmark-open-all,
 #context-menu[type=folder] > #bookmark-edit-folder,
 #context-menu[type=folder] > #bookmark-delete,
-#context-menu[type=folder] > #bookmark-location + hr {
+#context-menu[type=folder] > hr {
   display: block;
 }
 #context-menu[type=link] > #bookmark-new-tab,

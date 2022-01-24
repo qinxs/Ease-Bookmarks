@@ -17,6 +17,10 @@
     "message": "No matching bookmark."
   },
 
+  "openAll":
+  {
+    "message": "Open all"
+  },
   "openInNewTab":
   {
     "message": "Open in new tab"
@@ -41,7 +45,10 @@
   {
     "message": "Open the directory"
   },
-
+  "setAsStartupFolder":
+  {
+    "message": "Set as startup folder"
+  },
   "updateToCurrentURL":
   {
     "message": "Update to current URL"
@@ -57,10 +64,6 @@
   "deleteFolderConfirm":
   {
     "message": "This will also delete all bookmarks in this directory, is it sure?"
-  },
-  "openAll":
-  {
-    "message": "Open all"
   },
   "rename":
   {
@@ -139,14 +142,17 @@
   "fast": {
       "message": "Fast"
   },
-  "startupFromLast": {
-      "message": "Startup from last:"
+  "startupFolder": {
+      "message": "Startup folder:"
   },
-  "folder": {
-      "message": "Folder"
+  "folderXTitle": {
+      "message": "Please use the folder right-click menu to set or change startup from a subdirectory..."
   },
-  "folderAndScrollBar": {
-      "message": "Folder and scrollbar"
+  "lastFolder": {
+      "message": "Last folder"
+  },
+  "lastFolderAndScrollBar": {
+      "message": "Last folder and scrollbar"
   },
   "layoutCols": {
       "message": "Layout column(s):"

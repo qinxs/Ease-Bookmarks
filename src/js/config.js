@@ -1,8 +1,6 @@
 "use strict";
 
 window.BM = {
-  // 1 书签栏 2 其他书签（根目录为0）
-  startup: 1,
   preItems: null,
   // 选项必须与input的name和value一致
   default: {
@@ -11,7 +9,9 @@ window.BM = {
     hoverEnter: 500, // {0,300,500,800}
     layoutCols: 1,
     minItemsPerCol: 1, // 1-16；避免滚动条
-    startupFromLast: 0, // 从上次位置启动； 0 关闭，-1 目录，-2 目录和滚动条
+    // 1 书签栏 2 其他书签（根目录为0）
+    // -1 目录，-2 目录和滚动条（从上次位置启动）
+    startup: 1,
   },
   defaultSys: {
     fastCreate: 0, // 0-2
@@ -48,15 +48,17 @@ chrome.storage.sync.get(null, function(items) {
   BM.settingsReady = true;
 });
 
-BM.startupReal = localStorage.getItem('LastFolderID') || BM.startup;
+BM.startupReal = localStorage.getItem('startupID') || BM.default.startup;
 
 if (location.pathname === '/popup.html') {
   chrome.bookmarks.getChildren(BM.startupReal.toString(), (results) => {
     // console.log(results);
-    // 通过其他方式删除了文件夹
+    // 文件夹不存在了
     if (typeof results === 'undefined') {
-      localStorage.removeItem('LastFolderID');
-      location.reload();
+      localStorage.setItem('startupID', BM.default.startup);
+      chrome.storage.sync.set({startup: BM.default.startup}, () => {
+        location.reload();
+      });
     }
     if (!BM.preItems) BM.preItems = results;
   });
@@ -71,6 +73,14 @@ function setUsageLink() {
   if (!UsageLang.startsWith('zh')) {
     $('#usage').href = `usage/en.html`;
   }
+}
+
+function setStartupLocal(ele, folderID) {
+  var id = folderID || this.value;
+  id < 0 && localStorage.setItem('startupFromLast', id);
+  id > 0 && localStorage.setItem('startupID', id);
+  id > -1 && localStorage.removeItem('startupFromLast');
+  id > -2 && localStorage.removeItem('LastScrollTop');
 }
 
 // 选项数据（异步）加载完成

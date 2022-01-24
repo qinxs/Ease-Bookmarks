@@ -13,15 +13,22 @@ function bookmarksAlias() {
   chrome.storage.sync.set({rootInfo: rootInfo}, () => {});
 }
 
-function startupFromLast(ele) {
-  localStorage.setItem('startupFromLast', this.value);
-  this.value > -1 && localStorage.removeItem('LastFolderID');
-  this.value > -2 && localStorage.removeItem('LastScrollTop');
-}
-
 settingsReady(() => {
   // 读数据
   // console.log(BM.settings);
+  $('#_1').textContent = BM.settings.rootInfo[1];
+  $('#_2').textContent = BM.settings.rootInfo[2];
+  var folderX = $('#folderX');
+  folderX.title = L('folderXTitle');
+  if (BM.settings.startup > 2) {
+    folderX.previousElementSibling.value = BM.settings.startup;
+    chrome.bookmarks.get(BM.settings.startup, (results) => {
+      folderX.textContent = results[0].title;
+    });
+  } else {
+    folderX.previousElementSibling.disabled = true;
+    folderX.classList.add('disabled');
+  }
   for (var key in BM.default) {
     // console.log(`${key}: ${value}`);
     var value = BM.settings[key];
@@ -42,6 +49,7 @@ settingsReady(() => {
     ele.addEventListener('change', (event) => {
       // console.log(event.target);
       var {name, value} = event.target;
+      // if (name == 'startup') debugger
       if (value == BM.default[name]) {
         chrome.storage.sync.remove(name, () => {});
       } else {
@@ -49,6 +57,7 @@ settingsReady(() => {
       }
     }, false);
   }
+  // 只允许数字，范围 1-16
   $minItemsPerCol.addEventListener('input', function() {
     this.value = this.value.replace(/[^0-9]/g, '');
   });
@@ -67,8 +76,8 @@ settingsReady(() => {
     // console.log($customCSS.value);
     chrome.storage.sync.set({customCSS: $customCSS.value}, () => {});
   });
-  $$('input[name=startupFromLast]').forEach((ele) => {
-    ele.addEventListener('change', startupFromLast);
+  $$('input[name=startup]').forEach((ele) => {
+    ele.addEventListener('change', setStartupLocal);
   })
 })
 

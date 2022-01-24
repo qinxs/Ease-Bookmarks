@@ -17,6 +17,10 @@
     "message": "沒有匹配的書籤~"
   },
 
+  "openAll":
+  {
+    "message": "打開全部"
+  },
   "openInNewTab":
   {
     "message": "在新標籤中打開"
@@ -41,6 +45,10 @@
   {
     "message": "打開所在目錄"
   },
+  "setAsStartupFolder":
+  {
+    "message": "設為啟動目錄"
+  },
   "updateToCurrentURL":
   {
     "message": "更新為當前網址"
@@ -56,10 +64,6 @@
   "deleteFolderConfirm":
   {
     "message": "這還將刪除此目錄下的所有書籤, 確定嗎?"
-  },
-  "openAll":
-  {
-    "message": "打開全部"
   },
   "rename":
   {
@@ -138,14 +142,17 @@
   "fast": {
       "message": "快速"
   },
-  "startupFromLast": {
-      "message": "從上次位置啟動:"
+  "startupFolder": {
+      "message": "啟動位置:"
   },
-  "folder": {
-      "message": "目錄"
+  "folderXTitle": {
+      "message": "請通過文件夾右鍵菜單設置或更改從子目錄啟動..."
   },
-  "folderAndScrollBar": {
-      "message": "目錄和滾動條"
+  "lastFolder": {
+      "message": "上次目錄"
+  },
+  "lastFolderAndScrollBar": {
+      "message": "上次目錄和滾動條"
   },
   "layoutCols": {
       "message": "佈局列數:"

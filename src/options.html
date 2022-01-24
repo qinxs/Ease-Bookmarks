@@ -78,19 +78,27 @@
             </div>
         </li>
         <li>
-            <div class="label" id="startupFromLast" data-i18n="startupFromLast"></div>
+            <div class="label two_line" id="startupFolder" data-i18n="startupFolder"></div>
             <div class="label_box">
                 <label>
-                    <input type="radio" name="startupFromLast" value="0">
-                    <span data-i18n="off"></span>
+                    <input type="radio" name="startup" value="1">
+                    <span id="_1"></span>
                 </label>
                 <label>
-                    <input type="radio" name="startupFromLast" value="-1">
-                    <span data-i18n="folder"></span>
+                    <input type="radio" name="startup" value="2">
+                    <span id="_2"></span>
                 </label>
                 <label>
-                    <input type="radio" name="startupFromLast" value="-2">
-                    <span data-i18n="folderAndScrollBar"></span>
+                    <input type="radio" name="startup" value="0.1">
+                    <span id="folderX">X</span>
+                </label>
+                <label class="clear">
+                    <input type="radio" name="startup" value="-1">
+                    <span data-i18n="lastFolder"></span>
+                </label>
+                <label>
+                    <input type="radio" name="startup" value="-2">
+                    <span data-i18n="lastFolderAndScrollBar"></span>
                 </label>
             </div>
         </li>
