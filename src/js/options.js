@@ -5,12 +5,20 @@ var $otherBookmarks = $('#otherBookmarks');
 var $customCSS = $('#customCSS');
 var $minItemsPerCol = $('#minItemsPerCol');
 
+function setSyncItem(name, value) {
+  if (value == BM.default[name] || !value) {
+    chrome.storage.sync.remove(name);
+  } else {
+    chrome.storage.sync.set({[name]: value});
+  }
+}
+
 function bookmarksAlias() {
   var rootInfo = {
     1: $bookmarksBar.value,
     2: $otherBookmarks.value,
   }
-  chrome.storage.sync.set({rootInfo: rootInfo}, () => {});
+  chrome.storage.sync.set({rootInfo: rootInfo});
 }
 
 settingsReady(() => {
@@ -50,11 +58,7 @@ settingsReady(() => {
       // console.log(event.target);
       var {name, value} = event.target;
       // if (name == 'startup') debugger
-      if (value == BM.default[name]) {
-        chrome.storage.sync.remove(name, () => {});
-      } else {
-        chrome.storage.sync.set({[name]: value}, () => {});
-      }
+      setSyncItem(name, value);
     }, false);
   }
   // 只允许数字，范围 1-16
@@ -64,17 +68,12 @@ settingsReady(() => {
   $minItemsPerCol.addEventListener('change', function() {
     if (this.value < 1) this.value = 1;
     if (this.value > 16) this.value = 16;
-    if (this.value == BM.default['minItemsPerCol']) {
-      chrome.storage.sync.remove('minItemsPerCol', () => {});
-    } else {
-      chrome.storage.sync.set({minItemsPerCol: $minItemsPerCol.value}, () => {});
-    }
+    setSyncItem('minItemsPerCol', this.value);
   });
   $bookmarksBar.addEventListener('change', bookmarksAlias);
   $otherBookmarks.addEventListener('change', bookmarksAlias);
-  $customCSS.addEventListener('change', () => {
-    // console.log($customCSS.value);
-    chrome.storage.sync.set({customCSS: $customCSS.value}, () => {});
+  $customCSS.addEventListener('change', function() {
+    setSyncItem('customCSS', this.value);
   });
   $$('input[name=startup]').forEach((ele) => {
     ele.addEventListener('change', setStartupLocal);
