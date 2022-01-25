@@ -69,6 +69,13 @@ Ease Bookmarks 是一款为了替代浏览器原有书签栏的扩展
 
 - `28`：默认值（如果通过自定义样式改变了行高，则需要修改此值）
 
+### `keepMaxCols`
+
+> 功能：页面保持最大宽度
+
+- `0`：页面宽度始终与当前内容一致
+- `1`：默认值，页面宽度与（打开过的）页面的最大宽度一致（能避免切换文件夹时的页面跳动）
+
 ## 第三方库
 
 [dragula.js](https://github.com/bevacqua/dragula)（进行了细微调整 [改动内容](https://github.com/qinxs/dragula)）

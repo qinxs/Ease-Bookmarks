@@ -548,7 +548,7 @@ function setListSize($list, length) {
     colsCount = length > layoutCols * minItemsPerCol ? layoutCols : Math.ceil(length / minItemsPerCol);
     rowsCount = Math.ceil(length / colsCount);
 
-    if (colsCount > curMaxCols) {
+    if (colsCount > curMaxCols || !settings.keepMaxCols) {
       curMaxCols = colsCount;
       document.body.style.width = BM.bodyWidth[curMaxCols];
       rootStyle.setProperty('--width-item', parseInt(100 / curMaxCols) + "%");
@@ -694,9 +694,11 @@ function openFolder(event) {
     nav.setNavPath(id, folderName, target);
     nav.lastPathID = id;
     // debugger
-    if(!$(`#_${id}`)) {
+    var $list = $(`#_${id}`);
+    if(!$list) {
       loadChildrenView(id);
     } else {
+      !settings.keepMaxCols && setListSize($list, $list.childElementCount);
       toggleList(id);
     }
   }, settings.hoverEnter);
