@@ -48,6 +48,7 @@ const dataSetting = {
     minItemsPerCol = settings.minItemsPerCol;
     this.layout();
     this.switchTheme();
+    BM.EventType = settings.hoverEnter == 0 ? 'click' : 'mouseover';
   },
   layout() {
     if(settings.customCSS) $('#customCSS').textContent = settings.customCSS;
@@ -79,7 +80,7 @@ const nav = {
       this.rootID = id;
       // 底部其他书签（与书签栏切换使用）
       this.setFooterNav(id);
-    } else if (target.dataset.role === 'path') {
+    } else if (target && target.dataset.role === 'path') {
       while (target.nextElementSibling) {
         target.nextElementSibling.remove();
       }
@@ -147,9 +148,6 @@ const search = {
       // console.log(event);
       !inputFlag && this.loadSearchView($seachInput.value);
     }, false);
-    $seachInput.addEventListener("keydown", event => {
-      if (event.code === 'Escape' && !$seachInput.value) window.close();
-    });
   },
   loadSearchView(keyword) {
     if (keyword) {
@@ -555,6 +553,7 @@ function setListSize($list, length) {
     }
   }
   rowsCount = rowsCount < minItemsPerCol ? minItemsPerCol : rowsCount;
+  $list.dataset.rows = rowsCount;
   $list.style.height = rowsCount * settings.itemHeight + 'px';
 }
 
@@ -669,9 +668,9 @@ function openUrl(url, event, tabs) {
 function handleFolderEvent(nodelist) {
   for (var ele of nodelist) {
     if (settings.hoverEnter == 0) {
-      ele.addEventListener('click', openFolder, false);
+      ele.addEventListener('click', openFolderEvent, false);
     } else {
-      ele.addEventListener('mouseover', openFolder, false);
+      ele.addEventListener('mouseover', openFolderEvent, false);
       ele.addEventListener('mouseout', clearOpenFolderDelay, false);
     }
   }
@@ -681,27 +680,32 @@ function clearOpenFolderDelay() {
   clearTimeout(openFolderDelay);
 }
 
-function openFolder(event) {
+function openFolderEvent(event) {
   if (contextMenu.showing || dialog.showing) return;
   var target = event.target;
   // 路径最末级不在打开文件夹
   var id = parseInt(target.dataset.id);
   if (id == nav.lastPathID) return;
+  var folderName = target.textContent;
+  var delay = event.isTrusted ? settings.hoverEnter : 0;
   window.openFolderDelay = setTimeout(() => {
-    if (contextMenu.showing || dialog.showing) return;
-    var folderName = target.textContent;
-    // console.log(event.target);
-    nav.setNavPath(id, folderName, target);
-    nav.lastPathID = id;
-    // debugger
-    var $list = $(`#_${id}`);
-    if(!$list) {
-      loadChildrenView(id);
-    } else {
-      !settings.keepMaxCols && setListSize($list, $list.childElementCount);
-      toggleList(id);
-    }
-  }, settings.hoverEnter);
+    openFolder(id, folderName, target);
+  }, delay);
+}
+
+function openFolder(id, folderName, target) {
+  if (contextMenu.showing || dialog.showing) return;
+  // console.log(target);
+  nav.setNavPath(id, folderName, target);
+  nav.lastPathID = id;
+  // debugger
+  var $list = $(`#_${id}`);
+  if(!$list) {
+    loadChildrenView(id);
+  } else {
+    !settings.keepMaxCols && setListSize($list, $list.childElementCount);
+    toggleList(id);
+  }
 }
 
 /**
@@ -804,6 +808,104 @@ function dragToMove() {
   });
 }
 
+function hotskeyEvents(event) {
+  var keyCode = event.code;
+  var $list = isSeachView ? $searchList : $lastListView;
+  var $item = $('.item.active', $list);
+  switch (keyCode) {
+    case "Escape":
+      !$seachInput.value && window.close();
+      break;
+    case "Tab":
+      event.preventDefault();
+      $item && $item.classList.remove('active');
+      break;
+    case "Enter":
+      var $itemA = $('.item.active > a', $list);
+      if (!$itemA) return;
+      if ($itemA.type === 'link') {
+        chrome.tabs.query({active: true, currentWindow: true}, (tabs) => {
+          openUrl($itemA.dataset.url, event, tabs);
+        });
+      } else {
+        $itemA.closest('.item').classList.remove('active');
+        openFolder($itemA.dataset.id, $itemA.textContent);
+      }
+      break;
+    case "KeyF":
+      if (!event.ctrlKey || dialog.showing) return;
+      event.preventDefault();
+      contextMenu.showing && contextMenu.close();
+      $seachInput.focus();
+      break;
+    case "KeyZ":
+      if (!event.ctrlKey || dialog.showing) return;
+      event.preventDefault();
+      contextMenu.showing && contextMenu.close();
+      $item && $item.classList.remove('active');
+      var $back = $('a:nth-last-of-type(2)', $nav.header);
+      $back && $back.dispatchEvent(new Event(BM.EventType));
+      break;
+    case "Home":
+    case "End":
+    case "ArrowUp":
+    case "ArrowDown":
+    case "ArrowLeft":
+    case "ArrowRight":
+      event.preventDefault();
+      setActiveItem(keyCode);
+      break;
+    default:
+      break;
+  }
+
+  function setActiveItem(keyCode) {
+    var $goalItem = getGoalItem($item, keyCode, $list);
+    if ($goalItem) {
+      $item && $item.classList.remove('active');
+      $goalItem.classList.add('active');
+      // 滚动条靠顶或者靠底时 才滚动
+      $goalItem.scrollIntoView(keyCode == 'ArrowUp');
+    }
+  }
+
+  function getGoalItem($item, keyCode, $list) {
+    var rows = $list.dataset.rows;
+    switch (keyCode) {
+      case "Home":
+        return $list.firstElementChild;
+      case "End":
+        return $list.lastElementChild;
+      case "ArrowUp":
+        if ($item) {
+          return $item.previousElementSibling || $list.lastElementChild;
+        } else {
+          return $list.lastElementChild;
+        }
+      case "ArrowDown":
+        if ($item) {
+          return $item.nextElementSibling || $list.firstElementChild;
+        } else {
+          return $list.firstElementChild;
+        }
+      case "ArrowLeft":
+        var $prev = $item;
+        while (rows-- && $prev) {
+          $prev = $prev.previousElementSibling;
+        }
+        return $prev;
+      case "ArrowRight":
+        var $next = $item;
+        while (rows-- && $next) {
+          $next = $next.nextElementSibling;
+        }
+        return $next;
+      default:
+        return null;
+    }
+  }
+}
+
 function setLastData(event) {
   // Cancel the event as stated by the standard.
   event.preventDefault();
@@ -856,6 +958,7 @@ settingsReady(() => {
     $searchList.addEventListener('mouseover', handleSearchResultsHover, false);
     loadCSS('libs/dragula.css');
     loadJS('libs/dragula.min.js', dragToMove);
+    document.addEventListener('keydown', hotskeyEvents);
     window.addEventListener('unload', setLastData);
     setUsageLink();
   }, 60)
