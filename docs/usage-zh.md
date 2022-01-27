@@ -12,6 +12,8 @@
 
 书签多列显示
 
+快捷键支持
+
 在未使用本扩展时，不占用后台
 
 另外，本扩展对 `JS 小书签` 进行了特别支持~
@@ -21,15 +23,24 @@
 ### 打开/关闭 本扩展
 
 默认快捷键是 `Ctrl + Q`，你可以在如下管理页面进行修改：
-- Chrome：`chrome://extensions/shortcuts`
-- Edge：`edge://extensions/shortcuts`
+- **Chrome**：`chrome://extensions/shortcuts`
+- **Edge**：`edge://extensions/shortcuts`
 
 <!-- - Firefox：`about:addons` -> 扩展 -> 设置图标 -> 管理扩展快捷键 -->
 
 ### 功能键
 
-- Ctrl：在 当前标签/新标签 打开页面
-- Shift：是否在后台打开页面
+- `上`、`下`、`左`、`右`、`Home`、`End`：选择/切换 书签
+- `Enter`：打开选中的 书签/目录
+- `Tab`：取消选中
+- `Ctrl + Z`：返回上一级目录
+- `Ctrl + F`：激活搜索框
+- `Esc`：清除搜索框内容；关闭页面
+
+### 修饰键
+
+- `Ctrl`：在 当前标签/新标签 打开页面
+- `Shift`：是否在后台打开页面
 
 ## 自定义
 
@@ -40,7 +51,7 @@
 
 [GitHub Issues](https://github.com/qinxs/Ease-Bookmarks/issues) - 
 [博客留言](https://7bxing.com/posts/beb3fd2a/) - 
-邮件：qin_xs#qq.com（# 替换为 @）
+邮件：qin_xs@qq.com
 
 [GitHub Star](https://github.com/qinxs/Ease-Bookmarks "方便的话，给个 Star，感谢！") - 
 [欢迎捐赠](https://7bxing.com/donate/)

@@ -12,6 +12,8 @@ Various basic operations on bookmarks (edit, delete, move, etc.)
 
 Bookmarks in multiple columns
 
+Shortcut Key Support
+
 Does not occupy the background when this extension is not used
 
 In addition, this extension has special support for `JS bookmarklet`~
@@ -21,15 +23,24 @@ In addition, this extension has special support for `JS bookmarklet`~
 ### Turn this extension on/off
 
 The default shortcut is `Ctrl + Q`, you can modify it in the following management page:
-- Chrome: `chrome://extensions/shortcuts`
-- Edge: `edge://extensions/shortcuts`
+- **Chrome**: `chrome://extensions/shortcuts`
+- **Edge**: `edge://extensions/shortcuts`
 
 <!-- - Firefox: `about:addons` -> Extensions -> Settings Icons -> Manage Extension Shortcuts -->
 
 ### Function keys
 
-- Ctrl: open page in current tab/new tab
-- Shift: whether to open the page in the background
+- `Up`, `Down`, `Left`, `Right`, `Home`, `End`: select/toggle bookmarks
+- `Enter`: open the selected bookmark/directory
+- `Tab`: uncheck
+- `Ctrl + Z`: go back to the previous directory
+- `Ctrl + F`: activate the search box
+- `Esc`: clear the search box content; close the page 
+
+### Modifier keys
+
+- `Ctrl`: open page in current tab/new tab
+- `Shift`: whether to open the page in the background
 
 ## customize
 
@@ -40,7 +51,7 @@ The default shortcut is `Ctrl + Q`, you can modify it in the following managemen
 
 [GitHub Issues](https://github.com/qinxs/Ease-Bookmarks/issues) -
 [Blog Message](https://7bxing.com/posts/beb3fd2a/) -
-Email: qin_xs#qq.com (# Replace to @)
+Email: qin_xs@qq.com
 
 [GitHub Star](https://github.com/qinxs/Ease-Bookmarks "If it's convenient, give a Star, thanks!") -
 [Donate Welcome](https://7bxing.com/donate/)
