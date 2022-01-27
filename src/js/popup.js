@@ -579,10 +579,9 @@ function toggleList(id, searchMode = false) {
 function handleMainClick(event) {
   var target = event.target;
   // console.log(target);
-  if (typeof target.dataset.url === `undefined`) return;
-  chrome.tabs.query({active: true, currentWindow: true}, (tabs) => {
-    openUrl(target.dataset.url, event, tabs)
-  })
+  if (typeof target.dataset.url !== `undefined`) {
+    openUrl(target.dataset.url, event);
+  }
 }
 
 function handleMainMiddleClick(event) {
@@ -641,22 +640,24 @@ function addPathTitle(id, target) {
   高位1 在新标签打开; 0当前标签打开
   低位1 在前台打开; 0在后台
  */
-function openUrl(url, event, tabs) {
+function openUrl(url, event) {
   var flag = settings.openIn;
   if(event.metaKey || event.ctrlKey) flag ^= 0b10; 
   if(event.shiftKey) flag ^= 0b01;
   // console.log(event);
   // return
   if (isBookmarklet(url)) {
-    var pageUrl = tabs[0].url;
-    // 官方页面 不能直接执行js
-    // console.log(pageUrl);
-    if (/^(about|chrome|chrome-extension|https:\/\/chrome\.google\.com|edge|extension|https:\/\/microsoftedge\.microsoft\.com)/.test(pageUrl) || !pageUrl) {
-      !pageUrl && chrome.tabs.remove(tabs[0].id);
-      chrome.tabs.create({ url: url, active: true });
-    } else { 
-      chrome.tabs.executeScript({ code: url });
-    }
+    chrome.tabs.query({active: true, currentWindow: true}, (tabs) => {
+      var pageUrl = tabs[0].url;
+      // console.log(pageUrl);
+      // 官方页面 不能直接执行js
+      if (/^(about|chrome|chrome-extension|https:\/\/chrome\.google\.com|edge|extension|https:\/\/microsoftedge\.microsoft\.com)/.test(pageUrl) || !pageUrl) {
+        !pageUrl && chrome.tabs.remove(tabs[0].id);
+        chrome.tabs.create({ url: url, active: true });
+      } else { 
+        chrome.tabs.executeScript({ code: url });
+      }
+    });
   } else if(flag >> 1 == 0) {
     chrome.tabs.update({ url: url });
   } else {
@@ -824,9 +825,7 @@ function hotskeyEvents(event) {
       var $itemA = $('.item.active > a', $list);
       if (!$itemA) return;
       if ($itemA.type === 'link') {
-        chrome.tabs.query({active: true, currentWindow: true}, (tabs) => {
-          openUrl($itemA.dataset.url, event, tabs);
-        });
+        openUrl($itemA.dataset.url, event);
       } else {
         $itemA.closest('.item').classList.remove('active');
         openFolder($itemA.dataset.id, $itemA.textContent);
@@ -955,10 +954,10 @@ settingsReady(() => {
     search.init();
     contextMenu.init();
     dialog.init();
+    document.addEventListener('keydown', hotskeyEvents);
     $searchList.addEventListener('mouseover', handleSearchResultsHover, false);
     loadCSS('libs/dragula.css');
     loadJS('libs/dragula.min.js', dragToMove);
-    document.addEventListener('keydown', hotskeyEvents);
     window.addEventListener('unload', setLastData);
     setUsageLink();
   }, 60)
