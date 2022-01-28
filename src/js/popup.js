@@ -119,9 +119,13 @@ const nav = {
   setFooterNav(id) {
     var _id = 3 - id;
     chrome.bookmarks.getChildren(_id.toString(), (results) => {
-      if (!results.length) return;
-      $nav.footer.dataset.id = _id;
-      $nav.footer.textContent = settings.rootInfo[_id];
+      if (results.length) {
+        $nav.footer.dataset.id = _id;
+        $nav.footer.textContent = settings.rootInfo[_id];
+      } else if ($nav.footer.dataset.id) {
+        delete $nav.footer.dataset.id;
+        $nav.footer.textContent = '';
+      }
     });
   }
 }
