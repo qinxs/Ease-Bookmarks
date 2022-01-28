@@ -32,10 +32,11 @@ The default shortcut is `Ctrl + Q`, you can modify it in the following managemen
 
 - `Up`, `Down`, `Left`, `Right`, `Home`, `End`: select/toggle bookmarks
 - `Enter`: open the selected bookmark/directory
-- `Tab`: uncheck
-- `Ctrl + Z`: go back to the previous directory
+- `Space`: cancel selection
+- `Tab`: go back to the previous directory
+- `Ctrl + Z`: switch to bookmarks bar/other bookmarks
 - `Ctrl + F`: activate the search box
-- `Esc`: clear the search box content; close the page 
+- `Esc`: clear the search box content; close the page
 
 ### Modifier keys
 
