@@ -827,15 +827,29 @@ function dragToMove() {
 
 function hotskeyEvents(event) {
   var keyCode = event.code;
+  if (dialog.showing && keyCode !== 'Escape') return;
   var $list = isSeachView ? $searchList : $lastListView;
   var $item = $('.item.active', $list);
   switch (keyCode) {
     case "Escape":
+      if (dialog.showing) {
+        dialog.close(event);
+        return false;
+      }
       !$seachInput.value && window.close();
       break;
     case "Tab":
       event.preventDefault();
+      contextMenu.showing && contextMenu.close();
       $item && $item.classList.remove('active');
+      var $back = $('a:nth-last-of-type(2)', $nav.header);
+      $back && $back.dispatchEvent(new Event(BM.EventType));
+      break;
+    case "Space":
+      if ($item) {
+        event.preventDefault();
+        $item.classList.remove('active');
+      }
       break;
     case "Enter":
       var $itemA = $('.item.active > a', $list);
@@ -854,12 +868,8 @@ function hotskeyEvents(event) {
       $seachInput.focus();
       break;
     case "KeyZ":
-      if (!event.ctrlKey || dialog.showing) return;
       event.preventDefault();
-      contextMenu.showing && contextMenu.close();
-      $item && $item.classList.remove('active');
-      var $back = $('a:nth-last-of-type(2)', $nav.header);
-      $back && $back.dispatchEvent(new Event(BM.EventType));
+      $nav.footer.dataset.id && $nav.footer.dispatchEvent(new Event(BM.EventType));
       break;
     case "Home":
     case "End":
