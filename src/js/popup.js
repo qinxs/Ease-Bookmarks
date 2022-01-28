@@ -32,15 +32,18 @@ window.openFolderDelay = null;
 // 点击的右键菜单ID，需要弹出dialog时动态改变
 var curContextMenuID;
 
-// 宽度只变大 不缩小
 var layoutCols;
+// 宽度只变大 不缩小
 var curMaxCols = 1;
 var curItemslength;
 var minItemsPerCol;
 const rootStyle = document.documentElement.style;
 
 const isBookmarklet = url => url.trim().startsWith('javascript:');
-const nodataHtml = `<div class="item nodata">${L("noBookmarksTip")}<div>`;
+const htmlTemplate = {
+  nodata: `<div class="item nodata">${L("noBookmarksTip")}<div>`,
+  noresult: `<div class="item noresult">${L("seachNoResultTip")}<div>`,
+}
 
 const dataSetting = {
   init() {
@@ -93,18 +96,11 @@ const nav = {
       handleFolderEvent($$('nav > [type=folder]'));
     }
   },
-  // activeItemId 搜索结果定位目录时 激活来源id
-  resetNavPath(id, activeItemId) {
+  resetNavPath(id) {
     if (id < 3) {
       this.pathHtml = `<a type="folder" data-id="${id}" data-role="path">${settings.rootInfo[id]}</a>` + this.pathHtml;
       $nav.header.innerHTML = this.pathHtml;
       handleFolderEvent($$('nav > [type=folder]'));
-      // main区域下有两个对应item，此处用$选择第一个
-      if (activeItemId) {
-        var $item = $(`[data-id="${activeItemId}"]`).closest('.item');
-        $item.classList.add('active');
-        $item.scrollIntoView();
-      }
       this.rootID = id;
       this.setFooterNav(id);
       this.pathHtml = '';
@@ -113,7 +109,7 @@ const nav = {
         var folderName = this.replaceEmptyString(item[0].title);
         this.pathHtml = `
         <span>></span> <a type="folder" data-id="${id}" data-role="path">${folderName}</a>` + this.pathHtml;
-        this.resetNavPath(item[0].parentId, activeItemId);
+        this.resetNavPath(item[0].parentId);
       })
     }
   },
@@ -153,7 +149,8 @@ const search = {
     if (keyword) {
       // console.log($seachInput.value);
       this._loadSearchView($seachInput.value);
-      setTimeout(() => {
+      // 防止抖动
+      requestIdleCallback(() => {
         !isSeachView && toggleList(null, true);
       });
     } else {
@@ -162,9 +159,11 @@ const search = {
   },
   _loadSearchView(keyword) {
     chrome.bookmarks.search(keyword, (results) => {
-      var html = `<div class="item noresult">${L("seachNoResultTip")}<div>`;
+      var html;
       if (results.length) {
         html = template(results);
+      } else {
+        html = htmlTemplate.noresult;
       }
       setListSize($searchList, results.length);
       $searchList.innerHTML = html;
@@ -239,7 +238,7 @@ const contextMenu = {
           if (this.pos.top + $contextMenu.clientHeight > $main.clientHeight) {
             this.pos.top -= $contextMenu.clientHeight;
           }
-          this.pos.top += $main.scrollTop
+          this.pos.top += $main.scrollTop;
           this.show();
         }
         break;
@@ -294,9 +293,8 @@ const contextMenu = {
       case "bookmark-location":
         // console.log($fromTarget);
         var parentId = $fromTarget.dataset.parentId;
-        locationFolder(parentId);
-        nav.resetNavPath(parentId, id);
-        nav.lastPathID = parentId;
+        locationFolder(parentId, id);
+        nav.resetNavPath(parentId);
         break;
       case "bookmark-set-as-startup":
         // console.log($fromTarget);
@@ -312,7 +310,7 @@ const contextMenu = {
             if (!results.length || confirm(`[ ${$fromTarget.textContent} - ${results.length} ]:\n${L("deleteFolderConfirm")}`)) {
               chrome.bookmarks.removeTree(id, () => {
                 if ($lastListView.childElementCount === 1) {
-                  $lastListView.innerHTML = nodataHtml;
+                  $lastListView.innerHTML = htmlTemplate.nodata;
                 } else {
                   $fromTarget.closest('.item').remove();
                   setListSize($lastListView, --curItemslength);
@@ -326,7 +324,7 @@ const contextMenu = {
         } else {
           chrome.bookmarks.remove(id, () => {
             if ($lastListView.childElementCount === 1) {
-              $lastListView.innerHTML = nodataHtml;
+              $lastListView.innerHTML = htmlTemplate.nodata;
             } else {
               $fromTarget.closest('.item').remove();
               setListSize($lastListView, --curItemslength);
@@ -346,6 +344,8 @@ const dialog = {
   showing: false,
   init() {
     $dialog.insertAdjacentHTML('beforeend', this.html);
+    this.$name = $('#edit-dialog-name');
+    this.$url = $('#edit-dialog-url');
     delete this.html;
     $('#edit-cancel').addEventListener('click', () => this.close(event), false);
     $('#edit-save').addEventListener('click', () => this.save(event), false);
@@ -370,37 +370,37 @@ const dialog = {
     switch(curContextMenuID) {
       case "bookmark-add-bookmark":
         chrome.tabs.query({active: true, currentWindow: true}, (tabs) => {
-          $('#edit-dialog-name').value = tabs[0].title;
-          $('#edit-dialog-url').hidden = false;
-          $('#edit-dialog-url').value = tabs[0].url;
+          this.$name.value = tabs[0].title;
+          this.$url.hidden = false;
+          this.$url.value = tabs[0].url;
         });
         break;
       case "bookmark-add-folder":
-        $('#edit-dialog-name').value = '';
-        $('#edit-dialog-url').hidden = true;
+        this.$name.value = '';
+        this.$url.hidden = true;
         break;
       case "bookmark-edit":
-        $('#edit-dialog-name').value = $fromTarget.textContent;
-        $('#edit-dialog-url').hidden = false;
-        $('#edit-dialog-url').value = $fromTarget.dataset.url;
+        this.$name.value = $fromTarget.textContent;
+        this.$url.hidden = false;
+        this.$url.value = $fromTarget.dataset.url;
         break;
       case "bookmark-edit-folder":
-        $('#edit-dialog-name').value = $fromTarget.textContent;
-        $('#edit-dialog-url').hidden = true;
+        this.$name.value = $fromTarget.textContent;
+        this.$url.hidden = true;
         break;
       default: break;
     }
     $dialog.hidden = false;
     this.showing = true;
-    $('#edit-dialog-name').focus();
+    this.$name.focus();
   },
   save(e) {
     e.preventDefault();
     var ele = $fromTarget;
     var id = ele.dataset.id;
-    var title = $('#edit-dialog-name').value;
-    var url = $('#edit-dialog-url').hidden ? null : $('#edit-dialog-url').value;
-    // console.log($('#edit-dialog-name').value);
+    var title = this.$name.value;
+    var url = this.$url.hidden ? null : this.$url.value;
+    // console.log(this.$name.value);
     switch(curContextMenuID) {
       case "bookmark-add-bookmark":
       case "bookmark-add-folder":
@@ -467,7 +467,7 @@ const dialog = {
   },
 }
 
-function loadChildrenView(id, isStartup = false) {
+function loadChildrenView(id, isStartup = false, callback) {
   chrome.bookmarks.getChildren(id.toString(), (results) => {
     // console.log(results);
     renderListView(id, results);
@@ -476,13 +476,18 @@ function loadChildrenView(id, isStartup = false) {
     } else {
       $lastListView = $(`#_${id}`);
     }
+    if (typeof callback === 'function') {
+      callback();
+    }
   })
 }
 
 function renderListView(id, items) {
-  var html = nodataHtml;
+  var html;
   if (items.length) {
     html = template(items);
+  } else {
+    html = htmlTemplate.nodata;
   }
   // @TODO 能优化吗？
   $searchList.insertAdjacentHTML('beforebegin', `<div class="folder-list" id=_${id}>${html}</div>`);
@@ -559,7 +564,6 @@ function setListSize($list, length) {
 
 // 视图切换
 function toggleList(id, searchMode = false) {
-  // 防止切换时出现抖动
   // console.log($lastListView);
   $main.scrollTop = 0;
   $lastListView.hidden = true;
@@ -724,7 +728,7 @@ function updateFolderList(id, type, data = {}) {
     containers.remove($list);
   } else if (type === 'delete') {
     if ($list.childElementCount === 1) {
-      $list.innerHTML = nodataHtml;
+      $list.innerHTML = htmlTemplate.nodata;
     } else {
       $(`[data-id="${data.id}"]`, $list).closest('.item').remove();
     }
@@ -733,9 +737,9 @@ function updateFolderList(id, type, data = {}) {
     if (data.url) {
       var url = data.url;
       var favicon = `chrome://favicon/${url}`;
-      if (isBookmarklet(data.url)) {
+      if (isBookmarklet(url)) {
         favicon = 'icons/favicon/js.png';
-        url = decodeBookmarklet(data.url);
+        url = decodeBookmarklet(url);
       }
       a.textContent = data.title;
       a.dataset.url = url;
@@ -746,14 +750,22 @@ function updateFolderList(id, type, data = {}) {
   }
 }
 
-function locationFolder(id) {
+function locationFolder(parentId, id) {
   // console.log(event.target);
   contextMenu.close();
-  // debugger
-  if(!$(`#_${id}`)) {
-    loadChildrenView(id);
+  if(!$(`#_${parentId}`)) {
+    loadChildrenView(parentId, false, () => locationToItem(id));
   } else {
-    toggleList(id);
+    toggleList(parentId);
+    locationToItem(id);
+  }
+  nav.lastPathID = parentId;
+  // 搜索结果定位目录时 激活来源id
+  // main区域下有两个对应item，此处用$选择第一个
+  function locationToItem(id) {
+    var $item = $(`[data-id="${id}"]`).closest('.item');
+    $item.classList.add('active');
+    $item.scrollIntoView(false);
   }
 }
 
@@ -768,7 +780,7 @@ function loadJS(url, callback) {
       }
     };
   }
-  document.head.appendChild(script);
+  document.body.appendChild(script);
 }
 
 function loadCSS(url) {
@@ -955,10 +967,10 @@ settingsReady(() => {
     contextMenu.init();
     dialog.init();
     document.addEventListener('keydown', hotskeyEvents);
+    window.addEventListener('unload', setLastData);
+    setUsageLink();
     $searchList.addEventListener('mouseover', handleSearchResultsHover, false);
     loadCSS('libs/dragula.css');
     loadJS('libs/dragula.min.js', dragToMove);
-    window.addEventListener('unload', setLastData);
-    setUsageLink();
   }, 60)
 });
