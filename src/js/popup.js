@@ -1,5 +1,4 @@
 "use strict";
-// console.log("popup");
 
 var settings;
 const $nav = {
@@ -536,14 +535,13 @@ function templateItem(ele) {
 
 function decodeBookmarklet(url) {
   try {
-    url = decodeURI(url).replaceAll("\"", "&quot;");
+    url = decodeURI(url);
   } catch {
-    // console.log(`[${ele.title}]:`, e);
     // % 转义；比如css中的 width: 40%;
     // https://stackoverflow.com/questions/20700393/urierror-malformed-uri-sequence
-    url = decodeURI(url.replace(/%([^0-9A-E])/g, "%25$1")).replaceAll("\"", "&quot;");
+    url = decodeURI(url.replace(/%(?![0-9A-F]{2})/gi, "%25"));
   }
-  return url;
+  return url.replaceAll("\"", "&quot;");
 }
 
 function setListSize($list, length) {
