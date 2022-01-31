@@ -50,7 +50,7 @@ const dataSetting = {
     minItemsPerCol = settings.minItemsPerCol;
     this.layout();
     this.switchTheme();
-    BM.EventType = settings.hoverEnter == 0 ? 'click' : 'mouseover';
+    BM.openFolderEventType = settings.hoverEnter == 0 ? 'click' : 'mouseover';
   },
   layout() {
     if(settings.customCSS) $('#customCSS').textContent = settings.customCSS;
@@ -408,9 +408,9 @@ const dialog = {
       case "bookmark-add-bookmark":
       case "bookmark-add-folder":
         if ($fromTarget.classList.contains('nodata')) {
-          id = $lastListView.id.replace('_', '');
+          var parentId = $lastListView.id.replace('_', '');
           chrome.bookmarks.create({
-            'parentId': id,
+            'parentId': parentId,
             'title': title,
             'url': url
           }, results => {
@@ -474,10 +474,10 @@ function loadChildrenView(id, isStartup = false, callback) {
   chrome.bookmarks.getChildren(id.toString(), (results) => {
     // console.log(results);
     renderListView(id, results);
-    if (!isStartup) {
-      toggleList(id);
-    } else {
+    if (isStartup) {
       $lastListView = $(`#_${id}`);
+    } else {
+      toggleList(id);
     }
     if (typeof callback === 'function') {
       setTimeout(callback);
@@ -548,22 +548,25 @@ function decodeBookmarklet(url) {
 }
 
 function setListSize($list, length) {
-  if (layoutCols === 1) return;
   var rowsCount, colsCount;
-  if ($list === $searchList) {
-    rowsCount = Math.ceil(length / curMaxCols);
+  if (layoutCols === 1) {
+    rowsCount = length;
   } else {
-    colsCount = length > layoutCols * minItemsPerCol ? layoutCols : Math.ceil(length / minItemsPerCol);
-    rowsCount = Math.ceil(length / colsCount);
+    if ($list === $searchList) {
+      rowsCount = Math.ceil(length / curMaxCols);
+    } else {
+      colsCount = length > layoutCols * minItemsPerCol ? layoutCols : Math.ceil(length / minItemsPerCol);
+      rowsCount = Math.ceil(length / colsCount);
 
-    if (colsCount > curMaxCols || !settings.keepMaxCols) {
-      curMaxCols = colsCount;
-      document.body.style.width = BM.bodyWidth[curMaxCols];
-      rootStyle.setProperty('--width-item', parseInt(100 / curMaxCols) + "%");
+      if (colsCount > curMaxCols || !settings.keepMaxCols) {
+        curMaxCols = colsCount;
+        document.body.style.width = BM.bodyWidth[curMaxCols];
+        rootStyle.setProperty('--width-item', parseInt(100 / curMaxCols) + "%");
+      }
     }
+    rowsCount = rowsCount < minItemsPerCol ? minItemsPerCol : rowsCount;
+    $list.dataset.rows = rowsCount;
   }
-  rowsCount = rowsCount < minItemsPerCol ? minItemsPerCol : rowsCount;
-  $list.dataset.rows = rowsCount;
   $list.style.height = rowsCount * settings.itemHeight + 'px';
 }
 
@@ -645,9 +648,9 @@ function addPathTitle(id, target) {
 }
 
 /**
-  @flag [0b]00-11
-  高位1 在新标签打开; 0当前标签打开
-  低位1 在前台打开; 0在后台
+ * @flag [0b]00-11
+ * 高位1 在新标签打开; 0当前标签打开
+ * 低位1 在前台打开; 0在后台
  */
 function openUrl(url, event) {
   var flag = settings.openIn;
@@ -844,7 +847,7 @@ function hotskeyEvents(event) {
       contextMenu.showing && contextMenu.close();
       $item && $item.classList.remove('active');
       var $back = $('a:nth-last-of-type(2)', $nav.header);
-      $back && $back.dispatchEvent(new Event(BM.EventType));
+      $back && $back.dispatchEvent(new Event(BM.openFolderEventType));
       break;
     case "Space":
       if ($item) {
@@ -870,7 +873,7 @@ function hotskeyEvents(event) {
       break;
     case "KeyZ":
       event.preventDefault();
-      $nav.footer.dataset.id && $nav.footer.dispatchEvent(new Event(BM.EventType));
+      $nav.footer.dataset.id && $nav.footer.dispatchEvent(new Event(BM.openFolderEventType));
       break;
     case "Home":
     case "End":
@@ -938,13 +941,12 @@ function setLastData(event) {
   // Chrome requires returnValue to be set.
   event.returnValue = '';
   // startupFromLast 取最新的设置
-  // 否则，打开popup页面时，去修改此设置，数据会出错
   var curStartupFromLast = localStorage.getItem('startupFromLast');
-  if (curStartupFromLast < -1) {
-    localStorage.setItem('LastScrollTop', $main.scrollTop);
-  }
   if (curStartupFromLast < 0) {
-    localStorage.setItem('startupID', $('nav a:last-child').dataset.id);
+    localStorage.setItem('startupID', nav.lastPathID);
+    if (curStartupFromLast < -1) {
+      localStorage.setItem('LastScrollTop', $main.scrollTop);
+    }
   }
 }
 /******************************************************/
@@ -972,7 +974,6 @@ settingsReady(() => {
     handleFolderEvent($$('.nav > [type=folder]'));
   }
   nav.lastPathID = startupReal;
-  $('footer').classList.remove('hidden');
   setTimeout(() => {
     var LastScrollTop = localStorage.getItem('LastScrollTop') || 0;
     if (LastScrollTop) $main.scrollTop = LastScrollTop;
