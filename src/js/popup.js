@@ -480,25 +480,28 @@ function loadChildrenView(id, isStartup = false, callback) {
       $lastListView = $(`#_${id}`);
     }
     if (typeof callback === 'function') {
-      callback();
+      setTimeout(callback);
     }
   })
 }
 
 function renderListView(id, items) {
-  var html;
-  if (items.length) {
-    html = template(items);
-  } else {
-    html = htmlTemplate.nodata;
-  }
-  // @TODO 能优化吗？
-  $searchList.insertAdjacentHTML('beforebegin', `<div class="folder-list" id=_${id}>${html}</div>`);
+  $searchList.insertAdjacentHTML('beforebegin', `<div class="folder-list" id=_${id}></div>`);
   curItemslength = items.length;
   var $list = $(`#_${id}`);
   setListSize($list, curItemslength || 1);
   containers.push($list);
-  handleFolderEvent($$('[type=folder]', $list));
+  // 避免长任务
+  setTimeout(() => {
+    var html;
+    if (items.length) {
+      html = template(items);
+    } else {
+      html = htmlTemplate.nodata;
+    }
+    $list.insertAdjacentHTML('afterbegin', html);
+    handleFolderEvent($$('[type=folder]', $list));
+  });
 }
 
 function template(treeData) {
@@ -970,8 +973,10 @@ settingsReady(() => {
   }
   nav.lastPathID = startupReal;
   $('footer').classList.remove('hidden');
-  var LastScrollTop = localStorage.getItem('LastScrollTop') || 0;
-  if (LastScrollTop) $main.scrollTop = LastScrollTop;
+  setTimeout(() => {
+    var LastScrollTop = localStorage.getItem('LastScrollTop') || 0;
+    if (LastScrollTop) $main.scrollTop = LastScrollTop;
+  }, 5);
 
   // 优化 FCP
   setTimeout(() => {
