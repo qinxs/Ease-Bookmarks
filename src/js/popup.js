@@ -9,6 +9,7 @@ const $main = $('main');
 const $searchList = $('#search-list');
 const $contextMenu = $('#context-menu');
 const $dialog = $('#dialog');
+const folderListLength = {};
 const containers = [];
 Array.prototype.remove = function(val) {  
   var index = this.indexOf(val);  
@@ -34,7 +35,6 @@ var curContextMenuID;
 var layoutCols;
 // 宽度只变大 不缩小
 var curMaxCols = 1;
-var curItemslength;
 var minItemsPerCol;
 const rootStyle = document.documentElement.style;
 
@@ -305,6 +305,7 @@ const contextMenu = {
         chrome.storage.sync.set({startup: id}, () => {});
         break;
       case "bookmark-delete":
+        var listId = $lastListView.id.replace('_', '');
         if ($fromTarget.type === 'folder') {
           $fromTarget.closest('.item').classList.add('seleted');
           // 防止hover其他元素
@@ -316,7 +317,7 @@ const contextMenu = {
                   $lastListView.innerHTML = htmlTemplate.nodata;
                 } else {
                   $fromTarget.closest('.item').remove();
-                  setListSize($lastListView, --curItemslength);
+                  setListSize($lastListView, --folderListLength[listId]);
                 }
               });
             } else {
@@ -330,7 +331,7 @@ const contextMenu = {
               $lastListView.innerHTML = htmlTemplate.nodata;
             } else {
               $fromTarget.closest('.item').remove();
-              setListSize($lastListView, --curItemslength);
+              setListSize($lastListView, --folderListLength[listId]);
             }
           });
         }
@@ -407,15 +408,15 @@ const dialog = {
     switch(curContextMenuID) {
       case "bookmark-add-bookmark":
       case "bookmark-add-folder":
+        var listId = $lastListView.id.replace('_', '');
         if ($fromTarget.classList.contains('nodata')) {
-          var parentId = $lastListView.id.replace('_', '');
           chrome.bookmarks.create({
-            'parentId': parentId,
+            'parentId': listId,
             'title': title,
             'url': url
           }, results => {
             // console.log(results);
-            setListSize($lastListView, ++curItemslength);
+            setListSize($lastListView, ++folderListLength[listId]);
             $fromTarget.closest('.item').insertAdjacentHTML('afterend', templateItem(results));
             handleFolderEvent($$('[type=folder]', $fromTarget.closest('.item').nextElementSibling));
             $fromTarget.remove();
@@ -429,7 +430,7 @@ const dialog = {
               'url': url
             }, results => {
               // console.log(results);
-              setListSize($lastListView, ++curItemslength);
+              setListSize($lastListView, ++folderListLength[listId]);
               $fromTarget.closest('.item').insertAdjacentHTML('afterend', templateItem(results));
               handleFolderEvent($$('[type=folder]', $fromTarget.closest('.item').nextElementSibling));
             });
@@ -487,9 +488,8 @@ function loadChildrenView(id, isStartup = false, callback) {
 
 function renderListView(id, items) {
   $searchList.insertAdjacentHTML('beforebegin', `<div class="folder-list" id=_${id}></div>`);
-  curItemslength = items.length;
   var $list = $(`#_${id}`);
-  setListSize($list, curItemslength || 1);
+  setListSize($list, items.length, id);
   containers.push($list);
   // 避免长任务
   setTimeout(() => {
@@ -547,8 +547,10 @@ function decodeBookmarklet(url) {
   return url.replaceAll("\"", "&quot;");
 }
 
-function setListSize($list, length) {
+function setListSize($list, length, id) {
   var rowsCount, colsCount;
+  if (id) folderListLength[id] = length;
+  length = length || 1;
   if (layoutCols === 1) {
     rowsCount = length;
   } else {
