@@ -246,7 +246,10 @@ const contextMenu = {
         }
         break;
       case "click":
-        this.handleMenuItem(e.target)
+        event.preventDefault();
+        event.stopPropagation();
+        this.handleMenuItem(e.target);
+        this.close();
         break;
     }
   },
@@ -294,13 +297,11 @@ const contextMenu = {
         dialog.show();
         break;
       case "bookmark-location":
-        // console.log($fromTarget);
         var parentId = $fromTarget.getAttribute('data-parent-id');
         locationFolder(parentId, id);
         nav.resetNavPath(parentId);
         break;
       case "bookmark-set-as-startup":
-        // console.log($fromTarget);
         setStartupLocal(null, id);
         chrome.storage.sync.set({startup: id}, () => {});
         break;
@@ -703,9 +704,7 @@ function openFolderEvent(event) {
   if (id == nav.lastPathID) return;
   var folderName = target.textContent;
   var delay = event.isTrusted ? settings.hoverEnter : 0;
-  window.openFolderDelay = setTimeout(() => {
-    openFolder(id, folderName, target);
-  }, delay);
+  window.openFolderDelay = setTimeout(openFolder, delay, id, folderName, target);
 }
 
 function openFolder(id, folderName, target) {
@@ -875,15 +874,17 @@ function hotskeyEvents(event) {
       $seachInput.focus();
       break;
     case "KeyZ":
+      if (!event.ctrlKey || dialog.showing) return;
       event.preventDefault();
       $nav.footer.getAttribute('data-id') && $nav.footer.dispatchEvent(new Event(BM.openFolderEventType));
       break;
+    case "ArrowLeft":
+    case "ArrowRight":
+      if (layoutCols === 1) break;
     case "Home":
     case "End":
     case "ArrowUp":
     case "ArrowDown":
-    case "ArrowLeft":
-    case "ArrowRight":
       event.preventDefault();
       setActiveItem(keyCode);
       break;
