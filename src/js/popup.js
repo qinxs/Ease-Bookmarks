@@ -82,7 +82,7 @@ const nav = {
       this.rootID = id;
       // 底部其他书签（与书签栏切换使用）
       this.setFooterNav(id);
-    } else if (target && target.dataset.role === 'path') {
+    } else if (target && target.getAttribute('data-role') === 'path') {
       while (target.nextElementSibling) {
         target.nextElementSibling.remove();
       }
@@ -119,10 +119,10 @@ const nav = {
     var _id = 3 - id;
     chrome.bookmarks.getChildren(_id.toString(), (results) => {
       if (results.length) {
-        $nav.footer.dataset.id = _id;
+        $nav.footer.setAttribute('data-id', _id);
         $nav.footer.textContent = settings.rootInfo[_id];
-      } else if ($nav.footer.dataset.id) {
-        delete $nav.footer.dataset.id;
+      } else if ($nav.footer.getAttribute('data-id')) {
+        $nav.footer.removeAttribute('data-id');
         $nav.footer.textContent = '';
       }
     });
@@ -253,8 +253,8 @@ const contextMenu = {
   handleMenuItem(target) {
     // console.log($fromTarget);
     // console.log(target);
-    var id = $fromTarget.dataset.id;
-    var url = $fromTarget.dataset.url;
+    var id = $fromTarget.getAttribute('data-id');
+    var url = $fromTarget.getAttribute('data-url');
     switch(target.id) {
       case "bookmark-new-tab":
       case "bookmark-new-tab-background": 
@@ -273,7 +273,7 @@ const contextMenu = {
         chrome.tabs.query({active: true, currentWindow: true}, (tabs) => {
           var pageUrl = tabs[0].url;
           chrome.bookmarks.update(id, {url: pageUrl}, () => {
-            $fromTarget.dataset.url = pageUrl;
+            $fromTarget.setAttribute('data-url', pageUrl);
             $fromTarget.title = $fromTarget.textContent + '\n' + pageUrl;
             $fromTarget.previousElementSibling.src = 'chrome://favicon/' + pageUrl;
           });
@@ -295,7 +295,7 @@ const contextMenu = {
         break;
       case "bookmark-location":
         // console.log($fromTarget);
-        var parentId = $fromTarget.dataset.parentId;
+        var parentId = $fromTarget.getAttribute('data-parent-id');
         locationFolder(parentId, id);
         nav.resetNavPath(parentId);
         break;
@@ -335,7 +335,7 @@ const contextMenu = {
             }
           });
         }
-        isSeachView && updateFolderList($fromTarget.dataset.parentId, 'delete', {
+        isSeachView && updateFolderList($fromTarget.getAttribute('data-parent-id'), 'delete', {
           id: id
         });
         break;
@@ -386,7 +386,7 @@ const dialog = {
       case "bookmark-edit":
         this.$name.value = $fromTarget.textContent;
         this.$url.hidden = false;
-        this.$url.value = $fromTarget.dataset.url;
+        this.$url.value = $fromTarget.getAttribute('data-url');
         break;
       case "bookmark-edit-folder":
         this.$name.value = $fromTarget.textContent;
@@ -401,7 +401,7 @@ const dialog = {
   save(e) {
     e.preventDefault();
     var ele = $fromTarget;
-    var id = ele.dataset.id;
+    var id = ele.getAttribute('data-id');
     var title = this.$name.value;
     var url = this.$url.hidden ? null : this.$url.value;
     // console.log(this.$name.value);
@@ -445,7 +445,7 @@ const dialog = {
         }, () => {
           ele.textContent = title;
           if ($fromTarget.type === 'link') {
-            ele.dataset.url = url;
+            ele.setAttribute('data-url', url);
             ele.title = title + '\n' + url;
             if (!isBookmarklet(url)) {
               $fromTarget.previousElementSibling.src = 'chrome://favicon/' + url;
@@ -453,7 +453,7 @@ const dialog = {
               $fromTarget.previousElementSibling.src = 'icons/favicon/js.png';
             }
           }
-          isSeachView && updateFolderList($fromTarget.dataset.parentId, 'edit', {
+          isSeachView && updateFolderList($fromTarget.getAttribute('data-parent-id'), 'edit', {
             id: id,
             title: title,
             url: url
@@ -567,7 +567,7 @@ function setListSize($list, length, id) {
       }
     }
     rowsCount = rowsCount < minItemsPerCol ? minItemsPerCol : rowsCount;
-    $list.dataset.rows = rowsCount;
+    $list.setAttribute('data-rows', rowsCount);
   }
   $list.style.height = rowsCount * settings.itemHeight + 'px';
 }
@@ -593,8 +593,8 @@ function toggleList(id, searchMode = false) {
 function handleMainClick(event) {
   var target = event.target;
   // console.log(target);
-  if (typeof target.dataset.url !== `undefined`) {
-    openUrl(target.dataset.url, event);
+  if (typeof target.getAttribute('data-url') !== `undefined`) {
+    openUrl(target.getAttribute('data-url'), event);
   }
 }
 
@@ -606,7 +606,7 @@ function handleMainMiddleClick(event) {
   // console.log($fromTarget)
   if ($fromTarget.type === 'link') {
     chrome.tabs.create({
-      url: $fromTarget.dataset.url,
+      url: $fromTarget.getAttribute('data-url'),
       active: false
     });
   } else if (settings.fastCreate === 2 && $fromTarget.classList.contains('favicon')) {
@@ -615,11 +615,11 @@ function handleMainMiddleClick(event) {
       // console.log(target);
       chrome.tabs.query({active: true, currentWindow: true}, (tabs) => {
         chrome.bookmarks.create({
-          'parentId': a.dataset.id,
+          'parentId': a.getAttribute('data-id'),
           'title': tabs[0].title,
           'url': tabs[0].url
         }, results => {
-          updateFolderList(a.dataset.id, 'add');
+          updateFolderList(a.getAttribute('data-id'), 'add');
         });
       });
     }
@@ -628,9 +628,9 @@ function handleMainMiddleClick(event) {
 
 function handleSearchResultsHover(event) {
   var target = event.target;
-  if (target.tagName === 'A' && target.dataset.path !== 'done') {
+  if (target.tagName === 'A' && target.getAttribute('data-path') !== 'done') {
     // console.log(target);
-    addPathTitle(target.dataset.parentId, target);
+    addPathTitle(target.getAttribute('data-parent-id'), target);
   }
 }
 
@@ -639,7 +639,7 @@ function addPathTitle(id, target) {
   if (id < 3) {
     pathTitle = settings.rootInfo[id] + pathTitle;
     target.title += '\n\n' + '[ ' + pathTitle + ' ]';
-    target.dataset.path = 'done';
+    target.setAttribute('data-path', 'done');
     pathTitle = '';
   } else {
     chrome.bookmarks.get(id.toString(), (item) => {
@@ -699,7 +699,7 @@ function openFolderEvent(event) {
   if (contextMenu.showing || dialog.showing) return;
   var target = event.target;
   // 路径最末级不在打开文件夹
-  var id = parseInt(target.dataset.id);
+  var id = parseInt(target.getAttribute('data-id'));
   if (id == nav.lastPathID) return;
   var folderName = target.textContent;
   var delay = event.isTrusted ? settings.hoverEnter : 0;
@@ -752,7 +752,7 @@ function updateFolderList(id, type, data = {}) {
         url = decodeBookmarklet(url);
       }
       a.textContent = data.title;
-      a.dataset.url = url;
+      a.setAttribute('data-url', url);
       a.previousElementSibling.src = favicon;
     } else if (data.title) {
       a.textContent = data.title;
@@ -813,13 +813,13 @@ function dragToMove() {
     // return
     var lastFlag = 0;
     // debugger
-    var id = el.lastElementChild.dataset.id;
+    var id = el.lastElementChild.getAttribute('data-id');
     if (sibling === null) {
       lastFlag = 1;
       // 此时，lastElementChild 为拖动元素本身
       sibling = source.lastElementChild.previousElementSibling;
     }
-    var id_sibling = sibling.lastElementChild.dataset.id;
+    var id_sibling = sibling.lastElementChild.getAttribute('data-id');
     if (isHover) {
       chrome.bookmarks.move(id, {parentId: id_sibling});
       updateFolderList(id_sibling, 'add');
@@ -861,10 +861,10 @@ function hotskeyEvents(event) {
       var $itemA = $('.item.active > a', $list);
       if (!$itemA) return;
       if ($itemA.type === 'link') {
-        openUrl($itemA.dataset.url, event);
+        openUrl($itemA.getAttribute('data-url'), event);
       } else {
         $itemA.closest('.item').classList.remove('active');
-        openFolder($itemA.dataset.id, $itemA.textContent);
+        openFolder($itemA.getAttribute('data-id'), $itemA.textContent);
       }
       break;
     case "KeyF":
@@ -875,7 +875,7 @@ function hotskeyEvents(event) {
       break;
     case "KeyZ":
       event.preventDefault();
-      $nav.footer.dataset.id && $nav.footer.dispatchEvent(new Event(BM.openFolderEventType));
+      $nav.footer.getAttribute('data-id') && $nav.footer.dispatchEvent(new Event(BM.openFolderEventType));
       break;
     case "Home":
     case "End":
@@ -901,7 +901,7 @@ function hotskeyEvents(event) {
   }
 
   function getGoalItem($item, keyCode, $list) {
-    var rows = $list.dataset.rows;
+    var rows = $list.getAttribute('data-rows');
     switch (keyCode) {
       case "Home":
         return $list.firstElementChild;
