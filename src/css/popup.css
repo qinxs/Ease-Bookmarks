@@ -210,7 +210,7 @@ nav a {
 #context-menu li:hover {
   background: var(--color-hover);
 }
-#context-menu hr {
+hr {
   display: none;
   border: 0;
   padding: 0;
@@ -220,39 +220,39 @@ nav a {
   pointer-events: none;
 }
 
-#context-menu[type=folder] > #bookmark-add-bookmark,
-#context-menu[type=folder] > #bookmark-add-folder,
-#context-menu[type=folder] > #bookmark-set-as-startup,
-#context-menu[type=folder] > #bookmark-open-all,
-#context-menu[type=folder] > #bookmark-edit-folder,
-#context-menu[type=folder] > #bookmark-delete,
-#context-menu[type=folder] > hr {
+.folder > #bookmark-add-bookmark,
+.folder > #bookmark-add-folder,
+.folder > #bookmark-set-as-startup,
+.folder > #bookmark-open-all,
+.folder > #bookmark-edit-folder,
+.folder > #bookmark-delete,
+.folder > hr {
   display: block;
 }
-#context-menu[type=link] > #bookmark-new-tab,
-#context-menu[type=link] > #bookmark-new-tab-background,
-#context-menu[type=link] > #bookmark-new-incognito-window,
-#context-menu[type=link] > #bookmark-add-bookmark,
-#context-menu[type=link] > #bookmark-add-folder,
-#context-menu[type=link] > #bookmark-update-url,
-#context-menu[type=link] > #bookmark-edit,
-#context-menu[type=link] > #bookmark-delete,
-#context-menu[type=link] > hr {
+.link > #bookmark-new-tab,
+.link > #bookmark-new-tab-background,
+.link > #bookmark-new-incognito-window,
+.link > #bookmark-add-bookmark,
+.link > #bookmark-add-folder,
+.link > #bookmark-update-url,
+.link > #bookmark-edit,
+.link > #bookmark-delete,
+.link > hr {
   display: block;
 }
-#context-menu[type=nodata] > #bookmark-add-bookmark,
-#context-menu[type=nodata] > #bookmark-add-folder {
+.nodata > #bookmark-add-bookmark,
+.nodata > #bookmark-add-folder {
   display: block;
 }
 
-#context-menu.search > #bookmark-add-bookmark,
-#context-menu.search > #bookmark-add-folder {
+[type=search] > #bookmark-add-bookmark,
+[type=search] > #bookmark-add-folder {
   display: none;
 }
 #bookmark-location {
   display: none !important;
 }
-#context-menu.search > #bookmark-location {
+[type=search] > #bookmark-location {
   display: block !important;
 }
 

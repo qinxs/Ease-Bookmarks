@@ -230,8 +230,8 @@ const contextMenu = {
           // console.log(e);
           // console.log(this);
           $fromTarget = e.target;
-          $contextMenu.type = $fromTarget.type || 'nodata';
-          $contextMenu.className = isSeachView ? 'search' : '';
+          $contextMenu.className = $fromTarget.type || 'nodata';
+          $contextMenu.type = isSeachView ? 'search' : '';
           this.pos.left = e.clientX;
           // 数值6: 右键菜单的边距
           if (this.pos.left + $contextMenu.clientWidth > $main.clientWidth - 6) {
