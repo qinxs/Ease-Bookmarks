@@ -4,7 +4,7 @@ window.BM = {
   preItems: null,
   // 选项必须与input的name和value一致
   default: {
-    themeColor: 'auto',
+    themeColor: 'light',
     openIn: 3, // 0b11, 0-3 详细说明参见 openUrl 方法
     hoverEnter: 500, // {0,300,500,800}
     layoutCols: 1,
