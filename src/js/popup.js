@@ -808,6 +808,7 @@ function dragToMove() {
   window.drake = dragula(containers, {
     // spilling will put the element back where it was dragged from, if this is true
     revertOnSpill: true,
+    os: 'pc',
   }).on('drop', (el, target, source, sibling, isHover) => {
     // console.log(el, target, source, sibling, isHover);
     // return
