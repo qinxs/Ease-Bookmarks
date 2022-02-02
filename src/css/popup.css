@@ -59,7 +59,7 @@ header {
 }
 main {
   position: relative;
-  max-height: 500px;
+  max-height: 504px;
   min-height: 400px;
   overflow-x: hidden; 
   overflow-y: auto; 

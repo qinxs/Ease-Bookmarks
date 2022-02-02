@@ -23,8 +23,8 @@ const $seachInput = $('#search-input');
 // 中文拼音输入中，但未合成汉字
 var inputFlag = false;
 var isSeachView = false;
-// 上一个视图
-var $lastListView;
+// 当前视图
+var $curFolderList;
 // 中间变量
 var $fromTarget = null;
 var pathTitle = '';
@@ -72,9 +72,9 @@ const nav = {
   init(id) {
     // console.log(settings.rootInfo);
     this.setNavPath(id, settings.rootInfo[id]);
-    handleFolderEvent($$('.nav > [type=folder]'));
+    handleFolderEvent([$nav.footer]);
   },
-  setNavPath(id, folderName, target) {
+  setNavPath(id, folderName, target, curIsSearchView=false) {
     folderName = this.replaceEmptyString(folderName);
     // console.log(target);
     if (id < 3 && id != this.rootID) {
@@ -87,19 +87,24 @@ const nav = {
         target.nextElementSibling.remove();
       }
     } else {
-      var symbol = isSeachView ? '?' : '>';
+      var symbol = curIsSearchView ? '?' : '>';
       var html = `
       <span>${symbol}</span> <a type="folder" data-id="${id}" data-role="path">${folderName}</a>
       `;
+      handleFolderEvent($$('nav > a:last-child'));
       $nav.header.insertAdjacentHTML('beforeend', html);
-      handleFolderEvent($$('nav > [type=folder]'));
     }
+    this.lastPathID = id;
   },
   resetNavPath(id) {
+    this._resetNavPath(id);
+    this.lastPathID = id;
+  },
+  _resetNavPath(id) {
     if (id < 3) {
       this.pathHtml = `<a type="folder" data-id="${id}" data-role="path">${settings.rootInfo[id]}</a>` + this.pathHtml;
       $nav.header.innerHTML = this.pathHtml;
-      handleFolderEvent($$('nav > [type=folder]'));
+      handleFolderEvent($$('nav > a'));
       this.rootID = id;
       this.setFooterNav(id);
       this.pathHtml = '';
@@ -108,7 +113,7 @@ const nav = {
         var folderName = this.replaceEmptyString(item[0].title);
         this.pathHtml = `
         <span>></span> <a type="folder" data-id="${id}" data-role="path">${folderName}</a>` + this.pathHtml;
-        this.resetNavPath(item[0].parentId);
+        this._resetNavPath(item[0].parentId);
       })
     }
   },
@@ -157,7 +162,7 @@ const search = {
         !isSeachView && toggleList(null, true);
       });
     } else {
-      toggleList($lastListView.id.replace('_', ''));
+      toggleList($curFolderList.id.replace('_', ''));
     }
   },
   _loadSearchView(keyword) {
@@ -306,7 +311,7 @@ const contextMenu = {
         chrome.storage.sync.set({startup: id}, () => {});
         break;
       case "bookmark-delete":
-        var listId = $lastListView.id.replace('_', '');
+        var listId = $curFolderList.id.replace('_', '');
         if ($fromTarget.type === 'folder') {
           $fromTarget.closest('.item').classList.add('seleted');
           // 防止hover其他元素
@@ -314,11 +319,11 @@ const contextMenu = {
           chrome.bookmarks.getChildren(id, results => {
             if (!results.length || confirm(`[ ${$fromTarget.textContent} - ${results.length} ]:\n${L("deleteFolderConfirm")}`)) {
               chrome.bookmarks.removeTree(id, () => {
-                if ($lastListView.childElementCount === 1) {
-                  $lastListView.innerHTML = htmlTemplate.nodata;
+                if ($curFolderList.childElementCount === 1) {
+                  $curFolderList.innerHTML = htmlTemplate.nodata;
                 } else {
                   $fromTarget.closest('.item').remove();
-                  setListSize($lastListView, --folderListLength[listId]);
+                  setListSize($curFolderList, --folderListLength[listId]);
                 }
               });
             } else {
@@ -328,11 +333,11 @@ const contextMenu = {
           });
         } else {
           chrome.bookmarks.remove(id, () => {
-            if ($lastListView.childElementCount === 1) {
-              $lastListView.innerHTML = htmlTemplate.nodata;
+            if ($curFolderList.childElementCount === 1) {
+              $curFolderList.innerHTML = htmlTemplate.nodata;
             } else {
               $fromTarget.closest('.item').remove();
-              setListSize($lastListView, --folderListLength[listId]);
+              setListSize($curFolderList, --folderListLength[listId]);
             }
           });
         }
@@ -409,7 +414,7 @@ const dialog = {
     switch(curContextMenuID) {
       case "bookmark-add-bookmark":
       case "bookmark-add-folder":
-        var listId = $lastListView.id.replace('_', '');
+        var listId = $curFolderList.id.replace('_', '');
         if ($fromTarget.classList.contains('nodata')) {
           chrome.bookmarks.create({
             'parentId': listId,
@@ -417,7 +422,7 @@ const dialog = {
             'url': url
           }, results => {
             // console.log(results);
-            setListSize($lastListView, ++folderListLength[listId]);
+            setListSize($curFolderList, ++folderListLength[listId]);
             $fromTarget.closest('.item').insertAdjacentHTML('afterend', templateItem(results));
             handleFolderEvent($$('[type=folder]', $fromTarget.closest('.item').nextElementSibling));
             $fromTarget.remove();
@@ -431,7 +436,7 @@ const dialog = {
               'url': url
             }, results => {
               // console.log(results);
-              setListSize($lastListView, ++folderListLength[listId]);
+              setListSize($curFolderList, ++folderListLength[listId]);
               $fromTarget.closest('.item').insertAdjacentHTML('afterend', templateItem(results));
               handleFolderEvent($$('[type=folder]', $fromTarget.closest('.item').nextElementSibling));
             });
@@ -477,7 +482,7 @@ function loadChildrenView(id, isStartup = false, callback) {
     // console.log(results);
     renderListView(id, results);
     if (isStartup) {
-      $lastListView = $(`#_${id}`);
+      $curFolderList = $(`#_${id}`);
     } else {
       toggleList(id);
     }
@@ -575,9 +580,9 @@ function setListSize($list, length, id) {
 
 // 视图切换
 function toggleList(id, searchMode = false) {
-  // console.log($lastListView);
-  $main.scrollTop = 0;
-  $lastListView.hidden = true;
+  // console.log($curFolderList);
+  if ($main.scrollTop) $main.scrollTop = 0;
+  $curFolderList.hidden = true;
   // SeachView 会多次调用 单独处理
   if (searchMode) {
     $searchList.hidden = false;
@@ -587,7 +592,7 @@ function toggleList(id, searchMode = false) {
     $list.hidden = false;
     $searchList.hidden = true;
     isSeachView = false;
-    $lastListView = $list;
+    $curFolderList = $list;
   }
 }
 
@@ -709,10 +714,9 @@ function openFolderEvent(event) {
 
 function openFolder(id, folderName, target) {
   if (contextMenu.showing || dialog.showing) return;
+  if (id == nav.lastPathID) return;
   // console.log(target);
-  nav.setNavPath(id, folderName, target);
-  nav.lastPathID = id;
-  // debugger
+  var curIsSearchView = isSeachView;
   var $list = $(`#_${id}`);
   if(!$list) {
     loadChildrenView(id);
@@ -720,6 +724,7 @@ function openFolder(id, folderName, target) {
     !settings.keepMaxCols && setListSize($list, $list.childElementCount);
     toggleList(id);
   }
+  nav.setNavPath(id, folderName, target, curIsSearchView);
 }
 
 /**
@@ -768,7 +773,6 @@ function locationFolder(parentId, id) {
     toggleList(parentId);
     locationToItem(id);
   }
-  nav.lastPathID = parentId;
   // 搜索结果定位目录时 激活来源id
   // main区域下有两个对应item，此处用$选择第一个
   function locationToItem(id) {
@@ -834,7 +838,7 @@ function dragToMove() {
 function hotskeyEvents(event) {
   var keyCode = event.code;
   if (dialog.showing && keyCode !== 'Escape') return;
-  var $list = isSeachView ? $searchList : $lastListView;
+  var $list = isSeachView ? $searchList : $curFolderList;
   var $item = $('.item.active', $list);
   switch (keyCode) {
     case "Escape":
@@ -965,7 +969,7 @@ settingsReady(() => {
   if (BM.preItems) {
     renderListView(startupReal, BM.preItems);
     BM.preItems = 'done';
-    $lastListView = $(`#_${startupReal}`);
+    $curFolderList = $(`#_${startupReal}`);
   } else {
     loadChildrenView(startupReal, true);
     BM.preItems = 'nowait';
@@ -975,9 +979,8 @@ settingsReady(() => {
   } else {
     nav.resetNavPath(startupReal);
     // resetNavPath 未改变footer的DOM结构
-    handleFolderEvent($$('.nav > [type=folder]'));
+    handleFolderEvent($$('.nav > a'));
   }
-  nav.lastPathID = startupReal;
   setTimeout(() => {
     var LastScrollTop = localStorage.getItem('LastScrollTop') || 0;
     if (LastScrollTop) $main.scrollTop = LastScrollTop;
