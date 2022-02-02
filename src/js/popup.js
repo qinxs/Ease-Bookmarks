@@ -233,13 +233,13 @@ const contextMenu = {
           $contextMenu.className = $fromTarget.type || 'nodata';
           $contextMenu.type = isSeachView ? 'search' : '';
           this.pos.left = e.clientX;
-          // 数值6: 右键菜单的边距
-          if (this.pos.left + $contextMenu.clientWidth > $main.clientWidth - 6) {
-            this.pos.left = $main.clientWidth - $contextMenu.clientWidth - 6;
+          // 数值4: 右键菜单的边距
+          if (this.pos.left + $contextMenu.offsetWidth > $main.clientWidth - 4) {
+            this.pos.left = $main.clientWidth - $contextMenu.offsetWidth - 4;
           }
           this.pos.top = e.clientY - $main.offsetTop;
-          if (this.pos.top + $contextMenu.clientHeight > $main.clientHeight) {
-            this.pos.top -= $contextMenu.clientHeight;
+          if (this.pos.top + $contextMenu.offsetHeight > $main.clientHeight) {
+            this.pos.top -= $contextMenu.offsetHeight;
           }
           this.pos.top += $main.scrollTop;
           this.show();
