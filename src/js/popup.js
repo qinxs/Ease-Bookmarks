@@ -9,7 +9,10 @@ const $main = $('main');
 const $searchList = $('#search-list');
 const $contextMenu = $('#context-menu');
 const $dialog = $('#dialog');
-const folderListLength = {};
+const folderList = {
+  length: {},
+  hasScrollbar: {}
+};
 const containers = [];
 Array.prototype.remove = function(val) {  
   var index = this.indexOf(val);  
@@ -323,7 +326,7 @@ const contextMenu = {
                   $curFolderList.innerHTML = htmlTemplate.nodata;
                 } else {
                   $fromTarget.closest('.item').remove();
-                  setListSize($curFolderList, --folderListLength[listId]);
+                  setListSize($curFolderList, --folderList.length[listId]);
                 }
               });
             } else {
@@ -337,7 +340,7 @@ const contextMenu = {
               $curFolderList.innerHTML = htmlTemplate.nodata;
             } else {
               $fromTarget.closest('.item').remove();
-              setListSize($curFolderList, --folderListLength[listId]);
+              setListSize($curFolderList, --folderList.length[listId]);
             }
           });
         }
@@ -422,7 +425,7 @@ const dialog = {
             'url': url
           }, results => {
             // console.log(results);
-            setListSize($curFolderList, ++folderListLength[listId]);
+            setListSize($curFolderList, ++folderList.length[listId]);
             $fromTarget.closest('.item').insertAdjacentHTML('afterend', templateItem(results));
             handleFolderEvent($$('[type=folder]', $fromTarget.closest('.item').nextElementSibling));
             $fromTarget.remove();
@@ -436,7 +439,7 @@ const dialog = {
               'url': url
             }, results => {
               // console.log(results);
-              setListSize($curFolderList, ++folderListLength[listId]);
+              setListSize($curFolderList, ++folderList.length[listId]);
               $fromTarget.closest('.item').insertAdjacentHTML('afterend', templateItem(results));
               handleFolderEvent($$('[type=folder]', $fromTarget.closest('.item').nextElementSibling));
             });
@@ -553,10 +556,9 @@ function decodeBookmarklet(url) {
   return url.replaceAll("\"", "&quot;");
 }
 
-function setListSize($list, length, id) {
+function setListSize($list, _length, id) {
   var rowsCount, colsCount;
-  if (id) folderListLength[id] = length;
-  length = length || 1;
+  var length = _length || 1;
   if (layoutCols === 1) {
     rowsCount = length;
   } else {
@@ -575,13 +577,22 @@ function setListSize($list, length, id) {
     rowsCount = rowsCount < minItemsPerCol ? minItemsPerCol : rowsCount;
     $list.setAttribute('data-rows', rowsCount);
   }
+  var listHeight = rowsCount * settings.itemHeight;
   $list.style.height = rowsCount * settings.itemHeight + 'px';
+  if (id) {
+    folderList.length[id] = _length;
+    // 504 main最大高度
+    folderList.hasScrollbar[id] = listHeight > 504;
+  }
 }
 
 // 视图切换
 function toggleList(id, searchMode = false) {
   // console.log($curFolderList);
-  if ($main.scrollTop) $main.scrollTop = 0;
+  var curId = $curFolderList.id.replace('_', '');
+  if (folderList.hasScrollbar[curId] && (folderList.hasScrollbar[id] || searchMode)) {
+    $main.scrollTop = 0;
+  }
   $curFolderList.hidden = true;
   // SeachView 会多次调用 单独处理
   if (searchMode) {
