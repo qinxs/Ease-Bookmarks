@@ -610,9 +610,8 @@ function toggleList(id, searchMode = false) {
 function handleMainClick(event) {
   var target = event.target;
   // console.log(target);
-  if (typeof target.getAttribute('data-url') !== `undefined`) {
-    openUrl(target.getAttribute('data-url'), event);
-  }
+  var url = target.getAttribute('data-url');
+  url && openUrl(target.getAttribute('data-url'), event);
 }
 
 function handleMainMiddleClick(event) {
