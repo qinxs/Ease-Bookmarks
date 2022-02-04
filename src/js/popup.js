@@ -483,7 +483,7 @@ const dialog = {
 function loadChildrenView(id, isStartup = false, callback) {
   chrome.bookmarks.getChildren(id.toString(), (results) => {
     // console.log(results);
-    renderListView(id, results);
+    renderListView(id, results, isStartup);
     if (isStartup) {
       $curFolderList = $(`#_${id}`);
     } else {
@@ -495,13 +495,18 @@ function loadChildrenView(id, isStartup = false, callback) {
   })
 }
 
-function renderListView(id, items) {
+function renderListView(id, items, isStartup = false) {
   $searchList.insertAdjacentHTML('beforebegin', `<div class="folder-list" id=_${id}></div>`);
   var $list = $(`#_${id}`);
   setListSize($list, items.length, id);
   containers.push($list);
-  // 避免长任务
-  setTimeout(() => {
+  if (isStartup) {
+    // 延后渲染
+    setTimeout(applyHtml);
+  } else {
+    applyHtml();
+  }
+  function applyHtml() {
     var html;
     if (items.length) {
       html = template(items);
@@ -510,7 +515,7 @@ function renderListView(id, items) {
     }
     $list.insertAdjacentHTML('afterbegin', html);
     handleFolderEvent($$('[type=folder]', $list));
-  });
+  }
 }
 
 function template(treeData) {
@@ -539,7 +544,7 @@ function templateItem(ele) {
   if (isSeachView) attributeStr = `data-parent-id="${ele.parentId}"` + attributeStr;
   return `
     <div class="item">
-    <img class="favicon" src="${favicon}" alt=""></img>
+    <img class="favicon" src="${favicon}" alt></img>
     <a data-id="${ele.id}" ${attributeStr}>${ele.title}</a>
     </div>
   `;
@@ -977,7 +982,7 @@ settingsReady(() => {
   dataSetting.init();
   var startupReal = BM.startupReal;
   if (BM.preItems) {
-    renderListView(startupReal, BM.preItems);
+    renderListView(startupReal, BM.preItems, true);
     BM.preItems = 'done';
     $curFolderList = $(`#_${startupReal}`);
   } else {
