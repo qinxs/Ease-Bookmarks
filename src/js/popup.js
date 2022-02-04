@@ -9,6 +9,7 @@ const $main = $('main');
 const $searchList = $('#search-list');
 const $contextMenu = $('#context-menu');
 const $dialog = $('#dialog');
+const $itemForClone = $('#template > .item');
 const folderList = {
   length: {},
   hasScrollbar: {}
@@ -170,15 +171,17 @@ const search = {
   },
   _loadSearchView(keyword) {
     chrome.bookmarks.search(keyword, (results) => {
-      var html;
-      if (results.length) {
-        html = template(results);
-      } else {
-        html = htmlTemplate.noresult;
-      }
       setListSize($searchList, results.length);
-      $searchList.innerHTML = html;
-      handleFolderEvent($$('[type=folder]', $searchList));
+      if (results.length) {
+        var frag = templateFrag(results);
+        $searchList.innerHTML = '';
+        $searchList.append(frag);
+        handleFolderEvent($$('[type=folder]', $searchList));
+      } else {
+        var html;
+        html = htmlTemplate.noresult;
+        $searchList.innerHTML = html;
+      }
     })
   }
 }
@@ -426,7 +429,7 @@ const dialog = {
           }, results => {
             // console.log(results);
             setListSize($curFolderList, ++folderList.length[listId]);
-            $fromTarget.closest('.item').insertAdjacentHTML('afterend', templateItem(results));
+            $fromTarget.closest('.item').after(templateFragItem(results));
             handleFolderEvent($$('[type=folder]', $fromTarget.closest('.item').nextElementSibling));
             $fromTarget.remove();
           });
@@ -440,7 +443,7 @@ const dialog = {
             }, results => {
               // console.log(results);
               setListSize($curFolderList, ++folderList.length[listId]);
-              $fromTarget.closest('.item').insertAdjacentHTML('afterend', templateItem(results));
+              $fromTarget.closest('.item').after(templateFragItem(results));
               handleFolderEvent($$('[type=folder]', $fromTarget.closest('.item').nextElementSibling));
             });
           });
@@ -500,54 +503,58 @@ function renderListView(id, items, isStartup = false) {
   var $list = $(`#_${id}`);
   setListSize($list, items.length, id);
   containers.push($list);
-  if (isStartup) {
-    // 延后渲染
-    setTimeout(applyHtml);
-  } else {
-    applyHtml();
-  }
-  function applyHtml() {
-    var html;
-    if (items.length) {
-      html = template(items);
+  if (items.length) {
+    if (isStartup) {
+      // 延后渲染
+      setTimeout(applyFrag);
     } else {
-      html = htmlTemplate.nodata;
+      applyFrag();
     }
+  } else {
+    var html = htmlTemplate.nodata;
     $list.insertAdjacentHTML('afterbegin', html);
+  }
+  function applyFrag() {
+    var frag = templateFrag(items);
+    $list.append(frag);
     handleFolderEvent($$('[type=folder]', $list));
   }
 }
 
-function template(treeData) {
-  var insertHtml = '';
+function templateFrag(treeData) {
+  const fragment = document.createDocumentFragment();
   for (let ele of treeData) {
-    insertHtml += templateItem(ele);
-  };
-  return insertHtml;
+    fragment.append(templateFragItem(ele));
+  }
+  return fragment;
 }
 
-function templateItem(ele) {
-  var favicon;
+function templateFragItem(ele) {
+  var clone = $itemForClone.cloneNode(true);
+  var itemA = clone.lastElementChild;
+  var favicon, type;
   var url = ele.url;
-  var attributeStr;
-  if (typeof url === 'undefined') {
-    favicon = 'icons/favicon/folder.png';
-    attributeStr = `type="folder"`;
-  } else if (isBookmarklet(url)) {
-    favicon = 'icons/favicon/js.png';
-    url = decodeBookmarklet(url);
-    attributeStr = `type="link" data-url="${url}" title="${ele.title}&#10;${url}"`;
+  if (url) {
+    if (isBookmarklet(url)) {
+      favicon = 'icons/favicon/js.png';
+      url = decodeBookmarklet(url);
+    } else {
+      favicon = `chrome://favicon/${url}`;
+    }
   } else {
-    favicon = `chrome://favicon/${url}`;
-    attributeStr = `type="link" data-url="${url}" title="${ele.title}&#10;${url}"`;
+    favicon = 'icons/favicon/folder.png';
+    type = 'folder';
   }
-  if (isSeachView) attributeStr = `data-parent-id="${ele.parentId}"` + attributeStr;
-  return `
-    <div class="item">
-    <img class="favicon" src="${favicon}" alt></img>
-    <a data-id="${ele.id}" ${attributeStr}>${ele.title}</a>
-    </div>
-  `;
+  clone.firstElementChild.src = favicon;
+  itemA.setAttribute('data-id', ele.id);
+  type && itemA.setAttribute('type', type);
+  isSeachView && itemA.setAttribute('data-parent-id', ele.parentId);
+  if (url) {
+    itemA.setAttribute('data-url', url);
+    itemA.title = `${ele.title}\n${url}`;
+  }
+  itemA.textContent = ele.title;
+  return clone;
 }
 
 function decodeBookmarklet(url) {
@@ -558,7 +565,7 @@ function decodeBookmarklet(url) {
     // https://stackoverflow.com/questions/20700393/urierror-malformed-uri-sequence
     url = decodeURI(url.replace(/%(?![0-9A-F]{2})/gi, "%25"));
   }
-  return url.replaceAll("\"", "&quot;");
+  return url;
 }
 
 function setListSize($list, _length, id) {
@@ -999,7 +1006,7 @@ settingsReady(() => {
   setTimeout(() => {
     var LastScrollTop = localStorage.getItem('LastScrollTop') || 0;
     if (LastScrollTop) $main.scrollTop = LastScrollTop;
-  }, 5);
+  }, 17);
 
   // 优化 FCP
   setTimeout(() => {

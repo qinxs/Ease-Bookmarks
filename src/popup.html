@@ -12,9 +12,15 @@
 <body>
     <header>
         <nav></nav>
-        <input id="search-input" type="search" results="0" autofocus="">
+        <input id="search-input" type="search" results="0" autofocus>
     </header>
     <main>
+        <div id="template" hidden>
+            <div class="item">
+                <img class="favicon" src="" alt>
+                <a data-id="" type="link"></a>
+            </div>
+        </div>
         <div id="search-list"></div>
         <ul id="context-menu" class="hidden"></ul>
         <form id="dialog" hidden></form>
