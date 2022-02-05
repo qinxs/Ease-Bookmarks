@@ -13,7 +13,7 @@ Ease Bookmarks 是一款为了替代浏览器原有书签栏的扩展
 
 在此基础上，尽可能满足各类 书签使用习惯 用户的需求
 
-![2-popup.png](/screenshots/2-popup.png)
+![2-popup.png](./screenshots/2-popup.png)
 
 ## 主要功能
 
@@ -30,6 +30,8 @@ Ease Bookmarks 是一款为了替代浏览器原有书签栏的扩展
 另外，本扩展对 `JS 小书签` 进行了特别支持~
 
 > 更新日志：[ChangeLog.md](ChangeLog.md)
+> 
+> 查看所有截图：[Screenshots](./screenshots/README.md#所有截图)
 
 ## 使用快捷键
 

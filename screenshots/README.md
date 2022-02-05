@@ -17,3 +17,15 @@ JPEG 或 24 位 PNG（无 alpha 透明层）
 然后依次截图
 
 最后用 PS 调整大小
+
+## 所有截图
+
+![1-popup.png](1-popup.png)
+
+![2-popup.png](2-popup.png)
+
+![3-dark.png](3-dark.png)
+
+![4-duolie.png](4-duolie.png)
+
+![5-options.png](5-options.png)
