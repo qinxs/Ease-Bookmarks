@@ -12,7 +12,8 @@ const $dialog = $('#dialog');
 const $itemForClone = $('#template > .item');
 const folderList = {
   length: {},
-  hasScrollbar: {}
+  hasScrollbar: {},
+  links: {}
 };
 const containers = [];
 Array.prototype.remove = function(val) {  
@@ -268,7 +269,7 @@ const contextMenu = {
     // console.log($fromTarget);
     // console.log(target);
     var id = $fromTarget.getAttribute('data-id');
-    var url = $fromTarget.getAttribute('data-url');
+    var url = folderList.links[id];
     switch(target.id) {
       case "bookmark-new-tab":
       case "bookmark-new-tab-background": 
@@ -287,7 +288,7 @@ const contextMenu = {
         chrome.tabs.query({active: true, currentWindow: true}, (tabs) => {
           var pageUrl = tabs[0].url;
           chrome.bookmarks.update(id, {url: pageUrl}, () => {
-            $fromTarget.setAttribute('data-url', pageUrl);
+            folderList.links[id] = pageUrl;
             $fromTarget.title = $fromTarget.textContent + '\n' + pageUrl;
             $fromTarget.previousElementSibling.src = 'chrome://favicon/' + pageUrl;
           });
@@ -398,7 +399,8 @@ const dialog = {
       case "bookmark-edit":
         this.$name.value = $fromTarget.textContent;
         this.$url.hidden = false;
-        this.$url.value = $fromTarget.getAttribute('data-url');
+        var id = $fromTarget.getAttribute('data-id');
+        this.$url.value = folderList.links[id];
         break;
       case "bookmark-edit-folder":
         this.$name.value = $fromTarget.textContent;
@@ -457,7 +459,7 @@ const dialog = {
         }, () => {
           ele.textContent = title;
           if ($fromTarget.type === 'link') {
-            ele.setAttribute('data-url', url);
+            folderList.links[id] = url;
             ele.title = title + '\n' + url;
             if (!isBookmarklet(url)) {
               $fromTarget.previousElementSibling.src = 'chrome://favicon/' + url;
@@ -550,7 +552,7 @@ function templateFragItem(ele) {
   type && itemA.setAttribute('type', type);
   isSeachView && itemA.setAttribute('data-parent-id', ele.parentId);
   if (url) {
-    itemA.setAttribute('data-url', url);
+    folderList.links[ele.id] = url;
     itemA.title = `${ele.title}\n${url}`;
   }
   itemA.textContent = ele.title;
@@ -622,8 +624,9 @@ function toggleList(id, searchMode = false) {
 function handleMainClick(event) {
   var target = event.target;
   // console.log(target);
-  var url = target.getAttribute('data-url');
-  url && openUrl(target.getAttribute('data-url'), event);
+  if (target.type !== 'link') return;
+  var id = target.getAttribute('data-id');
+  openUrl(folderList.links[id], event);
 }
 
 function handleMainMiddleClick(event) {
@@ -633,8 +636,9 @@ function handleMainMiddleClick(event) {
   var $fromTarget = event.target;
   // console.log($fromTarget)
   if ($fromTarget.type === 'link') {
+    var id = $fromTarget.getAttribute('data-id');
     chrome.tabs.create({
-      url: $fromTarget.getAttribute('data-url'),
+      url: folderList.links[id],
       active: false
     });
   } else if (settings.fastCreate === 2 && $fromTarget.classList.contains('favicon')) {
@@ -778,7 +782,7 @@ function updateFolderList(id, type, data = {}) {
         url = decodeBookmarklet(url);
       }
       a.textContent = data.title;
-      a.setAttribute('data-url', url);
+      folderList.links[id] = url;
       a.previousElementSibling.src = favicon;
     } else if (data.title) {
       a.textContent = data.title;
@@ -886,11 +890,12 @@ function hotskeyEvents(event) {
     case "Enter":
       var $itemA = $('.item.active > a', $list);
       if (!$itemA) return;
+      var id = $itemA.getAttribute('data-id');
       if ($itemA.type === 'link') {
-        openUrl($itemA.getAttribute('data-url'), event);
+        openUrl(folderList.links[id], event);
       } else {
         $itemA.closest('.item').classList.remove('active');
-        openFolder($itemA.getAttribute('data-id'), $itemA.textContent);
+        openFolder(id, $itemA.textContent);
       }
       break;
     case "KeyF":
