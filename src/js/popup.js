@@ -179,9 +179,7 @@ const search = {
         $searchList.append(frag);
         handleFolderEvent($$('[type=folder]', $searchList));
       } else {
-        var html;
-        html = htmlTemplate.noresult;
-        $searchList.innerHTML = html;
+        $searchList.innerHTML = htmlTemplate.noresult;
       }
     })
   }
@@ -513,8 +511,7 @@ function renderListView(id, items, isStartup = false) {
       applyFrag();
     }
   } else {
-    var html = htmlTemplate.nodata;
-    $list.insertAdjacentHTML('afterbegin', html);
+    $list.insertAdjacentHTML('afterbegin', htmlTemplate.nodata);
   }
   function applyFrag() {
     var frag = templateFrag(items);
@@ -525,17 +522,17 @@ function renderListView(id, items, isStartup = false) {
 
 function templateFrag(treeData) {
   const fragment = document.createDocumentFragment();
-  for (let ele of treeData) {
-    fragment.append(templateFragItem(ele));
+  for (let item of treeData) {
+    fragment.append(templateFragItem(item));
   }
   return fragment;
 }
 
-function templateFragItem(ele) {
+function templateFragItem(item) {
   var clone = $itemForClone.cloneNode(true);
   var itemA = clone.lastElementChild;
   var favicon, type;
-  var url = ele.url;
+  var { id, title, url } = item;
   if (url) {
     if (isBookmarklet(url)) {
       favicon = 'icons/favicon/js.png';
@@ -548,14 +545,14 @@ function templateFragItem(ele) {
     type = 'folder';
   }
   clone.firstElementChild.src = favicon;
-  itemA.setAttribute('data-id', ele.id);
-  type && itemA.setAttribute('type', type);
-  isSeachView && itemA.setAttribute('data-parent-id', ele.parentId);
+  itemA.setAttribute('data-id', id);
+  itemA.textContent = title;
+  if (type) itemA.type = type;
+  isSeachView && itemA.setAttribute('data-parent-id', item.parentId);
   if (url) {
-    folderList.links[ele.id] = url;
-    itemA.title = `${ele.title}\n${url}`;
+    folderList.links[id] = url;
+    itemA.title = `${title}\n${url}`;
   }
-  itemA.textContent = ele.title;
   return clone;
 }
 

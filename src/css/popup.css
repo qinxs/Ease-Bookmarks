@@ -108,7 +108,7 @@ nav {
   font-weight: bold;
   color: var(--color-theme);
 }
-nav a {
+nav > a {
   padding: 1px 4px;
   border-radius: 4px;
   font-size: 16px;
@@ -163,7 +163,7 @@ nav a {
   height: 16px;
   top: 6px; /* (28 - 16) / 2 */
 }
-.item a {
+.item > a {
   display: block;
   padding-left: 24px;
   height: var(--height-item);
@@ -198,7 +198,7 @@ nav a {
   line-height: 2em;
   left: calc(50% - 140px) !important;
 }
-#context-menu li {
+#context-menu > li {
   display: none;
   padding: 0 8px;
   line-height: 22px;
@@ -207,7 +207,7 @@ nav a {
   text-overflow: ellipsis;
   text-shadow: none;
 }
-#context-menu li:hover {
+#context-menu > li:hover {
   background: var(--color-hover);
 }
 hr {
