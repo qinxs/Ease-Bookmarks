@@ -141,8 +141,6 @@ nav > a {
   opacity: .8;
 }
 .item {
-  position: relative;
-  float: left;
   padding-left: 8px;
   height: var(--height-item);
   width: calc(var(--width-item) * 1px);
@@ -160,13 +158,14 @@ nav > a {
   position: absolute;
   width: 16px;
   height: 16px;
-  top: 6px; /* (28 - 16) / 2 */
+  /* (28 - 16) / 2 */
+  transform: translateY(6px);
 }
 .item > a {
   display: block;
   padding-left: 24px;
-  height: var(--height-item);
-  color: var(--color-text);
+  /* 防止空名称文件夹不能打开 */
+  height: 100%;
   overflow:hidden;
   text-overflow:ellipsis;
   white-space:nowrap;
@@ -193,13 +192,6 @@ nav > a {
 #context-menu {
   left:0;
   top:0;
-}
-#dialog {
-  position: fixed;
-  top: 32px;
-  width: 280px;
-  line-height: 2em;
-  left: calc(50% - 140px) !important;
 }
 #context-menu > li {
   display: none;
@@ -259,6 +251,15 @@ hr {
   display: block !important;
 }
 
+#dialog {
+  position: fixed;
+  top: 32px;
+  width: 96%;
+  max-width: 360px;
+  line-height: 2em;
+  left: 50%;
+  transform: translateX(-50%);
+}
 #dialog input,
 #dialog textarea {
   margin: 8px 0;
