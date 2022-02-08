@@ -218,8 +218,7 @@ const contextMenu = {
     <li id="bookmark-delete">${L("delete")}</li>
   `,
   show() {
-    $contextMenu.style.left = this.pos.left + 'px';
-    $contextMenu.style.top = this.pos.top + 'px';
+    $contextMenu.style.transform = `translate(${this.pos.left}px, ${this.pos.top}px)`;
     $contextMenu.classList.remove('hidden');
     this.showing = true;
     $('.item.active') && $('.item.active').classList.remove('active');
@@ -243,13 +242,18 @@ const contextMenu = {
           $contextMenu.className = $fromTarget.type || 'nodata';
           $contextMenu.type = isSeachView ? 'search' : '';
           this.pos.left = e.clientX;
+          var mainWidth = $main.clientWidth;
+          var mainHeight = $main.clientHeight;
+          var menuWidth = $contextMenu.offsetWidth;
+          var menuHeight = $contextMenu.offsetHeight;
           // 数值4: 右键菜单的边距
-          if (this.pos.left + $contextMenu.offsetWidth > $main.clientWidth - 4) {
-            this.pos.left = $main.clientWidth - $contextMenu.offsetWidth - 4;
+          if (this.pos.left + menuWidth > mainWidth - 4) {
+            this.pos.left = mainWidth - menuWidth - 4;
           }
           this.pos.top = e.clientY - $main.offsetTop;
-          if (this.pos.top + $contextMenu.offsetHeight > $main.clientHeight) {
-            this.pos.top -= $contextMenu.offsetHeight;
+          var overflow = this.pos.top + menuHeight - mainHeight;
+          if (overflow > 0) {
+            this.pos.top -= (this.pos.top > menuHeight) ? menuHeight : overflow;
           }
           this.pos.top += $main.scrollTop;
           this.show();

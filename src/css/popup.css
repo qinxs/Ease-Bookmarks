@@ -190,6 +190,10 @@ nav > a {
   list-style: none;
   outline: 0;
 }
+#context-menu {
+  left:0;
+  top:0;
+}
 #dialog {
   position: fixed;
   top: 32px;
