@@ -1,7 +1,7 @@
 :root {
   --color-theme: #75c3b4;
   --height-item: 28px;
-  --width-item: 100%;
+  --width-item: 280;
   /* 浅色模式 */
   --color-text: #333;
   --color-background: #fff;
@@ -43,7 +43,6 @@ body {
   margin: 0;
   padding: 0;
   width: 280px;
-  max-height: 600px;
   color: var(--color-text);
   background-color: var(--color-background);
   overflow: hidden;
@@ -61,8 +60,8 @@ main {
   position: relative;
   max-height: 504px;
   min-height: 400px;
-  overflow-x: hidden; 
-  overflow-y: auto; 
+  overflow-x: hidden;
+  overflow-y: overlay;
 }
 footer {
   display: flex;
@@ -146,7 +145,7 @@ nav > a {
   float: left;
   padding-left: 8px;
   height: var(--height-item);
-  width: var(--width-item);
+  width: calc(var(--width-item) * 1px);
   line-height: var(--height-item);
   font-size: 13px;
 }
