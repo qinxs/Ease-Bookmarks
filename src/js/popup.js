@@ -13,14 +13,8 @@ const $itemForClone = $('#template > .item');
 const folderList = {
   length: {},
   hasScrollbar: {},
-  links: {}
-};
-const containers = [];
-Array.prototype.remove = function(val) {  
-  var index = this.indexOf(val);  
-  if (index > -1) {  
-    this.splice(index, 1);  
-  }  
+  links: {},
+  lists: {},
 };
 
 // 搜索框
@@ -235,9 +229,8 @@ const contextMenu = {
     switch(e.type) {
       case "contextmenu":
         e.preventDefault();
-        if(e.target.nodeName === 'A' || e.target.classList.contains('nodata')) {
+        if(e.target.tagName === 'A' || e.target.classList.contains('nodata')) {
           // console.log(e);
-          // console.log(this);
           $fromTarget = e.target;
           $contextMenu.className = $fromTarget.type || 'nodata';
           $contextMenu.type = isSeachView ? 'search' : '';
@@ -506,10 +499,10 @@ function renderListView(id, items, isStartup = false) {
   $searchList.insertAdjacentHTML('beforebegin', `<div class="folder-list" id=_${id}></div>`);
   var $list = $(`#_${id}`);
   setListSize($list, items.length, id);
-  containers.push($list);
+  folderList.lists[id] = $list;
   if (items.length) {
     if (isStartup) {
-      // 延后渲染
+      // 启动时延后渲染 避免长任务
       setTimeout(applyFrag);
     } else {
       applyFrag();
@@ -593,7 +586,7 @@ function setListSize($list, _length, id) {
     $list.setAttribute('data-rows', rowsCount);
   }
   var listHeight = rowsCount * settings.itemHeight;
-  $list.style.height = rowsCount * settings.itemHeight + 'px';
+  $list.style.height = listHeight + 'px';
   if (id) {
     folderList.length[id] = _length;
     // 504 main最大高度
@@ -614,7 +607,7 @@ function toggleList(id, searchMode = false) {
     $searchList.hidden = false;
     isSeachView = true;
   } else {
-    var $list = $(`#_${id}`);
+    var $list = folderList.lists[id];
     $list.hidden = false;
     $searchList.hidden = true;
     isSeachView = false;
@@ -740,11 +733,13 @@ function openFolderEvent(event) {
 }
 
 function openFolder(id, folderName, target) {
+  // 防止在文件夹上右键时 setTimeout生效打开文件夹
   if (contextMenu.showing || dialog.showing) return;
+  // 防止搜索到当前文件夹 通过Enter打开
   if (id == nav.lastPathID) return;
   // console.log(target);
   var curIsSearchView = isSeachView;
-  var $list = $(`#_${id}`);
+  var $list = folderList.lists[id];
   if(!$list) {
     loadChildrenView(id);
   } else {
@@ -761,12 +756,12 @@ function openFolder(id, folderName, target) {
  * @param  {Object} data edit 数据
  */
 function updateFolderList(id, type, data = {}) {
-  var $list = $(`#_${id}`);
+  var $list = folderList.lists[id];
   if (!$list) return;
 
   if (type === 'add') {
     $list.remove();
-    containers.remove($list);
+    delete folderList.lists[id];
   } else if (type === 'delete') {
     if ($list.childElementCount === 1) {
       $list.innerHTML = htmlTemplate.nodata;
@@ -794,7 +789,7 @@ function updateFolderList(id, type, data = {}) {
 function locationFolder(parentId, id) {
   // console.log(event.target);
   contextMenu.close();
-  if(!$(`#_${parentId}`)) {
+  if(!folderList.lists[parentId]) {
     loadChildrenView(parentId, false, () => locationToItem(id));
   } else {
     toggleList(parentId);
@@ -835,10 +830,13 @@ function dragToMove() {
     setTimeout(dragToMove);
     return
   }
-  window.drake = dragula(containers, {
+  window.drake = dragula({
     // spilling will put the element back where it was dragged from, if this is true
     revertOnSpill: true,
     os: 'pc',
+    isContainer: function (el) {
+      return el.classList.contains('folder-list');
+    }
   }).on('drop', (el, target, source, sibling, isHover) => {
     // console.log(el, target, source, sibling, isHover);
     // return
