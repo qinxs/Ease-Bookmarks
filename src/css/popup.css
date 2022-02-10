@@ -1,7 +1,7 @@
 :root {
   --color-theme: #75c3b4;
   --height-item: 28px;
-  --width-item: 280;
+  --width-item: 100%;
   /* 浅色模式 */
   --color-text: #333;
   --color-background: #fff;
@@ -143,7 +143,7 @@ nav > a {
 .item {
   padding-left: 8px;
   height: var(--height-item);
-  width: calc(var(--width-item) * 1px);
+  width: var(--width-item);
   line-height: var(--height-item);
   font-size: 13px;
 }

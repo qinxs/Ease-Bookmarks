@@ -577,8 +577,8 @@ function setListSize($list, _length, id) {
       rowsCount = Math.ceil(length / colsCount);
 
       if (colsCount > curMaxCols || !settings.keepMaxCols) {
-        document.body.style.width = BM.bodyWidth[colsCount] + 'px';
-        rootStyle.setProperty('--width-item', BM.bodyWidth[colsCount] / colsCount);
+        document.body.style.width = BM.bodyWidth[colsCount];
+        rootStyle.setProperty('--width-item', parseInt(100 / colsCount) + "%");
         curMaxCols = colsCount;
       }
     }

@@ -19,12 +19,11 @@ window.BM = {
     keepMaxCols: 1, // 0-1 保持最大宽度
   },
   bodyWidth: {
-    // 单位 px，保证整除
-    1: '280',
-    2: '400',
-    3: '540',
-    4: '660',
-    5: '800',
+    1: '280px',
+    2: '400px',
+    3: '530px',
+    4: '660px',
+    5: '800px',
   },
   set(name, value) {
     if (this.defaultSys.hasOwnProperty(name)) {
