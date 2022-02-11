@@ -564,6 +564,7 @@ function decodeBookmarklet(url) {
   return url;
 }
 
+// id 仅渲染$list时 需要传入
 function setListSize($list, _length, id) {
   var rowsCount, colsCount;
   var length = _length || 1;
@@ -576,13 +577,16 @@ function setListSize($list, _length, id) {
       colsCount = length > layoutCols * minItemsPerCol ? layoutCols : Math.ceil(length / minItemsPerCol);
       rowsCount = Math.ceil(length / colsCount);
 
-      if (colsCount > curMaxCols || !settings.keepMaxCols) {
+      if (colsCount != curMaxCols && (colsCount > curMaxCols || !settings.keepMaxCols)) {
         document.body.style.width = BM.bodyWidth[colsCount];
         rootStyle.setProperty('--width-item', parseInt(100 / colsCount) + "%");
         curMaxCols = colsCount;
       }
+      if (rowsCount < minItemsPerCol && length > minItemsPerCol) {
+        rowsCount = minItemsPerCol;
+      }
     }
-    rowsCount = rowsCount < minItemsPerCol ? minItemsPerCol : rowsCount;
+    // data-rows 供左右快捷键使用
     $list.setAttribute('data-rows', rowsCount);
   }
   var listHeight = rowsCount * settings.itemHeight;
