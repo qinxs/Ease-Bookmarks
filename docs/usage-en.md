@@ -14,8 +14,6 @@ Bookmarks in multiple columns
 
 Shortcut Key Support
 
-Does not occupy the background when this extension is not used
-
 In addition, this extension has special support for `JS bookmarklet`~
 
 ## Use shortcut keys
@@ -50,9 +48,9 @@ The default shortcut is `Ctrl + Q`, you can modify it in the following managemen
 
 ## support
 
-[GitHub Issues](https://github.com/qinxs/Ease-Bookmarks/issues) -
-[Blog Message](https://7bxing.com/posts/beb3fd2a/) -
+[GitHub Issues](https://github.com/qinxs/Ease-Bookmarks/issues) - 
+[Blog Message](https://7bxing.com/posts/beb3fd2a/) - 
 Email: qin_xs@qq.com
 
-[GitHub Star](https://github.com/qinxs/Ease-Bookmarks "If it's convenient, give a Star, thanks!") -
+[GitHub Star](https://github.com/qinxs/Ease-Bookmarks "If it's convenient, give a Star, thanks!") - 
 [Donate Welcome](https://7bxing.com/donate/)
