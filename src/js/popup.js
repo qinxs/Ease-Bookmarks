@@ -28,6 +28,8 @@ var $curFolderList;
 var $fromTarget = null;
 var pathTitle = '';
 window.openFolderDelay = null;
+var mainScrollTop = 0;
+var cachedFolderScrollTop = 0;
 // 点击的右键菜单ID，需要弹出dialog时动态改变
 var curContextMenuID;
 
@@ -601,8 +603,10 @@ function setListSize($list, _length, id) {
 // 视图切换
 function toggleList(id, searchMode = false) {
   // console.log($curFolderList);
-  var curId = $curFolderList.id.replace('_', '');
-  if (folderList.hasScrollbar[curId] && (folderList.hasScrollbar[id] || searchMode)) {
+  if (mainScrollTop && (folderList.hasScrollbar[id] || searchMode)) {
+    if (searchMode) {
+      cachedFolderScrollTop = mainScrollTop;
+    }
     $main.scrollTop = 0;
   }
   $curFolderList.hidden = true;
@@ -616,6 +620,10 @@ function toggleList(id, searchMode = false) {
     $searchList.hidden = true;
     isSeachView = false;
     $curFolderList = $list;
+    if (cachedFolderScrollTop) {
+      $main.scrollTop = cachedFolderScrollTop;
+      cachedFolderScrollTop = 0;
+    }
   }
 }
 
@@ -1012,6 +1020,9 @@ settingsReady(() => {
     handleFolderEvent($$('.nav > a'));
   }
   setTimeout(() => {
+    $main.addEventListener('scroll', function() {
+      mainScrollTop = this.scrollTop;
+    }, false);
     var LastScrollTop = localStorage.getItem('LastScrollTop') || 0;
     if (LastScrollTop) $main.scrollTop = LastScrollTop;
   }, 17);
