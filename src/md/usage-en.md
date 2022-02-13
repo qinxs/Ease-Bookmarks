@@ -41,12 +41,12 @@ The default shortcut is `Ctrl + Q`, you can modify it in the following managemen
 - `Ctrl`: open page in current tab/new tab
 - `Shift`: whether to open the page in the background
 
-## customize
+## Customize
 
 - Aliases (bookmarks bar and other bookmarks, may be required for other languages)
 - Custom style (popup page, DOM structure can be viewed in the header area `Right click -> Inspect`)
 
-## support
+## Support
 
 [GitHub Issues](https://github.com/qinxs/Ease-Bookmarks/issues) - 
 [Blog Message](https://7bxing.com/posts/beb3fd2a/) - 

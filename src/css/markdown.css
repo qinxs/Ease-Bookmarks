@@ -1,8 +1,29 @@
+body {
+  margin: 0 auto;
+  width: 720px;
+  min-height: calc(100vh + 15px);
+  box-shadow: 0 0 60px rgb(0 0 0 / 10%);
+}
+body::-webkit-scrollbar {
+  display: none;
+}
+.btns {
+  position: fixed;
+  display: block;
+  top: 2px;
+  right: calc(50vw - 360px + 30px);
+  opacity: .5;
+  cursor: pointer;
+}
+.btns img {
+  width: 24px;
+}
+
 /* 根据该字体大小，统一调整文章整体大小 */
 /* 间距，其他字体，代码块以及注脚 */
 /* 不会控制微信代码块 */
 #nice {
-  margin-top: -1em;
+  margin-top: -15px;
   padding: 15px 30px;
   font-size: 16px;
   line-height: 1.6;

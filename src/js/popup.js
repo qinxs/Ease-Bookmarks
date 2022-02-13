@@ -1034,7 +1034,6 @@ settingsReady(() => {
     dialog.init();
     document.addEventListener('keydown', hotskeyEvents);
     window.addEventListener('unload', setLastData);
-    setUsageLink();
     $searchList.addEventListener('mouseover', handleSearchResultsHover, false);
     loadCSS('libs/dragula.css');
     loadJS('libs/dragula.min.js', dragToMove);

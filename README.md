@@ -95,6 +95,8 @@ Ease Bookmarks 是一款为了替代浏览器原有书签栏的扩展
 
 [dragula.js](https://github.com/bevacqua/dragula)（进行了细微调整 [改动内容](https://github.com/qinxs/dragula2)）
 
+[marked](https://github.com/markedjs/marked)（动态渲染 markdown 文件）
+
 ## License
 
 [MIT](LICENSE)

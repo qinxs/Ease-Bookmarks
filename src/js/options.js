@@ -93,7 +93,6 @@ for (var ele of $$('[data-i18n]')) {
         ele.textContent = chrome.i18n.getMessage(ele.dataset.i18n);
     }
 }
-setUsageLink();
 
 chrome.bookmarks.getChildren('0', (results) => {
   // console.log(results);

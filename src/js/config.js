@@ -69,13 +69,6 @@ const $ = (css, d = document) => d.querySelector(css);
 const $$ = (css, d = document) => d.querySelectorAll(css);
 const L = chrome.i18n.getMessage;
 
-function setUsageLink() {
-  var UsageLang = chrome.i18n.getUILanguage();
-  if (!UsageLang.startsWith('zh')) {
-    $('#usage').href = `usage/en.html`;
-  }
-}
-
 function setStartupLocal(ele, folderID) {
   var id = folderID || this.value;
   id < 0 && localStorage.setItem('startupFromLast', id);
