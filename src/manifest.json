@@ -28,7 +28,9 @@
     "_execute_browser_action": {
       "suggested_key": {
         "windows": "Ctrl+Q",
-        "mac": "Command+Q"
+        "mac": "Command+Q",
+        "linux": "Ctrl+Q",
+        "chromeos": "Ctrl+Q"
       },
       "description": "打开/关闭扩展"
     }
