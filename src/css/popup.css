@@ -90,9 +90,6 @@ a {
   text-decoration: none;
   cursor: pointer;
 }
-img {
-  max-height: 100%;
-}
 
 nav {
   margin: 4px 0;
@@ -110,7 +107,6 @@ nav {
 nav > a {
   padding: 1px 4px;
   border-radius: 4px;
-  font-size: 16px;
   color: #fff;
   background-color: var(--color-theme);
 }
@@ -121,6 +117,7 @@ nav > a {
   flex-direction: column;
   flex-wrap: wrap;
   align-content: flex-start;
+  font-size: 13px;
 }
 .folder-list[hidden],
 #search-list[hidden] {
@@ -141,11 +138,11 @@ nav > a {
   opacity: .8;
 }
 .item {
+  position: relative;
   padding-left: 8px;
-  height: var(--height-item);
   width: var(--width-item);
+  height: var(--height-item);
   line-height: var(--height-item);
-  font-size: 13px;
 }
 .item:hover,
 .item:focus,
@@ -156,10 +153,9 @@ nav > a {
 
 .favicon {
   position: absolute;
-  width: 16px;
   height: 16px;
-  /* (28 - 16) / 2 */
-  transform: translateY(6px);
+  top: 50%;
+  transform: translateY(-50%);
 }
 .item > a {
   display: block;
@@ -171,7 +167,7 @@ nav > a {
   white-space:nowrap;
 }
 .btns {
-  padding: 4px 0;
+  padding-top: 4px;
   opacity: .5;
 }
 
