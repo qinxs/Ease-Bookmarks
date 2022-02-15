@@ -27,7 +27,7 @@ settingsReady(() => {
   $('#_1').textContent = BM.settings.rootInfo[1];
   $('#_2').textContent = BM.settings.rootInfo[2];
   var folderX = $('#folderX');
-  folderX.title = L('folderXTitle');
+  // folderX.title = L('folderXTitle');
   if (BM.settings.startup > 2) {
     folderX.previousElementSibling.value = BM.settings.startup;
     chrome.bookmarks.get(BM.settings.startup, (results) => {

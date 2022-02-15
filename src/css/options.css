@@ -1,9 +1,35 @@
 :root {
-  --primary-color: #1abc9c;
+    --primary-color: #1abc9c;
+}
+::-webkit-scrollbar {
+    display: none;
 }
 
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
 body {
+    margin: 0 auto;
+    width: 720px;
+    min-height: 100vh;
     font-size: 16px;
+    box-shadow: 0 0 60px rgb(0 0 0 / 10%);
+}
+.btns {
+    position: fixed;
+    display: block;
+    top: 2px;
+    right: calc(50vw - 360px + 30px);
+    opacity: .5;
+    cursor: pointer;
+}
+.btns img {
+    width: 24px;
+}
+#options {
+    padding: 15px 30px 0;
 }
 
 .ul_box {
@@ -11,9 +37,10 @@ body {
     list-style: none;
 }
 .ul_box > li {
-    padding: 10px 10px 0 10px;
-    overflow: hidden;
+    display: flex;
+    padding: 5px;
     border-bottom: 1px solid #e5e5e5;
+    align-items: center;
 }
 .ul_box > li:last-child {
     border-bottom: none;
@@ -24,11 +51,7 @@ body {
 .ul_box > li > div:nth-child(1) {
     min-width: 120px;
     text-align: right;
-    padding-right: 10px;
-    box-sizing: border-box;
-}
-.ul_box > li > div:nth-child(2) {
-    overflow: hidden;
+    padding-right: 5px;
 }
 
 .label {
@@ -38,31 +61,28 @@ body {
 .label_box > label {
     display: block;
     float: left;
-    margin: 0 10px 10px 0;
+    margin: 5px;
     position: relative;
-    overflow: hidden;
 }
 .label_box > label > input {
     position: absolute;
-    top: 0;
-    left: -20px;
+    display: none;
 }
 .label_box > label > span {
     display: block;
-    min-width: 76px;
+    min-width: 90px;
     padding: 0 6px;
     text-align: center;
     border: 1px solid #ddd;
-    height: 40px;
-    line-height: 40px;
-    color: #666666;
+    height: 42px;
+    line-height: 42px;
+    color: #666;
     user-select: none;
-    overflow: hidden;
     position: relative;
 }
 .two_line {
-    height: 80px;
-    line-height: 80px;
+    height: 84px;
+    line-height: 84px;
 }
 .clear {
     clear: both;
@@ -76,27 +96,24 @@ body {
 }
 .label_box > label > input:checked + span:after {
     content: '';
-    display: block;
-    width: 20px;
-    height: 20px;
-    background-color: var(--primary-color);
-    transform: skewY(-45deg);
     position: absolute;
-    bottom: -10px;
-    right: 0;
+    bottom: -15px;
+    right: -15px;
+    border: 15px solid;
+    border-color: transparent transparent var(--primary-color);
     z-index: 1;
+    transform: rotate(135deg);
 }
 .label_box > label > input:checked + span:before {
     content: '';
-    display: block;
+    position: absolute;
+    bottom: 2px;
+    right: 4px;
     width: 3px;
     height: 8px;
     border-right: 2px solid #fff;
     border-bottom: 2px solid #fff;
     transform: rotate(35deg);
-    position: absolute;
-    bottom: 2px;
-    right: 4px;
     z-index: 2;
 }
 
@@ -109,21 +126,46 @@ body {
     font-family: 'Fira Code,Menlo,Monaco,Consolas,Liberation Mono,Courier New,Courier,monospace';
 }
 .input_box > input {
-    margin-right: 6px;
-    height: 28px;
-    width: 188px;
+    margin: 5px;
+    height: 30px;
+    width: 190px;
 }
 .input_box > textarea {
+    margin: 0 5px;
     width: 480px;
 }
 #minItemsPerCol {
-    width: 82px;
+    width: 90px;
 }
-.tips {
-    line-height: 36px;
-    height: 36px;
+.note {
     font-size: 13px;
     color: #555;
+}
+
+.tooltip ~ .tooltiptext {
+    visibility: hidden;
+    position: absolute;
+    bottom: 120%;
+    padding: 0 10px;
+    width: max-content;
+    border-radius: 6px;
+    font-size: 13px;
+    color: #fff;
+    background-color: #666;
+    z-index: 9999;
+    transition: visibility .2s ease-in .3s;
+}
+.tooltip ~ .tooltiptext::after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 40px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: #666 transparent transparent transparent;
+}
+.tooltip:hover ~ .tooltiptext {
+    visibility: visible;
 }
 
 @media (prefers-color-scheme: dark) {

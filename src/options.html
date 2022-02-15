@@ -5,13 +5,6 @@
     <meta charset="UTF-8">
     <title>Ease Bookmarks</title>
     <base target="_blank">
-    <style>
-      body {margin: 0 auto; width: 720px; box-shadow: 0 0 60px rgb(0 0 0 / 10%);}
-      body::-webkit-scrollbar {display: none; }
-      .btns {position: fixed; display: block; top: 2px; right: calc(50vw - 360px + 30px); opacity: .5; cursor: pointer; }
-      .btns img {width: 24px;}
-      #options {margin-top: -15px; padding: 15px 30px; min-height: calc(100vh - 30px);}
-    </style>
     <link rel="stylesheet" href="css/options.css">
     <script src='js/config.js'></script>
 </head>
@@ -20,135 +13,134 @@
 <div class="btns">
     <a id="usage" href="usage.html" target="_self"><img src="icons/usage.svg"></a>
 </div>
-<div id="options">
-    <ul class="ul_box">
-        <li>
-            <div class="label" id="themeColor" data-i18n="themeColor"></div>
-            <div class="label_box">
-                <label>
-                    <input type="radio" name="themeColor" value="auto">
-                    <span data-i18n="auto"></span>
-                </label>
-                <label>
-                    <input type="radio" name="themeColor" value="light">
-                    <span data-i18n="light"></span>
-                </label>
-                <label>
-                    <input type="radio" name="themeColor" value="dark">
-                    <span data-i18n="dark"></span>
-                </label>
-            </div>
-        </li>
-        <li>
-            <div class="label" id="openIn" data-i18n="openIn"></div>
-            <div class="label_box">
-                <label>
-                    <input type="radio" name="openIn" value="0">
-                    <span data-i18n="currentTab"></span>
-                </label>
-                <label>
-                    <input type="radio" name="openIn" value="3">
-                    <span data-i18n="newTab"></span>
-                </label>
-                <label>
-                    <input type="radio" name="openIn" value="2">
-                    <span data-i18n="backgroundTab"></span>
-                </label>
-            </div>
-        </li>
-        <li>
-            <div class="label" id="hoverEnter" data-i18n="hoverEnter"></div>
-            <div class="label_box">
-                <label>
-                    <input type="radio" name="hoverEnter" value="0">
-                    <span data-i18n="off"></span>
-                </label>
-                <label>
-                    <input type="radio" name="hoverEnter" value="800">
-                    <span data-i18n="slow"></span>
-                </label>
-                <label>
-                    <input type="radio" name="hoverEnter" value="500">
-                    <span data-i18n="moderate"></span>
-                </label>
-                <label>
-                    <input type="radio" name="hoverEnter" value="300">
-                    <span data-i18n="fast"></span>
-                </label>
-            </div>
-        </li>
-        <li>
-            <div class="label two_line" id="startupFolder" data-i18n="startupFolder"></div>
-            <div class="label_box">
-                <label>
-                    <input type="radio" name="startup" value="1">
-                    <span id="_1"></span>
-                </label>
-                <label>
-                    <input type="radio" name="startup" value="2">
-                    <span id="_2"></span>
-                </label>
-                <label>
-                    <input type="radio" name="startup" value="0.1">
-                    <span id="folderX">X</span>
-                </label>
-                <label class="clear">
-                    <input type="radio" name="startup" value="-1">
-                    <span data-i18n="lastFolder"></span>
-                </label>
-                <label>
-                    <input type="radio" name="startup" value="-2">
-                    <span data-i18n="lastFolderAndScrollBar"></span>
-                </label>
-            </div>
-        </li>
-        <li>
-            <div class="label" id="layoutCols" data-i18n="layoutCols"></div>
-            <div class="label_box">
-                <label>
-                    <input type="radio" name="layoutCols" value="1">
-                    <span>1</span>
-                </label>
-                <label>
-                    <input type="radio" name="layoutCols" value="2">
-                    <span>2</span>
-                </label>
-                <label>
-                    <input type="radio" name="layoutCols" value="3">
-                    <span>3</span>
-                </label>
-                <label>
-                    <input type="radio" name="layoutCols" value="4">
-                    <span>4</span>
-                </label>
-                <label>
-                    <input type="radio" name="layoutCols" value="5">
-                    <span>5</span>
-                </label>
-            </div>
-        </li>
-        <li>
-            <div class="label" id="minItemsEachCol" data-i18n="minItemsEachCol"></div>
-            <div class="input_box">
-                <input type="text" id="minItemsPerCol" name="minItemsPerCol">
-            </div>
-            <span class="tips" data-i18n="minItemsEachColTips"></span>
-        </li>
-        <li>
-            <div class="label" data-i18n="alias"></div>
-            <div class="input_box">
-                <input type="text" id="bookmarksBar">
-                <input type="text" id="otherBookmarks">
-            </div>
-        </li>
-        <li>
-            <div class="label" data-i18n="customCSS"></div>
-            <div class="input_box">
-                <textarea id="customCSS" rows="8" placeholder="&#10;footer { display: none; }" data-i18n="example"></textarea>
-            </div>
-        </li>
-    </ul>
-</div>
+<ul id="options" class="ul_box">
+    <li>
+        <div class="label" id="themeColor" data-i18n="themeColor"></div>
+        <div class="label_box">
+            <label>
+                <input type="radio" name="themeColor" value="auto">
+                <span data-i18n="auto"></span>
+            </label>
+            <label>
+                <input type="radio" name="themeColor" value="light">
+                <span data-i18n="light"></span>
+            </label>
+            <label>
+                <input type="radio" name="themeColor" value="dark">
+                <span data-i18n="dark"></span>
+            </label>
+        </div>
+    </li>
+    <li>
+        <div class="label" id="openIn" data-i18n="openIn"></div>
+        <div class="label_box">
+            <label>
+                <input type="radio" name="openIn" value="0">
+                <span data-i18n="currentTab"></span>
+            </label>
+            <label>
+                <input type="radio" name="openIn" value="3">
+                <span data-i18n="newTab"></span>
+            </label>
+            <label>
+                <input type="radio" name="openIn" value="2">
+                <span data-i18n="backgroundTab"></span>
+            </label>
+        </div>
+    </li>
+    <li>
+        <div class="label" id="hoverEnter" data-i18n="hoverEnter"></div>
+        <div class="label_box">
+            <label>
+                <input type="radio" name="hoverEnter" value="0">
+                <span data-i18n="off"></span>
+            </label>
+            <label>
+                <input type="radio" name="hoverEnter" value="800">
+                <span data-i18n="slow"></span>
+            </label>
+            <label>
+                <input type="radio" name="hoverEnter" value="500">
+                <span data-i18n="moderate"></span>
+            </label>
+            <label>
+                <input type="radio" name="hoverEnter" value="300">
+                <span data-i18n="fast"></span>
+            </label>
+        </div>
+    </li>
+    <li>
+        <div class="label two_line" id="startupFolder" data-i18n="startupFolder"></div>
+        <div class="label_box">
+            <label>
+                <input type="radio" name="startup" value="1">
+                <span id="_1"></span>
+            </label>
+            <label>
+                <input type="radio" name="startup" value="2">
+                <span id="_2"></span>
+            </label>
+            <label>
+                <input type="radio" name="startup" value="0.1">
+                <span id="folderX" class="tooltip">X</span>
+                <span class="tooltiptext" data-i18n="folderXTitle"></span>
+            </label>
+            <label class="clear">
+                <input type="radio" name="startup" value="-1">
+                <span data-i18n="lastFolder"></span>
+            </label>
+            <label>
+                <input type="radio" name="startup" value="-2">
+                <span data-i18n="lastFolderAndScrollBar"></span>
+            </label>
+        </div>
+    </li>
+    <li>
+        <div class="label" id="layoutCols" data-i18n="layoutCols"></div>
+        <div class="label_box">
+            <label>
+                <input type="radio" name="layoutCols" value="1">
+                <span>1</span>
+            </label>
+            <label>
+                <input type="radio" name="layoutCols" value="2">
+                <span>2</span>
+            </label>
+            <label>
+                <input type="radio" name="layoutCols" value="3">
+                <span>3</span>
+            </label>
+            <label>
+                <input type="radio" name="layoutCols" value="4">
+                <span>4</span>
+            </label>
+            <label>
+                <input type="radio" name="layoutCols" value="5">
+                <span>5</span>
+            </label>
+        </div>
+    </li>
+    <li>
+        <div class="label" id="minItemsEachCol" data-i18n="minItemsEachCol"></div>
+        <div class="input_box">
+            <input type="text" id="minItemsPerCol" name="minItemsPerCol">
+        </div>
+        <span class="note" data-i18n="minItemsEachColTips"></span>
+    </li>
+    <li>
+        <div class="label" data-i18n="alias"></div>
+        <div class="input_box">
+            <input type="text" id="bookmarksBar">
+            <input type="text" id="otherBookmarks">
+        </div>
+    </li>
+    <li>
+        <div class="label" data-i18n="customCSS"></div>
+        <div class="input_box">
+            <textarea id="customCSS" rows="8" placeholder="&#10;footer { display: none; }" data-i18n="example"></textarea>
+        </div>
+    </li>
+</ul>
 <script src='js/options.js'></script>
 </body>
 
