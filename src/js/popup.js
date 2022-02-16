@@ -38,6 +38,7 @@ var layoutCols;
 var curMaxCols = 1;
 var minItemsPerCol;
 const rootStyle = document.documentElement.style;
+var itemHeight;
 
 const isBookmarklet = url => url.trim().startsWith('javascript:');
 const htmlTemplate = {
@@ -54,7 +55,12 @@ const dataSetting = {
     BM.openFolderEventType = settings.hoverEnter == 0 ? 'click' : 'mouseover';
   },
   layout() {
-    if(settings.customCSS) $('#customCSS').textContent = settings.customCSS;
+    if(settings.customCSS) {
+      $('#customCSS').textContent = settings.customCSS;
+      itemHeight = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--height-item'));
+    } else {
+      itemHeight = '28'; // --height-item的默认值
+    }
   },
   switchTheme() {
     // 媒体查询，用户系统是否启动暗色模式
@@ -591,7 +597,7 @@ function setListSize($list, _length, id) {
     // data-rows 供左右快捷键使用
     $list.setAttribute('data-rows', rowsCount);
   }
-  var listHeight = rowsCount * settings.itemHeight;
+  var listHeight = rowsCount * itemHeight;
   $list.style.height = listHeight + 'px';
   if (id) {
     folderList.length[id] = _length;

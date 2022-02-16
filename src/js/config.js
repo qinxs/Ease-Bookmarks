@@ -15,7 +15,6 @@ window.BM = {
   },
   defaultSys: {
     fastCreate: 0, // 0-2
-    itemHeight: 28, // 与css变量 --height-item一致
     keepMaxCols: 1, // 0-1 保持最大宽度
   },
   bodyWidth: {
