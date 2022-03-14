@@ -61,13 +61,12 @@ settingsReady(() => {
       setSyncItem(name, value);
     }, false);
   }
-  // 只允许数字，范围 1-16
+  // 只允许数字
   $minItemsPerCol.addEventListener('input', function() {
     this.value = this.value.replace(/[^0-9]/g, '');
   });
   $minItemsPerCol.addEventListener('change', function() {
     if (this.value < 1) this.value = 1;
-    if (this.value > 16) this.value = 16;
     setSyncItem('minItemsPerCol', this.value);
   });
   $bookmarksBar.addEventListener('change', bookmarksAlias);

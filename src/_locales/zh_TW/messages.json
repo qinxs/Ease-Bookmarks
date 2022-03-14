@@ -161,7 +161,7 @@
       "message": "每列條數:"
   },
   "minItemsEachColTips": {
-      "message": "注：佈局列數為多列時有效，推薦1、10或者16（範圍: 1-16）"
+      "message": "注：佈局列數為多列時有效，推薦1或者10"
   },
   "alias": {
       "message": "別名:"

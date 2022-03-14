@@ -161,7 +161,7 @@
       "message": "Items each col:"
   },
   "minItemsEachColTips": {
-      "message": "Note: valid if the number of Layout columns is multiple. 1, 10 or 16(range: 1-16) are recommended"
+      "message": "Note: valid if the number of Layout columns is multiple. 1 or 10 is recommended"
   },
   "alias": {
       "message": "Alias:"
