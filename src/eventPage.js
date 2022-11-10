@@ -1,5 +1,23 @@
-"use strict";
-console.log("eventPage");
+'use strict';
+// console.log('eventPage');
+
+//check browser
+var browserType;
+if(navigator.userAgent.toLowerCase().indexOf('firefox')!=-1){
+  browserType = 'firefox';
+}else if(navigator.userAgent.toLowerCase().indexOf('edge')!=-1){
+  browserType = 'edge';
+}else{
+  browserType = 'chrome';
+}
+
+var bookmarksManagerUrl = (() => {
+  if (browserType == 'edge') {
+    return 'edge://favorites/';
+  } else {
+    return 'chrome://bookmarks/';
+  }
+})();
 
 function checkRootInfo(argument) {
   chrome.storage.sync.get(['rootInfo'], function(result) {
@@ -45,3 +63,13 @@ chrome.runtime.onInstalled.addListener(() => {
 // chrome.runtime.onStartup.addListener(function() {
 //   localStorage.setItem('time', new Date().toLocaleString());
 // });
+
+chrome.contextMenus.create({
+  title: chrome.i18n.getMessage('bookmarksManager'), 
+  contexts: ['browser_action'],
+  onclick: () => {
+    chrome.tabs.create({
+      url: bookmarksManagerUrl,
+    });
+  }
+});

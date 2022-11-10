@@ -4,6 +4,11 @@
     "message": "简单易用的书签管理器"
   },
 
+  "bookmarksManager":
+  {
+    "message": "书签管理器"
+  },
+
   "noBookmarksTip":
   {
     "message": "这里没有书签呢~"

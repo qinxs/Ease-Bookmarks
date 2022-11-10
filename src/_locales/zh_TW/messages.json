@@ -4,6 +4,11 @@
     "message": "簡單易用的書籤管理器"
   },
 
+  "bookmarksManager":
+  {
+    "message": "書籤管理器"
+  },
+  
   "noBookmarksTip":
   {
     "message": "這裏沒有書籤呢~"

@@ -4,6 +4,11 @@
     "message": "Easy to use bookmark manager"
   },
 
+  "bookmarksManager":
+  {
+    "message": "Bookmarks Manager"
+  },
+
   "noBookmarksTip":
   {
     "message": "There is no bookmark here."
