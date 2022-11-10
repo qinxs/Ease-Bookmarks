@@ -718,6 +718,7 @@ function openUrl(url, event) {
     });
   } else if(flag >> 1 == 0) {
     chrome.tabs.update({ url: url });
+    window.close();
   } else {
     var active = Boolean(flag & 1);
     chrome.tabs.create({ url: url, active });
