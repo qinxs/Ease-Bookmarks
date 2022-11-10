@@ -67,9 +67,11 @@ footer {
   display: flex;
   justify-content: flex-end;
   height: 28px;
-  line-height: 28px;
   color: var(--color-text);
   background-color: #eee;
+}
+footer > * {
+  padding-top: 4px;
 }
 
 input,
@@ -168,8 +170,7 @@ nav > a {
   white-space:nowrap;
 }
 .btn {
-  margin-left: 1px;
-  padding-top: 4px;
+  margin-left: 2px;
   opacity: .5;
 }
 
@@ -282,4 +283,7 @@ hr {
 }
 .dark img {
   filter: brightness(0.9);
+}
+.dark svg {
+  fill: var(--color-text);
 }
