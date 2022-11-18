@@ -5,6 +5,13 @@ var $otherBookmarks = $('#otherBookmarks');
 var $customCSS = $('#customCSS');
 var $minItemsPerCol = $('#minItemsPerCol');
 
+var $iconPreview = $('.icon_preview');
+
+var lang = chrome.i18n.getUILanguage();
+if (lang.startsWith('zh')) {
+  document.documentElement.lang = 'zh';
+}
+
 function setSyncItem(name, value) {
   if (value == BM.default[name] || !value) {
     chrome.storage.sync.remove(name);
@@ -76,8 +83,65 @@ settingsReady(() => {
   });
   $$('input[name=startup]').forEach((ele) => {
     ele.addEventListener('change', setStartupLocal);
-  })
-})
+  });
+
+  // 预览自定义头像
+  var iconBase64 = localStorage.customIcon;
+  if (iconBase64) {
+    $iconPreview.style.backgroundImage = `url(${iconBase64})`;
+    $iconPreview.style.backgroundSize = `19px`;
+  }
+
+  // 压缩图片需要的一些元素和对象
+  var reader = new FileReader(), img = new Image(), file = null;
+
+  var canvas = document.createElement("canvas");
+  var context = canvas.getContext("2d");
+
+  $('#uploadIcon').addEventListener('change', function() {
+    file = event.target.files[0];
+    // 选择的文件是图片
+    if (file.type.indexOf("image") == 0) {
+      reader.readAsDataURL(file);    
+    }
+  });
+
+  reader.onload = function (event) {
+    // base64码
+    img.src = event.target.result;
+  }
+
+  img.onload = function() {
+    var imgBase64 = image2Base64(img);
+    $iconPreview.style.backgroundImage = `url(${imgBase64})`;
+    $iconPreview.style.backgroundSize = `19px`;
+    localStorage.customIcon = imgBase64;
+
+    var imageData = context.getImageData(0, 0, 19, 19);
+    chrome.browserAction.setIcon({imageData: imageData});
+
+    function image2Base64(img, width = 19, height = 19) {
+      canvas.width = width;
+      canvas.height = height;
+      // 清除画布
+      context.clearRect(0, 0, width, height);
+      // 图片压缩
+      context.drawImage(img, 0, 0, width, height);
+      var dataURL = canvas.toDataURL("image/png");
+      // console.log(dataURL);
+      return dataURL;
+    }
+  };
+
+  $('#resetIcon').addEventListener('click', function(){
+    if (localStorage.customIcon) {
+      delete localStorage.customIcon;
+      chrome.browserAction.setIcon({path: '../icons/icon32.png'});
+      $iconPreview.removeAttribute('style');
+    }
+  });
+
+});
 
 // 多语言
 for (var ele of $$('[data-i18n]')) {

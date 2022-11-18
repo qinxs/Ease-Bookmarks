@@ -137,6 +137,32 @@ body {
 #minItemsPerCol {
     width: 90px;
 }
+
+.icon_preview {
+    float: left;
+    margin: 5px;
+    width: 50px;
+    height: 50px;
+    background-position: center;
+    background-image: repeating-linear-gradient(45deg, #999, #eee 1%, #eee 5%);
+    background-size: 50px;
+    background-repeat: no-repeat;
+}
+.button {
+    user-select: none;
+    float: left;
+    margin: 15px 5px;
+    padding: .15em .5em;
+    border: 1px solid #777;
+    border-radius: 4px;
+    background-color: #f5f5f5;
+}
+.button:hover {
+    background-color: #1abc9c48;
+}
+html[lang=en] .button {
+    margin: 1px 5px !important;
+}
 .note {
     font-size: 13px;
     color: #555;

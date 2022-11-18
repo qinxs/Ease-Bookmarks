@@ -1,6 +1,12 @@
 'use strict';
 // console.log('eventPage');
 
+// default_icon 设为透明图标，但效果不好
+var iconBase64 = localStorage.customIcon;
+if (iconBase64) {
+  chrome.browserAction.setIcon({path: iconBase64});
+}
+
 //check browser
 var browserType;
 if(navigator.userAgent.toLowerCase().indexOf('firefox')!=-1){

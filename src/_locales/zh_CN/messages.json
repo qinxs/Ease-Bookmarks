@@ -171,6 +171,18 @@
   "alias": {
       "message": "别名:"
   },
+  "customIcon": {
+      "message": "自定义图标:"
+  },
+  "selectFile": {
+      "message": "选择文件"
+  },
+  "reset": {
+      "message": "重置"
+  },
+  "customIconTip": {
+      "message": "注：请选择方形、透明背景图片（png格式）"
+  },
   "customCSS": {
       "message": "自定义样式:"
   },

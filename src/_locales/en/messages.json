@@ -171,6 +171,18 @@
   "alias": {
       "message": "Alias:"
   },
+  "customIcon": {
+      "message": "Custom icon:"
+  },
+  "selectFile": {
+      "message": "Select file"
+  },
+  "reset": {
+      "message": "reset"
+  },
+  "customIconTip": {
+      "message": "Note: Please select square, transparent-background image (png format)"
+  },
   "customCSS": {
       "message": "Custom style:"
   },
