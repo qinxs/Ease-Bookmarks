@@ -66,12 +66,10 @@ main {
 footer {
   display: flex;
   justify-content: flex-end;
+  align-items: center;
   height: 28px;
   color: var(--color-text);
   background-color: #eee;
-}
-footer > * {
-  padding-top: 4px;
 }
 
 input,
@@ -104,7 +102,7 @@ nav {
 }
 .nav {
   margin-right: auto;
-  font-size: 14px;
+  font-size: 15px;
   font-weight: bold;
   color: var(--color-theme);
 }
@@ -177,7 +175,14 @@ nav > a:last-of-type {
 }
 .btn {
   margin-left: 2px;
+  height: 100%;
   opacity: .5;
+}
+
+.btn svg {
+  position: relative;
+  top: 50%;
+  transform: translateY(-50%);
 }
 
 #context-menu,
