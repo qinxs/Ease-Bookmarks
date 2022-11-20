@@ -100,6 +100,7 @@ nav {
   color: #789;
   word-break: keep-all;
 }
+#bookmark-manager,
 .nav {
   margin-right: auto;
   font-size: 15px;
@@ -173,16 +174,19 @@ nav > a:last-of-type {
   text-overflow:ellipsis;
   white-space:nowrap;
 }
+#bookmark-manager {
+  margin: 0 7px 0 -3px;
+}
 .btn {
   margin-left: 2px;
   height: 100%;
-  opacity: .5;
 }
 
 .btn svg {
   position: relative;
   top: 50%;
   transform: translateY(-50%);
+  opacity: .5;
 }
 
 #context-menu,

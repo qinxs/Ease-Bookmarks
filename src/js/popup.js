@@ -76,10 +76,12 @@ const nav = {
   rootID: -1,
   lastPathID: -1,
   pathHtml: '',
+  $bookmarkManagerText: $('#bookmark-manager span'),
   init(id) {
     // console.log(settings.rootInfo);
     this.setNavPath(id, settings.rootInfo[id]);
     handleFolderEvent([$nav.header, $nav.footer]);
+    this.$bookmarkManagerText.textContent = L('bookmarksManager');
   },
   setNavPath(id, folderName, target, curIsSearchView=false) {
     folderName = this.replaceEmptyString(folderName);
@@ -132,9 +134,11 @@ const nav = {
       if (results.length) {
         $nav.footer.setAttribute('data-id', _id);
         $nav.footer.textContent = settings.rootInfo[_id];
+        this.$bookmarkManagerText.hidden = true;
       } else if ($nav.footer.getAttribute('data-id')) {
         $nav.footer.removeAttribute('data-id');
         $nav.footer.textContent = '';
+        this.$bookmarkManagerText.hidden = true;
       }
     });
   }
@@ -822,6 +826,11 @@ function locationFolder(parentId, id) {
   }
 }
 
+function openBookmarkManagerUrl(event) {
+  const {bookmarksManagerUrl} = chrome.extension.getBackgroundPage();
+  openUrl(bookmarksManagerUrl, event);
+}
+
 function loadJS(url, callback) {
   var script = document.createElement('script');
   script.src = url;
@@ -1004,6 +1013,7 @@ function setLastData(event) {
 /******************************************************/
 $main.addEventListener('click', handleMainClick, false);
 $main.addEventListener('mousedown', handleMainMiddleClick, false);
+$('#bookmark-manager').addEventListener('click', openBookmarkManagerUrl, false);
 
 settingsReady(() => {
   // console.log(BM.settings);
