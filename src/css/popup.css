@@ -94,6 +94,7 @@ a {
 }
 
 nav {
+  pointer-events: none;
   margin: 4px 0;
   min-height: 24px;
   line-height: 1.65em;
@@ -108,10 +109,15 @@ nav {
   color: var(--color-theme);
 }
 nav > a {
+  pointer-events: auto;
   padding: 1px 4px;
   border-radius: 4px;
   color: #fff;
   background-color: var(--color-theme);
+}
+
+nav > a:last-of-type {
+  pointer-events: none;
 }
 
 .folder-list,

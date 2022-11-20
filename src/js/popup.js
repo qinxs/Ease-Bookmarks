@@ -79,7 +79,7 @@ const nav = {
   init(id) {
     // console.log(settings.rootInfo);
     this.setNavPath(id, settings.rootInfo[id]);
-    handleFolderEvent([$nav.footer]);
+    handleFolderEvent([$nav.header, $nav.footer]);
   },
   setNavPath(id, folderName, target, curIsSearchView=false) {
     folderName = this.replaceEmptyString(folderName);
@@ -98,7 +98,6 @@ const nav = {
       var html = `
       <span>${symbol}</span> <a type="folder" data-id="${id}" data-role="path">${folderName}</a>
       `;
-      handleFolderEvent($$('nav > a:last-child'));
       $nav.header.insertAdjacentHTML('beforeend', html);
     }
     this.lastPathID = id;
@@ -897,7 +896,7 @@ function hotskeyEvents(event) {
       contextMenu.showing && contextMenu.close();
       $item && $item.classList.remove('active');
       var $back = $('a:nth-last-of-type(2)', $nav.header);
-      $back && $back.dispatchEvent(new Event(BM.openFolderEventType));
+      $back && $back.dispatchEvent(new Event(BM.openFolderEventType, {"bubbles": true}));
       break;
     case "Space":
       if ($item) {
@@ -1039,7 +1038,7 @@ settingsReady(() => {
     search.init();
     contextMenu.init();
     dialog.init();
-    document.addEventListener('keydown', hotskeyEvents);
+    window.addEventListener('keydown', hotskeyEvents);
     window.addEventListener('unload', setLastData);
     $searchList.addEventListener('mouseover', handleSearchResultsHover, false);
     loadCSS('libs/dragula.css');
