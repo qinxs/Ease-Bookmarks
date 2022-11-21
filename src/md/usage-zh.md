@@ -54,4 +54,5 @@
 
 [GitHub Star](https://github.com/qinxs/Ease-Bookmarks "方便的话，给个 Star，感谢！") - 
 [常见问题](https://github.com/qinxs/Ease-Bookmarks/wiki/常见问题（FAQ）) - 
+[更新日志](https://github.com/qinxs/Ease-Bookmarks/blob/master/ChangeLog.md) - 
 [欢迎捐赠](https://7bxing.com/donate/)

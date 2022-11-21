@@ -54,4 +54,5 @@ Email: qin_xs@qq.com
 
 [GitHub Star](https://github.com/qinxs/Ease-Bookmarks "If it's convenient, give a Star, thanks!") - 
 [FAQ](https://github.com/qinxs/Ease-Bookmarks/wiki/常见问题（FAQ）) - 
+[Change Log](https://github.com/qinxs/Ease-Bookmarks/blob/master/ChangeLog.md) - 
 [Donate Welcome](https://7bxing.com/donate/)

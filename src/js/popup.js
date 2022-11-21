@@ -3,7 +3,7 @@
 var settings;
 const $nav = {
   header: $('nav'),
-  footer: $('.nav > a')
+  footer: $('a.nav')
 };
 const $main = $('main');
 const $searchList = $('#search-list');
@@ -1033,7 +1033,7 @@ settingsReady(() => {
   } else {
     nav.resetNavPath(startupReal);
     // resetNavPath 未改变footer的DOM结构
-    handleFolderEvent($$('.nav > a'));
+    handleFolderEvent($$('a.nav'));
   }
   setTimeout(() => {
     $main.addEventListener('scroll', function() {
