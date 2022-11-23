@@ -79,7 +79,11 @@ const nav = {
   $bookmarkManagerText: $('#bookmark-manager span'),
   init(id) {
     // console.log(settings.rootInfo);
-    this.setNavPath(id, settings.rootInfo[id]);
+    if (id < 3) {
+      this.setNavPath(id, settings.rootInfo[id]);
+    } else {
+      nav.resetNavPath(id);
+    }
     handleFolderEvent([$nav.header, $nav.footer]);
     this.$bookmarkManagerText.textContent = L('bookmarksManager');
   },
@@ -112,7 +116,6 @@ const nav = {
     if (id < 3) {
       this.pathHtml = `<a type="folder" data-id="${id}" data-role="path">${settings.rootInfo[id]}</a>` + this.pathHtml;
       $nav.header.innerHTML = this.pathHtml;
-      handleFolderEvent($$('nav > a'));
       this.rootID = id;
       this.setFooterNav(id);
       this.pathHtml = '';
@@ -126,7 +129,7 @@ const nav = {
     }
   },
   replaceEmptyString(folderName) {
-    return folderName ? folderName : ' ';
+    return folderName || '&ensp;';
   },
   setFooterNav(id) {
     var _id = 3 - id;
@@ -138,7 +141,7 @@ const nav = {
       } else if ($nav.footer.getAttribute('data-id')) {
         $nav.footer.removeAttribute('data-id');
         $nav.footer.textContent = '';
-        this.$bookmarkManagerText.hidden = true;
+        this.$bookmarkManagerText.hidden = false;
       }
     });
   }
@@ -1028,13 +1031,9 @@ settingsReady(() => {
     loadChildrenView(startupReal, true);
     BM.preItems = 'nowait';
   }
-  if (startupReal < 3) {
-    nav.init(startupReal);
-  } else {
-    nav.resetNavPath(startupReal);
-    // resetNavPath 未改变footer的DOM结构
-    handleFolderEvent($$('a.nav'));
-  }
+  
+  nav.init(startupReal);
+  
   setTimeout(() => {
     $main.addEventListener('scroll', function() {
       mainScrollTop = this.scrollTop;
