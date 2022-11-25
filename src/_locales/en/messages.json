@@ -163,7 +163,7 @@
       "message": "Layout column(s):"
   },
   "minItemsEachCol": {
-      "message": "Items each col:"
+      "message": "Items each column:"
   },
   "minItemsEachColTips": {
       "message": "Note: valid if the number of Layout columns is multiple. 1 or 10 is recommended"
