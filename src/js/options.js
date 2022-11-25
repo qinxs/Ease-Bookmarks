@@ -12,6 +12,20 @@ if (lang.startsWith('zh')) {
   document.documentElement.lang = 'zh';
 }
 
+// 多语言
+for (var ele of $$('[data-i18n]')) {
+    // console.log(ele);
+    switch(ele.tagName) {
+      case "INPUT":
+      case "TEXTAREA":
+        // console.log(ele.placeholder)
+        ele.placeholder = chrome.i18n.getMessage(ele.dataset.i18n) + ele.placeholder;
+        break;
+      default:
+        ele.textContent = chrome.i18n.getMessage(ele.dataset.i18n);
+    }
+}
+
 function setSyncItem(name, value) {
   if (value == BM.default[name] || !value) {
     chrome.storage.sync.remove(name);
@@ -31,6 +45,17 @@ function bookmarksAlias() {
 settingsReady(() => {
   // 读数据
   // console.log(BM.settings);
+  for (var key in BM.default) {
+    // console.log(`${key}: ${value}`);
+    var value = BM.settings[key];
+    var ele = $(`input[name=${key}][value="${value}"]`);
+    if (ele) {
+      ele.checked = true;
+    } else {
+      // console.log(`[未设置选项] ${key}: ${value}`)
+    }
+  }
+
   $('#_1').textContent = BM.settings.rootInfo[1];
   $('#_2').textContent = BM.settings.rootInfo[2];
   var folderX = $('#folderX');
@@ -45,20 +70,16 @@ settingsReady(() => {
     folderX.classList.add('disabled');
   }
 
-  for (var key in BM.default) {
-    // console.log(`${key}: ${value}`);
-    var value = BM.settings[key];
-    var ele = $(`input[name=${key}][value="${value}"]`);
-    if (ele) {
-      ele.checked = true;
-    } else {
-      // console.log(`[未设置选项] ${key}: ${value}`)
-    }
-  }
-
   $minItemsPerCol.value = BM.settings.minItemsPerCol;
+
   $bookmarksBar.value = BM.settings.rootInfo[1];
   $otherBookmarks.value = BM.settings.rootInfo[2];
+  chrome.bookmarks.getChildren('0', (results) => {
+    // console.log(results);
+    $bookmarksBar.placeholder = results[0].title;
+    $otherBookmarks.placeholder = results[1].title;
+  });
+
   $customCSS.value = BM.settings.customCSS || '';
 
   // 写数据
@@ -71,6 +92,12 @@ settingsReady(() => {
     }, false);
   }
 
+  $$('input[name=startup]').forEach((ele) => {
+    ele.addEventListener('change', function() {
+      setStartupID(this.value);
+    });
+  });
+  
   // 只允许数字
   $minItemsPerCol.addEventListener('input', function() {
     this.value = this.value.replace(/[^0-9]/g, '');
@@ -82,13 +109,9 @@ settingsReady(() => {
 
   $bookmarksBar.addEventListener('change', bookmarksAlias);
   $otherBookmarks.addEventListener('change', bookmarksAlias);
+  
   $customCSS.addEventListener('change', function() {
     setSyncItem('customCSS', this.value);
-  });
-  $$('input[name=startup]').forEach((ele) => {
-    ele.addEventListener('change', function() {
-      setStartupID(this.value);
-    });
   });
 
   // 预览自定义头像
@@ -147,24 +170,4 @@ settingsReady(() => {
     }
   });
 
-});
-
-// 多语言
-for (var ele of $$('[data-i18n]')) {
-    // console.log(ele);
-    switch(ele.tagName) {
-      case "INPUT":
-      case "TEXTAREA":
-        // console.log(ele.placeholder)
-        ele.placeholder = chrome.i18n.getMessage(ele.dataset.i18n) + ele.placeholder;
-        break;
-      default:
-        ele.textContent = chrome.i18n.getMessage(ele.dataset.i18n);
-    }
-}
-
-chrome.bookmarks.getChildren('0', (results) => {
-  // console.log(results);
-  $bookmarksBar.placeholder = results[0].title;
-  $otherBookmarks.placeholder = results[1].title;
 });
