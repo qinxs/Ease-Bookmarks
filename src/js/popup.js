@@ -10,11 +10,11 @@ const $searchList = $('#search-list');
 const $contextMenu = $('#context-menu');
 const $dialog = $('#dialog');
 const $itemForClone = $('#template > .item');
-const folderList = {
-  length: {},
+const cachedFolderInfo = {
+  length: {}, // 目录中书签个数
   hasScrollbar: {},
-  links: {},
-  lists: {},
+  links: {}, // 书签链接存在此处，不用渲染到dom中
+  lists: {}, // 已加载的目录
 };
 
 // 搜索框
@@ -278,7 +278,7 @@ const contextMenu = {
     // console.log($fromTarget);
     // console.log(target);
     var id = $fromTarget.getAttribute('data-id');
-    var url = folderList.links[id];
+    var url = cachedFolderInfo.links[id];
     switch(target.id) {
       case "bookmark-new-tab":
       case "bookmark-new-tab-background": 
@@ -297,7 +297,7 @@ const contextMenu = {
         chrome.tabs.query({active: true, currentWindow: true}, (tabs) => {
           var pageUrl = tabs[0].url;
           chrome.bookmarks.update(id, {url: pageUrl}, () => {
-            folderList.links[id] = pageUrl;
+            cachedFolderInfo.links[id] = pageUrl;
             $fromTarget.title = $fromTarget.textContent + '\n' + pageUrl;
             $fromTarget.previousElementSibling.src = 'chrome://favicon/' + pageUrl;
           });
@@ -323,8 +323,8 @@ const contextMenu = {
         nav.resetNavPath(parentId);
         break;
       case "bookmark-set-as-startup":
-        setStartupLocal(null, id);
-        chrome.storage.sync.set({startup: id}, () => {});
+        setStartupID(id);
+        chrome.storage.sync.set({startup: id});
         break;
       case "bookmark-delete":
         var listId = $curFolderList.id.replace('_', '');
@@ -339,7 +339,7 @@ const contextMenu = {
                   $curFolderList.innerHTML = htmlTemplate.nodata;
                 } else {
                   $fromTarget.closest('.item').remove();
-                  setListSize($curFolderList, --folderList.length[listId]);
+                  setListSize($curFolderList, --cachedFolderInfo.length[listId]);
                 }
               });
             } else {
@@ -353,7 +353,7 @@ const contextMenu = {
               $curFolderList.innerHTML = htmlTemplate.nodata;
             } else {
               $fromTarget.closest('.item').remove();
-              setListSize($curFolderList, --folderList.length[listId]);
+              setListSize($curFolderList, --cachedFolderInfo.length[listId]);
             }
           });
         }
@@ -409,7 +409,7 @@ const dialog = {
         this.$name.value = $fromTarget.textContent;
         this.$url.hidden = false;
         var id = $fromTarget.getAttribute('data-id');
-        this.$url.value = folderList.links[id];
+        this.$url.value = cachedFolderInfo.links[id];
         break;
       case "bookmark-edit-folder":
         this.$name.value = $fromTarget.textContent;
@@ -439,7 +439,7 @@ const dialog = {
             'url': url
           }, results => {
             // console.log(results);
-            setListSize($curFolderList, ++folderList.length[listId]);
+            setListSize($curFolderList, ++cachedFolderInfo.length[listId]);
             $fromTarget.closest('.item').after(templateFragItem(results));
             handleFolderEvent($$('[type=folder]', $fromTarget.closest('.item').nextElementSibling));
             $fromTarget.remove();
@@ -453,7 +453,7 @@ const dialog = {
               'url': url
             }, results => {
               // console.log(results);
-              setListSize($curFolderList, ++folderList.length[listId]);
+              setListSize($curFolderList, ++cachedFolderInfo.length[listId]);
               $fromTarget.closest('.item').after(templateFragItem(results));
               handleFolderEvent($$('[type=folder]', $fromTarget.closest('.item').nextElementSibling));
             });
@@ -468,7 +468,7 @@ const dialog = {
         }, () => {
           ele.textContent = title;
           if ($fromTarget.type === 'link') {
-            folderList.links[id] = url;
+            cachedFolderInfo.links[id] = url;
             ele.title = title + '\n' + url;
             if (!isBookmarklet(url)) {
               $fromTarget.previousElementSibling.src = 'chrome://favicon/' + url;
@@ -513,7 +513,7 @@ function renderListView(id, items, isStartup = false) {
   $searchList.insertAdjacentHTML('beforebegin', `<div class="folder-list" id=_${id}></div>`);
   var $list = $(`#_${id}`);
   setListSize($list, items.length, id);
-  folderList.lists[id] = $list;
+  cachedFolderInfo.lists[id] = $list;
   if (items.length) {
     if (isStartup) {
       // 启动时延后渲染 避免长任务
@@ -561,7 +561,7 @@ function templateFragItem(item) {
   if (type) itemA.type = type;
   isSeachView && itemA.setAttribute('data-parent-id', item.parentId);
   if (url) {
-    folderList.links[id] = url;
+    cachedFolderInfo.links[id] = url;
     itemA.title = `${title}\n${url}`;
   }
   return clone;
@@ -606,16 +606,16 @@ function setListSize($list, _length, id) {
   var listHeight = rowsCount * itemHeight;
   $list.style.height = listHeight + 'px';
   if (id) {
-    folderList.length[id] = _length;
+    cachedFolderInfo.length[id] = _length;
     // 504 main最大高度
-    folderList.hasScrollbar[id] = listHeight > 504;
+    cachedFolderInfo.hasScrollbar[id] = listHeight > 504;
   }
 }
 
 // 视图切换
 function toggleList(id, searchMode = false) {
   // console.log($curFolderList);
-  if (mainScrollTop && (folderList.hasScrollbar[id] || searchMode)) {
+  if (mainScrollTop && (cachedFolderInfo.hasScrollbar[id] || searchMode)) {
     if (searchMode) {
       cachedFolderScrollTop = mainScrollTop;
     }
@@ -627,7 +627,7 @@ function toggleList(id, searchMode = false) {
     $searchList.hidden = false;
     isSeachView = true;
   } else {
-    var $list = folderList.lists[id];
+    var $list = cachedFolderInfo.lists[id];
     $list.hidden = false;
     $searchList.hidden = true;
     isSeachView = false;
@@ -644,7 +644,7 @@ function handleMainClick(event) {
   // console.log(target);
   if (target.type !== 'link') return;
   var id = target.getAttribute('data-id');
-  openUrl(folderList.links[id], event);
+  openUrl(cachedFolderInfo.links[id], event);
 }
 
 function handleMainMiddleClick(event) {
@@ -656,7 +656,7 @@ function handleMainMiddleClick(event) {
   if ($fromTarget.type === 'link') {
     var id = $fromTarget.getAttribute('data-id');
     chrome.tabs.create({
-      url: folderList.links[id],
+      url: cachedFolderInfo.links[id],
       active: false
     });
   } else if (settings.fastCreate === 2 && $fromTarget.classList.contains('favicon')) {
@@ -753,6 +753,7 @@ function openFolderEvent(event) {
   var id = parseInt(target.getAttribute('data-id'));
   if (id == nav.lastPathID) return;
   var folderName = target.textContent;
+  // 使用快捷键时 直接打开
   var delay = event.isTrusted ? settings.hoverEnter : 0;
   window.openFolderDelay = setTimeout(openFolder, delay, id, folderName, target);
 }
@@ -764,7 +765,7 @@ function openFolder(id, folderName, target) {
   if (id == nav.lastPathID) return;
   // console.log(target);
   var curIsSearchView = isSeachView;
-  var $list = folderList.lists[id];
+  var $list = cachedFolderInfo.lists[id];
   if(!$list) {
     loadChildrenView(id);
   } else {
@@ -781,12 +782,12 @@ function openFolder(id, folderName, target) {
  * @param  {Object} data edit 数据
  */
 function updateFolderList(id, type, data = {}) {
-  var $list = folderList.lists[id];
+  var $list = cachedFolderInfo.lists[id];
   if (!$list) return;
 
   if (type === 'add') {
     $list.remove();
-    delete folderList.lists[id];
+    delete cachedFolderInfo.lists[id];
   } else if (type === 'delete') {
     if ($list.childElementCount === 1) {
       $list.innerHTML = htmlTemplate.nodata;
@@ -803,7 +804,7 @@ function updateFolderList(id, type, data = {}) {
         url = decodeBookmarklet(url);
       }
       a.textContent = data.title;
-      folderList.links[id] = url;
+      cachedFolderInfo.links[id] = url;
       a.previousElementSibling.src = favicon;
     } else if (data.title) {
       a.textContent = data.title;
@@ -814,7 +815,7 @@ function updateFolderList(id, type, data = {}) {
 function locationFolder(parentId, id) {
   // console.log(event.target);
   contextMenu.close();
-  if(!folderList.lists[parentId]) {
+  if(!cachedFolderInfo.lists[parentId]) {
     loadChildrenView(parentId, false, () => locationToItem(id));
   } else {
     toggleList(parentId);
@@ -921,7 +922,7 @@ function hotskeyEvents(event) {
       if (!$itemA) return;
       var id = $itemA.getAttribute('data-id');
       if ($itemA.type === 'link') {
-        openUrl(folderList.links[id], event);
+        openUrl(cachedFolderInfo.links[id], event);
       } else {
         $itemA.closest('.item').classList.remove('active');
         openFolder(id, $itemA.textContent);
@@ -935,6 +936,7 @@ function hotskeyEvents(event) {
       break;
     case "KeyZ":
       if (!event.ctrlKey || dialog.showing) return;
+      clearTimeout(openFolderDelay);
       event.preventDefault();
       $nav.footer.getAttribute('data-id') && $nav.footer.dispatchEvent(new Event(BM.openFolderEventType));
       break;

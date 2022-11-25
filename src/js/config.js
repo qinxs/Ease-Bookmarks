@@ -27,9 +27,9 @@ window.BM = {
   set(name, value) {
     if (this.defaultSys.hasOwnProperty(name)) {
       if (value == BM.defaultSys[name]) {
-        chrome.storage.sync.remove(name, () => {});
+        chrome.storage.sync.remove(name);
       } else {
-        chrome.storage.sync.set({[name]: value}, () => {});
+        chrome.storage.sync.set({[name]: value});
       }
       location.reload();
     } else {
@@ -68,12 +68,11 @@ const $ = (css, d = document) => d.querySelector(css);
 const $$ = (css, d = document) => d.querySelectorAll(css);
 const L = chrome.i18n.getMessage;
 
-function setStartupLocal(ele, folderID) {
-  var id = folderID || this.value;
-  id < 0 && localStorage.setItem('startupFromLast', id);
-  id > 0 && localStorage.setItem('startupID', id);
-  id > -1 && localStorage.removeItem('startupFromLast');
-  id > -2 && localStorage.removeItem('LastScrollTop');
+function setStartupID(folderID) {
+  folderID < 0 && localStorage.setItem('startupFromLast', folderID);
+  folderID > 0 && localStorage.setItem('startupID', folderID);
+  folderID > -1 && localStorage.removeItem('startupFromLast');
+  folderID > -2 && localStorage.removeItem('LastScrollTop');
 }
 
 // 选项数据（异步）加载完成

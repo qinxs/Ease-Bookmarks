@@ -44,6 +44,7 @@ settingsReady(() => {
     folderX.previousElementSibling.disabled = true;
     folderX.classList.add('disabled');
   }
+
   for (var key in BM.default) {
     // console.log(`${key}: ${value}`);
     var value = BM.settings[key];
@@ -54,6 +55,7 @@ settingsReady(() => {
       // console.log(`[未设置选项] ${key}: ${value}`)
     }
   }
+
   $minItemsPerCol.value = BM.settings.minItemsPerCol;
   $bookmarksBar.value = BM.settings.rootInfo[1];
   $otherBookmarks.value = BM.settings.rootInfo[2];
@@ -68,6 +70,7 @@ settingsReady(() => {
       setSyncItem(name, value);
     }, false);
   }
+
   // 只允许数字
   $minItemsPerCol.addEventListener('input', function() {
     this.value = this.value.replace(/[^0-9]/g, '');
@@ -76,13 +79,16 @@ settingsReady(() => {
     if (this.value < 1) this.value = 1;
     setSyncItem('minItemsPerCol', this.value);
   });
+
   $bookmarksBar.addEventListener('change', bookmarksAlias);
   $otherBookmarks.addEventListener('change', bookmarksAlias);
   $customCSS.addEventListener('change', function() {
     setSyncItem('customCSS', this.value);
   });
   $$('input[name=startup]').forEach((ele) => {
-    ele.addEventListener('change', setStartupLocal);
+    ele.addEventListener('change', function() {
+      setStartupID(this.value);
+    });
   });
 
   // 预览自定义头像
