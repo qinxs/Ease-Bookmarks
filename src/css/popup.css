@@ -9,6 +9,8 @@
   --color-border: #ddd;
   --color-hover: #d3ece7;
   --color-scrollbar-thumb: rgba(50, 50, 50, .3);
+  --textbox-border-color: #a0b3d6;
+  --textbox-focus-border-color: #34538b;
 }
 .dark {
   --color-text: #adaaa6;
@@ -17,6 +19,8 @@
   --color-border: #666;
   --color-hover: #545454;
   --color-scrollbar-thumb: rgba(200, 200, 200, .3);
+  --textbox-border-color: #666;
+  --textbox-focus-border-color: #e29c45;
   /* 深色模式独有 */
   --color-footer-background-dark: #333;
   --color-input-background-dark: #171a1a;
@@ -72,19 +76,25 @@ footer {
   background-color: #eee;
 }
 
-input,
-textarea {
+input {
   outline: none;
   color: var(--color-text);
   border: 1px solid;
 }
+
 input::placeholder,
-textarea::placeholder {
+.textbox:empty:before {
   opacity: .66;
 }
+
 button {
+  outline: none;
   cursor: pointer;
   margin-right: 0.5em;
+  padding: .15em .5em;
+  border: 1px solid var(--textbox-border-color);
+  background-color: transparent;
+  color: var(--color-text);
 }
 a {
   text-decoration: none;
@@ -274,18 +284,47 @@ hr {
   left: 50%;
   transform: translateX(-50%);
 }
-#dialog input,
-#dialog textarea {
-  margin: 8px 0;
+
+.textbox {
+  outline: none;
+  margin: 10px 0;
   width: 100%;
-  min-width: 100%;
-  max-width: 100%;
-  line-height: 18px;
+  border: 1px solid var(--textbox-border-color);
+  border-radius: 3px;
+  color: var(--color-text);
+  font-size: 14px;
   word-break: break-all;
+  overflow-x: hidden;
+  overflow-y: auto;
+  -webkit-user-modify: read-write-plaintext-only;
 }
-.title {
+.textbox:empty:before {
+  content: attr(placeholder);
+}
+
+#dialog input:focus,
+#dialog .textbox:focus,
+#dialog button:focus {
+  border-color: var(--textbox-focus-border-color);
+  box-shadow: 0 0 2px rgba(0, 100, 255, .45);
+}
+
+#edit-dialog-text {
   text-align: center;
   font-size: 1.4em;
+}
+#edit-dialog-name {
+  padding: 1px 3px;
+  max-height: 15vh;
+}
+#edit-dialog-url {
+  padding: 3px;
+  max-height: 60vh;
+}
+.title {
+  padding: 0 10px;
+  border-radius: 5px;
+  background-color: var(--color-hover);
 }
 
 /* 深色模式 */
@@ -293,7 +332,7 @@ hr {
   background-color: var(--color-footer-background-dark);
 }
 .dark input,
-.dark textarea {
+.dark .textbox {
   background-color: var(--color-input-background-dark);
 }
 .dark img {

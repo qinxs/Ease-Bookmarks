@@ -379,9 +379,24 @@ const dialog = {
   showing: false,
   init() {
     $dialog.insertAdjacentHTML('beforeend', this.html);
+    this.$title = $('#edit-dialog-text > .title');
     this.$name = $('#edit-dialog-name');
     this.$url = $('#edit-dialog-url');
     delete this.html;
+    this.$name.addEventListener('keydown', () => {
+       var keyCode = event.code;
+       if (keyCode == 'Enter') {
+         event.preventDefault();
+         event.stopPropagation();
+         this.save(event);
+       }
+    }, false);
+    // 光标移到末尾
+    this.$name.addEventListener('focus', () => {
+      var range = window.getSelection();
+      range.selectAllChildren(this.$name);
+      range.collapseToEnd();
+    }, false);
     $('#edit-cancel').addEventListener('click', () => this.close(event), false);
     $('#edit-save').addEventListener('click', () => this.save(event), false);
   },
@@ -392,36 +407,36 @@ const dialog = {
     'bookmark-edit-folder': L("editFolderName"),
   },
   html: `
-    <div id="edit-dialog-text" class="title"></div>
-    <input id="edit-dialog-name" placeholder="${L("name")}">
-    <textarea type="url" id="edit-dialog-url" placeholder="${L("URL")}"></textarea>
+    <div id="edit-dialog-text"><span class="title"></span></div>
+    <div id="edit-dialog-name" class="textbox" contenteditable="true" placeholder="${L("name")}"></div>
+    <div type="url" id="edit-dialog-url" class="textbox" contenteditable="true" placeholder="${L("URL")}"></div>
     <div>
       <button id="edit-save">${L("save")}</button>
       <button id="edit-cancel">${L("cancel")}</button>
     </div>
   `,
   show() {
-    $('#edit-dialog-text').textContent = this.title[curContextMenuID];
+    this.$title.textContent = this.title[curContextMenuID];
     switch(curContextMenuID) {
       case "bookmark-add-bookmark":
         chrome.tabs.query({active: true, currentWindow: true}, (tabs) => {
-          this.$name.value = tabs[0].title;
+          this.$name.textContent = tabs[0].title;
           this.$url.hidden = false;
-          this.$url.value = tabs[0].url;
+          this.$url.textContent = tabs[0].url;
         });
         break;
       case "bookmark-add-folder":
-        this.$name.value = '';
+        this.$name.textContent = '';
         this.$url.hidden = true;
         break;
       case "bookmark-edit":
-        this.$name.value = $fromTarget.textContent;
+        this.$name.textContent = $fromTarget.textContent;
         this.$url.hidden = false;
         var id = $fromTarget.getAttribute('data-id');
-        this.$url.value = cachedFolderInfo.links[id];
+        this.$url.textContent = cachedFolderInfo.links[id];
         break;
       case "bookmark-edit-folder":
-        this.$name.value = $fromTarget.textContent;
+        this.$name.textContent = $fromTarget.textContent;
         this.$url.hidden = true;
         break;
       default: break;
@@ -434,9 +449,9 @@ const dialog = {
     e.preventDefault();
     var ele = $fromTarget;
     var id = ele.getAttribute('data-id');
-    var title = this.$name.value;
-    var url = this.$url.hidden ? null : this.$url.value;
-    // console.log(this.$name.value);
+    var title = this.$name.textContent;
+    var url = this.$url.hidden ? null : this.$url.textContent;
+    // console.log(this.$name.textContent);
     switch(curContextMenuID) {
       case "bookmark-add-bookmark":
       case "bookmark-add-folder":
