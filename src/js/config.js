@@ -16,6 +16,10 @@ window.BM = {
   defaultSys: {
     fastCreate: 0, // 0-2
     keepMaxCols: 1, // 0-1 保持最大宽度
+     // 1-2
+     // 1：仅url 
+     // 2：url和title
+    updateBookmarkOpt: 1,
   },
   bodyWidth: {
     1: '280px',

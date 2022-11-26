@@ -296,10 +296,19 @@ const contextMenu = {
       case "bookmark-update-url": 
         chrome.tabs.query({active: true, currentWindow: true}, (tabs) => {
           var pageUrl = tabs[0].url;
-          chrome.bookmarks.update(id, {url: pageUrl}, () => {
+          var option = {
+            url: pageUrl,
+          }
+          if (settings.updateBookmarkOpt == 2) {
+            option.title = tabs[0].title;
+          }
+          chrome.bookmarks.update(id, option, () => {
             cachedFolderInfo.links[id] = pageUrl;
             $fromTarget.title = $fromTarget.textContent + '\n' + pageUrl;
             $fromTarget.previousElementSibling.src = 'chrome://favicon/' + pageUrl;
+            if (option.title) {
+              $fromTarget.textContent = option.title;
+            }
           });
         });
         break;
