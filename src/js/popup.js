@@ -1020,19 +1020,18 @@ $main.addEventListener('click', handleMainClick, false);
 $main.addEventListener('mousedown', handleMainMiddleClick, false);
 $('#bookmark-manager').addEventListener('click', openBookmarkManagerUrl, false);
 
-settingsReady(() => {
+Promise.all([
+  loadSettings,
+  loadPreItems,
+  ]).then(() => {
   // console.log(BM.settings);
   settings = BM.settings;
   dataSetting.init();
+
   var startupReal = BM.startupReal;
-  if (BM.preItems) {
-    renderListView(startupReal, BM.preItems, true);
-    BM.preItems = 'done';
-    $curFolderList = $(`#_${startupReal}`);
-  } else {
-    loadChildrenView(startupReal, true);
-    BM.preItems = 'nowait';
-  }
+  renderListView(startupReal, BM.preItems, true);
+  BM.preItems = 'done';
+  $curFolderList = $(`#_${startupReal}`);
   
   nav.init(startupReal);
   

@@ -42,7 +42,7 @@ function bookmarksAlias() {
   chrome.storage.sync.set({rootInfo: rootInfo});
 }
 
-settingsReady(() => {
+loadSettings.then(() => {
   // 读数据
   // console.log(BM.settings);
   for (var key in BM.default) {

@@ -41,26 +41,33 @@ window.BM = {
 
 // @TODO 改为 localStorage？
 // option页面自动同步到 storage，实现有点麻烦
-chrome.storage.sync.get(null, function(items) {
-  // console.log(items);
-  BM.userOptions = items;
-  BM.settings = Object.assign({}, BM.default, BM.defaultSys, items);
-  BM.settingsReady = true;
+var loadSettings = new Promise(function(resolve, reject) {
+  chrome.storage.sync.get(null, function(items) {
+    // console.log(items);
+    BM.userOptions = items;
+    BM.settings = Object.assign({}, BM.default, BM.defaultSys, items);
+    resolve();
+  });
 });
 
 BM.startupReal = localStorage.getItem('startupID') || BM.default.startup;
 
+var loadPreItems;
+
 if (location.pathname === '/popup.html') {
-  chrome.bookmarks.getChildren(BM.startupReal.toString(), (results) => {
-    // console.log(results);
-    // 文件夹不存在了
-    if (typeof results === 'undefined') {
-      localStorage.setItem('startupID', BM.default.startup);
-      chrome.storage.sync.set({startup: BM.default.startup}, () => {
-        location.reload();
-      });
-    }
-    if (!BM.preItems) BM.preItems = results;
+  loadPreItems = new Promise(function(resolve, reject) {
+    chrome.bookmarks.getChildren(BM.startupReal.toString(), (results) => {
+      // console.log(results);
+      // 文件夹不存在了
+      if (typeof results === 'undefined') {
+        localStorage.setItem('startupID', BM.default.startup);
+        chrome.storage.sync.set({startup: BM.default.startup}, () => {
+          location.reload();
+        });
+      }
+      if (!BM.preItems) BM.preItems = results;
+      resolve();
+    });
   });
 }
 
@@ -73,15 +80,4 @@ function setStartupID(folderID) {
   folderID > 0 && localStorage.setItem('startupID', folderID);
   folderID > -1 && localStorage.removeItem('startupFromLast');
   folderID > -2 && localStorage.removeItem('LastScrollTop');
-}
-
-// 选项数据（异步）加载完成
-function settingsReady(callback) {
-  if (BM.settingsReady) {
-    callback();
-  } else {
-    setTimeout(() => {
-      settingsReady(callback);
-    }, 0);
-  }
 }
