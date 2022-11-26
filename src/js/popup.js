@@ -937,6 +937,12 @@ function hotskeyEvents(event) {
         openFolder(id, $itemA.textContent);
       }
       break;
+    case "F2":
+      $fromTarget = $('.item.active > a', $list);
+      if (!$fromTarget) return;
+      curContextMenuID = $fromTarget.type == 'folder' ? 'bookmark-edit-folder' : 'bookmark-edit';
+      dialog.show();
+      break;
     case "KeyF":
       if (!event.ctrlKey || dialog.showing) return;
       event.preventDefault();
