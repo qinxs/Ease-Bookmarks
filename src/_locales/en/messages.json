@@ -9,13 +9,13 @@
     "message": "Bookmarks Manager"
   },
 
-  "noBookmarksTip":
-  {
-    "message": "There is no bookmark here."
-  },
   "seachPlaceholder":
   {
     "message": "Search Bookmarks..."
+  },
+  "noBookmarksTip":
+  {
+    "message": "There is no bookmark here."
   },
   "seachNoResultTip":
   {
@@ -166,7 +166,7 @@
       "message": "Items each column:"
   },
   "minItemsEachColTips": {
-      "message": "Note: valid if the number of Layout columns is multiple. 1 or 10 is recommended"
+      "message": "Note: valid when the number of Layout columns is multiple. 1 or 10 is recommended"
   },
   "alias": {
       "message": "Alias:"

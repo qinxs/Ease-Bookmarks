@@ -9,13 +9,13 @@
     "message": "书签管理器"
   },
 
-  "noBookmarksTip":
-  {
-    "message": "这里没有书签呢~"
-  },
   "seachPlaceholder":
   {
     "message": "搜索书签..."
+  },
+  "noBookmarksTip":
+  {
+    "message": "这里没有书签呢~"
   },
   "seachNoResultTip":
   {
@@ -166,7 +166,7 @@
       "message": "每列条数:"
   },
   "minItemsEachColTips": {
-      "message": "注：布局列数为多列时有效，推荐1或者10"
+      "message": "注：布局列数为多列时有效；推荐1或者10"
   },
   "alias": {
       "message": "别名:"
