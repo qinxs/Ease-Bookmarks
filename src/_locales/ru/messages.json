@@ -1,0 +1,195 @@
+{
+  "pluginDesc":
+  {
+    "message": "Простой и удобный в использовании менеджер закладок"
+  },
+
+  "bookmarksManager":
+  {
+    "message": "Диспетчер закладок"
+  },
+
+  "seachPlaceholder":
+  {
+    "message": "Искать в закладках..."
+  },
+  "noBookmarksTip":
+  {
+    "message": "Здесь нет закладки."
+  },
+  "seachNoResultTip":
+  {
+    "message": "Нет соответствующей закладки."
+  },
+
+  "openAll":
+  {
+    "message": "Открыть все"
+  },
+  "openInNewTab":
+  {
+    "message": "Открыть в новой вкладке"
+  },
+  "openInBackgroundTab":
+  {
+    "message": "Открыть в фоновом режиме"
+  },
+  "openInIncognitoWindow":
+  {
+    "message": "Открыть в режиме инкогнито"
+  },
+  "addBookmark":
+  {
+    "message": "Новая закладка"
+  },
+  "addFolder":
+  {
+    "message": "Новая папка"
+  },
+  "location":
+  {
+    "message": "Откройте каталог, к которому он принадлежит"
+  },
+  "setAsStartupFolder":
+  {
+    "message": "Установить в качестве каталога автозагрузки"
+  },
+  "updateToCurrentURL":
+  {
+    "message": "Обновление текущего URL-адреса"
+  },
+  "edit":
+  {
+    "message": "Изменить"
+  },
+  "delete":
+  {
+    "message": "Удалить"
+  },
+  "deleteFolderConfirm":
+  {
+    "message": "Это также удалит все закладки в этом каталоге, это точно?"
+  },
+  "rename":
+  {
+    "message": "Переименовать"
+  },
+  
+  "editBookmark":
+  {
+    "message": "Редактировать закладку"
+  },
+  "editFolderName":
+  {
+    "message": "Изменение имени папки"
+  },
+  "save":
+  {
+    "message": "Сохранить"
+  },
+  "cancel":
+  {
+    "message": "Отмена"
+  },
+  "name":
+  {
+    "message": "Название"
+  },
+  "URL":
+  {
+    "message": "URL"
+  },
+
+  "themeColor":
+  {
+    "message": "Theme color:"
+  },
+  "auto":
+  {
+    "message": "Auto"
+  },
+  "light":
+  {
+    "message": "Light"
+  },
+  "dark":
+  {
+    "message": "Dark"
+  },
+  "openIn":
+  {
+    "message": "Open bookmarks in:"
+  },
+  "currentTab":
+  {
+    "message": "Current tab"
+  },
+  "newTab":
+  {
+    "message": "New tab"
+  },
+  "backgroundTab":
+  {
+    "message": "Background tab"
+  },
+  "hoverEnter": {
+      "message": "Hover to open folder:"
+  },
+  "off": {
+      "message": "Off"
+  },
+  "slow": {
+      "message": "Slow"
+  },
+  "moderate": {
+      "message": "Moderate"
+  },
+  "fast": {
+      "message": "Fast"
+  },
+  "startupFolder": {
+      "message": "Startup folder:"
+  },
+  "folderXTitle": {
+      "message": "Please use the folder right-click menu to set or change startup from a subdirectory..."
+  },
+  "lastFolder": {
+      "message": "Last folder"
+  },
+  "lastFolderAndScrollBar": {
+      "message": "Last folder and scrollbar"
+  },
+  "layoutCols": {
+      "message": "Layout column(s):"
+  },
+  "minItemsEachCol": {
+      "message": "Items each column:"
+  },
+  "minItemsEachColTips": {
+      "message": "Note: valid when the number of Layout columns is multiple. 1 or 10 is recommended"
+  },
+  "alias": {
+      "message": "Alias:"
+  },
+  "customIcon": {
+      "message": "Custom icon:"
+  },
+  "selectFile": {
+      "message": "Select file"
+  },
+  "reset": {
+      "message": "reset"
+  },
+  "customIconTip": {
+      "message": "Note: Please select square, transparent-background image (png format)"
+  },
+  "customCSS": {
+      "message": "Custom style:"
+  },
+  "example": {
+      "message": "For example:"
+  },
+  "setInvalidTips": {
+      "message": "Invalid option! Optional Settings:"
+  }
+}

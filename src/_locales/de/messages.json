@@ -1,0 +1,195 @@
+{
+  "pluginDesc":
+  {
+    "message": "Einfacher und benutzerfreundlicher Lesezeichen-Manager"
+  },
+
+  "bookmarksManager":
+  {
+    "message": "Lesezeichen-Manager"
+  },
+
+  "seachPlaceholder":
+  {
+    "message": "In Lesezeichen suchen..."
+  },
+  "noBookmarksTip":
+  {
+    "message": "Hier gibt es kein Lesezeichen."
+  },
+  "seachNoResultTip":
+  {
+    "message": "Kein passendes Lesezeichen."
+  },
+
+  "openAll":
+  {
+    "message": "Alle öffnen"
+  },
+  "openInNewTab":
+  {
+    "message": "In neuem Tab öffnen"
+  },
+  "openInBackgroundTab":
+  {
+    "message": "Registerkarte Im Hintergrund öffnen"
+  },
+  "openInIncognitoWindow":
+  {
+    "message": "In Inkognitofenster öffnen"
+  },
+  "addBookmark":
+  {
+    "message": "Neues Lesezeichen hinzufügen"
+  },
+  "addFolder":
+  {
+    "message": "Neuen Ordner hinzufügen"
+  },
+  "location":
+  {
+    "message": "Verzeichnis öffnen"
+  },
+  "setAsStartupFolder":
+  {
+    "message": "Als Startverzeichnis festlegen"
+  },
+  "updateToCurrentURL":
+  {
+    "message": "Aktualisieren auf die aktuelle URL"
+  },
+  "edit":
+  {
+    "message": "Bearbeiten"
+  },
+  "delete":
+  {
+    "message": "Löschen"
+  },
+  "deleteFolderConfirm":
+  {
+    "message": "Dadurch werden auch alle Lesezeichen in diesem Verzeichnis gelöscht, OK?"
+  },
+  "rename":
+  {
+    "message": "Umbenennen"
+  },
+  
+  "editBookmark":
+  {
+    "message": "Lesezeichen bearbeiten"
+  },
+  "editFolderName":
+  {
+    "message": "Ordnernamen bearbeiten"
+  },
+  "save":
+  {
+    "message": "Speichern"
+  },
+  "cancel":
+  {
+    "message": "Abbrechen"
+  },
+  "name":
+  {
+    "message": "Name"
+  },
+  "URL":
+  {
+    "message": "URL"
+  },
+
+  "themeColor":
+  {
+    "message": "Theme color:"
+  },
+  "auto":
+  {
+    "message": "Auto"
+  },
+  "light":
+  {
+    "message": "Light"
+  },
+  "dark":
+  {
+    "message": "Dark"
+  },
+  "openIn":
+  {
+    "message": "Open bookmarks in:"
+  },
+  "currentTab":
+  {
+    "message": "Current tab"
+  },
+  "newTab":
+  {
+    "message": "New tab"
+  },
+  "backgroundTab":
+  {
+    "message": "Background tab"
+  },
+  "hoverEnter": {
+      "message": "Hover to open folder:"
+  },
+  "off": {
+      "message": "Off"
+  },
+  "slow": {
+      "message": "Slow"
+  },
+  "moderate": {
+      "message": "Moderate"
+  },
+  "fast": {
+      "message": "Fast"
+  },
+  "startupFolder": {
+      "message": "Startup folder:"
+  },
+  "folderXTitle": {
+      "message": "Please use the folder right-click menu to set or change startup from a subdirectory..."
+  },
+  "lastFolder": {
+      "message": "Last folder"
+  },
+  "lastFolderAndScrollBar": {
+      "message": "Last folder and scrollbar"
+  },
+  "layoutCols": {
+      "message": "Layout column(s):"
+  },
+  "minItemsEachCol": {
+      "message": "Items each column:"
+  },
+  "minItemsEachColTips": {
+      "message": "Note: valid when the number of Layout columns is multiple. 1 or 10 is recommended"
+  },
+  "alias": {
+      "message": "Alias:"
+  },
+  "customIcon": {
+      "message": "Custom icon:"
+  },
+  "selectFile": {
+      "message": "Select file"
+  },
+  "reset": {
+      "message": "reset"
+  },
+  "customIconTip": {
+      "message": "Note: Please select square, transparent-background image (png format)"
+  },
+  "customCSS": {
+      "message": "Custom style:"
+  },
+  "example": {
+      "message": "For example:"
+  },
+  "setInvalidTips": {
+      "message": "Invalid option! Optional Settings:"
+  }
+}
