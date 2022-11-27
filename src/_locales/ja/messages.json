@@ -1,0 +1,195 @@
+{
+  "pluginDesc":
+  {
+    "message": "使いやすいブックマーク・マネージャー"
+  },
+
+  "bookmarksManager":
+  {
+    "message": "ブックマーク マネージャ"
+  },
+
+  "seachPlaceholder":
+  {
+    "message": "ブックマークを検索..."
+  },
+  "noBookmarksTip":
+  {
+    "message": "ブックマークはありません"
+  },
+  "seachNoResultTip":
+  {
+    "message": "一致するブックマークはありません〜。"
+  },
+
+  "openAll":
+  {
+    "message": "すべて開"
+  },
+  "openInNewTab":
+  {
+    "message": "新しいタブで開く"
+  },
+  "openInBackgroundTab":
+  {
+    "message": "バックグラウンドで開きます"
+  },
+  "openInIncognitoWindow":
+  {
+    "message": "シークレット ウィンドウで開"
+  },
+  "addBookmark":
+  {
+    "message": "新しいブックマークを追加"
+  },
+  "addFolder":
+  {
+    "message": "新しいフォルダを追加"
+  },
+  "location":
+  {
+    "message": "ディレクトリを開く"
+  },
+  "setAsStartupFolder":
+  {
+    "message": "スタートアップディレクトリに設定"
+  },
+  "updateToCurrentURL":
+  {
+    "message": "現在のURLに更新しました"
+  },
+  "edit":
+  {
+    "message": "編集"
+  },
+  "delete":
+  {
+    "message": "削除"
+  },
+  "deleteFolderConfirm":
+  {
+    "message": "この場合、このディレクトリ内のブックマークもすべて削除されますが、よろしいですか？"
+  },
+  "rename":
+  {
+    "message": "名前を変更"
+  },
+
+  "editBookmark":
+  {
+    "message": "編集"
+  },
+  "editFolderName":
+  {
+    "message": "名前を変更"
+  },
+  "save":
+  {
+    "message": "保存"
+  },
+  "cancel":
+  {
+    "message": "キャンセル"
+  },
+  "name":
+  {
+    "message": "名前"
+  },
+  "URL":
+  {
+    "message": "URL"
+  },
+
+  "themeColor":
+  {
+    "message": "テーマカラー:"
+  },
+  "auto":
+  {
+    "message": "システムデフォルト"
+  },
+  "light":
+  {
+    "message": "ライトカラー"
+  },
+  "dark":
+  {
+    "message": "ダーク"
+  },
+  "openIn":
+  {
+    "message": "ブックマークの開き方:"
+  },
+  "currentTab":
+  {
+    "message": "現在のページ"
+  },
+  "newTab":
+  {
+    "message": "新しいタブ"
+  },
+  "backgroundTab":
+  {
+    "message": "新しいタブ（バックステージ）"
+  },
+  "hoverEnter": {
+      "message": "カタログホバーアクセス:"
+  },
+  "off": {
+      "message": "閉じます"
+  },
+  "slow": {
+      "message": "遅い"
+  },
+  "moderate": {
+      "message": "控えめ"
+  },
+  "fast": {
+      "message": "急げ!"
+  },
+  "startupFolder": {
+      "message": "起動場所:"
+  },
+  "folderXTitle": {
+      "message": "フォルダの右ボタンメニューの設定または変更によってサブディレクトリから起動してください..."
+  },
+  "lastFolder": {
+      "message": "最後のディレクトリ"
+  },
+  "lastFolderAndScrollBar": {
+      "message": "最後のディレクトリとスクロール バー"
+  },
+  "layoutCols": {
+      "message": "レイアウト列の数:"
+  },
+  "minItemsEachCol": {
+      "message": "列あたりのバーの数:"
+  },
+  "minItemsEachColTips": {
+      "message": "注: レイアウト列の数が複数ある場合に有効です。1 または 10 を推奨"
+  },
+  "alias": {
+      "message": "エイリアス:"
+  },
+  "customIcon": {
+      "message": "Custom icon:"
+  },
+  "selectFile": {
+      "message": "Select file"
+  },
+  "reset": {
+      "message": "reset"
+  },
+  "customIconTip": {
+      "message": "注：正方形で透過性のある背景画像（png形式）を選択してください。"
+  },
+  "customCSS": {
+      "message": "Custom style:"
+  },
+  "example": {
+      "message": "For example:"
+  },
+  "setInvalidTips": {
+      "message": "Invalid option! Optional Settings:"
+  }
+}
