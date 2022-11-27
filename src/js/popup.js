@@ -383,14 +383,6 @@ const dialog = {
     this.$name = $('#edit-dialog-name');
     this.$url = $('#edit-dialog-url');
     delete this.html;
-    this.$name.addEventListener('keydown', () => {
-       var keyCode = event.code;
-       if (keyCode == 'Enter') {
-         event.preventDefault();
-         event.stopPropagation();
-         this.save(event);
-       }
-    }, false);
     // 光标移到末尾
     this.$name.addEventListener('focus', () => {
       var range = window.getSelection();
@@ -416,6 +408,9 @@ const dialog = {
     </div>
   `,
   show() {
+    if (contextMenu.showing) {
+      contextMenu.close();
+    }
     this.$title.textContent = this.title[curContextMenuID];
     switch(curContextMenuID) {
       case "bookmark-add-bookmark":
@@ -917,6 +912,13 @@ function dragToMove() {
 
 function hotskeyEvents(event) {
   var keyCode = event.code;
+  // 编辑书签/文件件名称时 回车保存
+  if (keyCode == 'Enter' && event.target.id == 'edit-dialog-name') {
+    event.preventDefault();
+    event.stopPropagation();
+    dialog.save(event);
+    return;
+  }
   if (dialog.showing && keyCode !== 'Escape') return;
   var $list = isSeachView ? $searchList : $curFolderList;
   var $item = $('.item.active', $list);
