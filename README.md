@@ -92,6 +92,14 @@ Ease Bookmarks 是一款为了替代浏览器原有书签栏的扩展
 - `1`：默认值，仅更新 url
 - `2`：同时更新 url 和 title
 
+## 翻译
+> 通过以下方式翻译，如有不当，请提 issue 指明，感谢~
+
+- `chrome://bookmarks/` -> `F12`，[参考](docs/chrome_bookmarks.png)
+- Chrome 的 pak 文件，路径`Chromium\94.0.4606.81\Locales`
+  > 使用 `ChromePAK解包打包工具.exe` 解包搜索对比
+- [Microsoft Translator](https://cn.bing.com/translator)，并用其他翻译验证
+
 ## 第三方库
 
 [dragula.js](https://github.com/bevacqua/dragula)（进行了细微调整 [改动内容](https://github.com/qinxs/dragula2)）

@@ -50,6 +50,12 @@ body {
   margin: 0 2px;
   font-family: Operator Mono, Consolas, Monaco, Menlo, monospace;
 }
+/* 避免被翻译（但保持原来样式） */
+#nice strong > code {
+  color: unset;
+  background: none;
+  font-size: 16px;
+}
 #nice .footnote-word,
 #nice .footnote-ref {
   color: #004a7c;

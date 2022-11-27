@@ -21,19 +21,19 @@ In addition, this extension has special support for `JS bookmarklet`~
 ### Turn this extension on/off
 
 The default shortcut is `Ctrl + Q`, you can modify it in the following management page:
-- **Chrome**: `chrome://extensions/shortcuts`
-- **Edge**: `edge://extensions/shortcuts`
+- **`Chrome`**: `chrome://extensions/shortcuts`
+- **`Edge`**: `edge://extensions/shortcuts`
 
 <!-- - Firefox: `about:addons` -> Extensions -> Settings Icons -> Manage Extension Shortcuts -->
 
 ### Function keys
 
 - `Up`, `Down`, `Left`, `Right`, `Home`, `End`: select/toggle bookmarks
-- `Enter`: open the selected bookmark/directory
+- `Enter`: open the selected bookmark/folder
 - `Space`: cancel selection
-- `F2`：edit
-- `Tab`: go back to the previous directory
-- `Ctrl + Z`: switch to bookmarks bar/other bookmarks
+- `F2`：edit bookmark/folder
+- `Tab`: go back to the previous folder
+- `Ctrl + Z`: switch to bookmarks\_bar/other\_bookmarks
 - `Ctrl + F`: activate the search box
 - `Esc`: clear the search box content; close the page
 
@@ -45,13 +45,13 @@ The default shortcut is `Ctrl + Q`, you can modify it in the following managemen
 ## Customize
 
 - Aliases (bookmarks bar and other bookmarks, may be required for other languages)
-- Custom style (popup page, DOM structure can be viewed in the header area `Right click -> Inspect`)
+- Custom style (`popup` page, DOM structure can be viewed in the header area `Right click -> Inspect`)
 
 ## Support
 
 [GitHub Issues](https://github.com/qinxs/Ease-Bookmarks/issues) - 
 [Blog Message](https://7bxing.com/posts/beb3fd2a/) - 
-Email: qin_xs@qq.com
+Email: qinxs87@gmail.com
 
 [GitHub Star](https://github.com/qinxs/Ease-Bookmarks "If it's convenient, give a Star, thanks!") - 
 [FAQ](https://github.com/qinxs/Ease-Bookmarks/wiki/常见问题（FAQ）) - 
