@@ -950,7 +950,6 @@ function hotskeyEvents(event) {
       if ($itemA.type === 'link') {
         openUrl(cachedFolderInfo.links[id], event);
       } else {
-        $itemA.closest('.item').classList.remove('active');
         openFolder(id, $itemA.textContent);
       }
       break;
