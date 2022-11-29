@@ -912,22 +912,28 @@ function dragToMove() {
 
 function hotskeyEvents(event) {
   var keyCode = event.code;
-  // 编辑书签/文件件名称时 回车保存
-  if (keyCode == 'Enter' && event.target.id == 'edit-dialog-name') {
-    event.preventDefault();
-    event.stopPropagation();
-    dialog.save(event);
+
+  // 优先处理dialog
+  if (dialog.showing) {
+    switch (keyCode) {
+      case "Escape":
+      case "F2":
+        dialog.close(event);
+        break;
+      case "Enter":
+        event.preventDefault();
+        event.stopPropagation();
+        dialog.save(event);
+        break;
+    }
     return;
   }
-  if (dialog.showing && keyCode !== 'Escape') return;
+
   var $list = isSeachView ? $searchList : $curFolderList;
   var $item = $('.item.active', $list);
+
   switch (keyCode) {
     case "Escape":
-      if (dialog.showing) {
-        dialog.close(event);
-        return false;
-      }
       !$seachInput.value && window.close();
       break;
     case "Tab":
