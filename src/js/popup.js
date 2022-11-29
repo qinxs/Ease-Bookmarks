@@ -996,8 +996,10 @@ function hotskeyEvents(event) {
     if ($goalItem) {
       $item && $item.classList.remove('active');
       $goalItem.classList.add('active');
-      // 滚动条靠顶或者靠底时 才滚动
-      $goalItem.scrollIntoView(keyCode == 'ArrowUp');
+      $goalItem.scrollIntoViewIfNeeded();
+      // firefox polyfill
+      // https://stackoverflow.com/questions/11039885/scrollintoview-causing-the-whole-page-to-move
+      // $goalItem.scrollIntoView({block: 'nearest', inline: 'start' });
     }
   }
 
