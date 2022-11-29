@@ -57,6 +57,7 @@ footer {
   padding: 0 8px;
 }
 header {
+  position: relative;
   padding-bottom: 4px;
   border-bottom: 1px solid var(--color-border);
 }
@@ -276,13 +277,13 @@ hr {
 }
 
 #dialog {
-  position: fixed;
-  top: 32px;
+  position: absolute;
   width: 96%;
   max-width: 360px;
   line-height: 2em;
   left: 50%;
   transform: translateX(-50%);
+  z-index: 9999;
 }
 
 .textbox {
