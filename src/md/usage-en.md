@@ -31,7 +31,7 @@ The default shortcut is `Ctrl + Q`, you can modify it in the following managemen
 - `Up`, `Down`, `Left`, `Right`, `Home`, `End`: select/toggle bookmarks
 - `Enter`: open the selected bookmark/folder
 - `Space`: cancel selection
-- `F2`：edit bookmark/folder
+- `F2`：edit bookmark/folder（`Enter` Save; `Esc`、`F2` Cancel）
 - `Tab`: go back to the previous folder
 - `Ctrl + Z`: switch to bookmarks\_bar/other\_bookmarks
 - `Ctrl + F`: activate the search box
