@@ -43,19 +43,8 @@ function bookmarksAlias() {
 }
 
 loadSettings.then(() => {
-  // 读数据
-  // console.log(BM.settings);
-  for (var key in BM.default) {
-    // console.log(`${key}: ${value}`);
-    var value = BM.settings[key];
-    var ele = $(`input[name=${key}][value="${value}"]`);
-    if (ele) {
-      ele.checked = true;
-    } else {
-      // console.log(`[未设置选项] ${key}: ${value}`)
-    }
-  }
 
+  // 必须在最前面 #folderX的数据通过后面for写入
   $('#_1').textContent = BM.settings.rootInfo[1];
   $('#_2').textContent = BM.settings.rootInfo[2];
   var folderX = $('#folderX');
@@ -68,6 +57,19 @@ loadSettings.then(() => {
   } else {
     folderX.previousElementSibling.disabled = true;
     folderX.classList.add('disabled');
+  }
+
+  // 读数据
+  // console.log(BM.settings);
+  for (var key in BM.default) {
+    // console.log(`${key}: ${value}`);
+    var value = BM.settings[key];
+    var ele = $(`input[name=${key}][value="${value}"]`);
+    if (ele) {
+      ele.checked = true;
+    } else {
+      // console.log(`[未设置选项] ${key}: ${value}`)
+    }
   }
 
   $minItemsPerCol.value = BM.settings.minItemsPerCol;
