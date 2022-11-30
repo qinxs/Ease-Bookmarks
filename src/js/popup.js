@@ -561,7 +561,7 @@ function templateFrag(treeData) {
 function templateFragItem(item) {
   var clone = $itemForClone.cloneNode(true);
   var itemA = clone.lastElementChild;
-  var favicon, type;
+  var favicon;
   var { id, title, url } = item;
   if (url) {
     if (isBookmarklet(url)) {
@@ -570,19 +570,16 @@ function templateFragItem(item) {
     } else {
       favicon = `chrome://favicon/${url}`;
     }
+    cachedFolderInfo.links[id] = url;
+    itemA.title = `${title}\n${url}`;
   } else {
     favicon = 'icons/favicon/folder.png';
-    type = 'folder';
+    itemA.type = 'folder';
   }
   clone.firstElementChild.src = favicon;
   itemA.setAttribute('data-id', id);
   itemA.textContent = title;
-  if (type) itemA.type = type;
   isSeachView && itemA.setAttribute('data-parent-id', item.parentId);
-  if (url) {
-    cachedFolderInfo.links[id] = url;
-    itemA.title = `${title}\n${url}`;
-  }
   return clone;
 }
 
@@ -934,7 +931,10 @@ function hotskeyEvents(event) {
 
   switch (keyCode) {
     case "Escape":
-      !$seachInput.value && window.close();
+      if (!$seachInput.value) {
+        event.preventDefault();
+        window.close()
+      }
       break;
     case "Tab":
       event.preventDefault();
@@ -1088,7 +1088,7 @@ Promise.all([
     contextMenu.init();
     dialog.init();
     window.addEventListener('keydown', hotskeyEvents);
-    window.addEventListener('unload', setLastData);
+    BM.settings.startup < 0 && window.addEventListener('unload', setLastData);
     $searchList.addEventListener('mouseover', handleSearchResultsHover, false);
     loadCSS('libs/dragula.css');
     loadJS('libs/dragula.min.js', dragToMove);
