@@ -20,7 +20,7 @@ const cachedFolderInfo = {
 // 搜索框
 const $seachInput = $('#search-input');
 // 中文拼音输入中，但未合成汉字
-var inputFlag = false;
+var inputFlag = true;
 var isSeachView = false;
 // 当前视图
 var $curFolderList;
@@ -155,15 +155,15 @@ const search = {
   handleEvent() {
     // 实时搜索 兼容中文
     $seachInput.addEventListener('compositionstart', () => {
-      inputFlag = true;
+      inputFlag = false;
     }, false);
     $seachInput.addEventListener('compositionend', () => {
-      inputFlag = false;
+      inputFlag = true;
       this.loadSearchView($seachInput.value);
     }, false);
     $seachInput.addEventListener('input', event => {
       // console.log(event);
-      !inputFlag && this.loadSearchView($seachInput.value);
+      inputFlag && this.loadSearchView($seachInput.value);
     }, false);
   },
   loadSearchView(keyword) {
@@ -239,16 +239,16 @@ const contextMenu = {
       $('.item.active') && $('.item.active').classList.remove('active');
     }
   },
-  handleEvent(e) {
-    switch(e.type) {
+  handleEvent(event) {
+    switch(event.type) {
       case "contextmenu":
-        e.preventDefault();
-        if(e.target.tagName === 'A' || e.target.classList.contains('nodata')) {
-          // console.log(e);
-          $fromTarget = e.target;
+        event.preventDefault();
+        if(event.target.tagName === 'A' || event.target.classList.contains('nodata')) {
+          // console.log(event);
+          $fromTarget = event.target;
           $contextMenu.className = $fromTarget.type || 'nodata';
           $contextMenu.type = isSeachView ? 'search' : '';
-          this.pos.left = e.clientX;
+          this.pos.left = event.clientX;
           var mainWidth = $main.clientWidth;
           var mainHeight = $main.clientHeight;
           var menuWidth = $contextMenu.offsetWidth;
@@ -257,7 +257,7 @@ const contextMenu = {
           if (this.pos.left + menuWidth > mainWidth - 4) {
             this.pos.left = mainWidth - menuWidth - 4;
           }
-          this.pos.top = e.clientY - $main.offsetTop;
+          this.pos.top = event.clientY - $main.offsetTop;
           var overflow = this.pos.top + menuHeight - mainHeight;
           if (overflow > 0) {
             this.pos.top -= (this.pos.top > menuHeight) ? menuHeight : overflow;
@@ -269,7 +269,7 @@ const contextMenu = {
       case "click":
         event.preventDefault();
         event.stopPropagation();
-        this.handleMenuItem(e.target);
+        this.handleMenuItem(event.target);
         this.close();
         break;
     }
@@ -440,8 +440,8 @@ const dialog = {
     this.showing = true;
     this.$name.focus();
   },
-  save(e) {
-    e.preventDefault();
+  save(event) {
+    event.preventDefault();
     var ele = $fromTarget;
     var id = ele.getAttribute('data-id');
     var title = this.$name.textContent;
@@ -506,8 +506,8 @@ const dialog = {
     $dialog.hidden = true;
     this.showing = false;
   },
-  close(e) {
-    e.preventDefault();
+  close(event) {
+    event.preventDefault();
     $dialog.hidden = true;
     this.showing = false;
   },
@@ -909,6 +909,7 @@ function dragToMove() {
 
 function hotskeyEvents(event) {
   var keyCode = event.code;
+  // console.log(keyCode);
 
   // 优先处理dialog
   if (dialog.showing) {
@@ -984,7 +985,10 @@ function hotskeyEvents(event) {
     case "End":
     case "ArrowUp":
     case "ArrowDown":
-      event.preventDefault();
+      // 不阻止#search-input中的左右键
+      if ($item) {
+        event.preventDefault();
+      }
       setActiveItem(keyCode);
       break;
     default:
@@ -1087,7 +1091,7 @@ Promise.all([
     search.init();
     contextMenu.init();
     dialog.init();
-    window.addEventListener('keydown', hotskeyEvents);
+    document.addEventListener('keydown', hotskeyEvents);
     BM.settings.startup < 0 && window.addEventListener('unload', setLastData);
     $searchList.addEventListener('mouseover', handleSearchResultsHover, false);
     loadCSS('libs/dragula.css');
