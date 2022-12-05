@@ -8,7 +8,7 @@ window.BM = {
     openIn: 3, // 0b11, 0-3 详细说明参见 openUrl 方法
     hoverEnter: 500, // {0,300,500,800}
     layoutCols: 1,
-    minItemsPerCol: 1, // 1-16；避免滚动条
+    minItemsPerCol: 10, // 1-16；避免滚动条
     // 1 书签栏 2 其他书签（根目录为0）
     // -1 目录，-2 目录和滚动条（从上次位置启动）
     startup: 1,

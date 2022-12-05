@@ -105,7 +105,7 @@ loadSettings.then(() => {
     this.value = this.value.replace(/[^0-9]/g, '');
   });
   $minItemsPerCol.addEventListener('change', function() {
-    if (this.value < 1) this.value = 1;
+    if (this.value < 1) this.value = BM.default.minItemsPerCol;
     setSyncItem('minItemsPerCol', this.value);
   });
 
