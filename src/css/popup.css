@@ -8,7 +8,7 @@
   --color-background-dialog: rgba(255, 255, 255, .96);
   --color-border: #ddd;
   --color-hover: #d3ece7;
-  --color-scrollbar-thumb: rgba(50, 50, 50, .3);
+  --color-scrollbar-thumb: rgba(50, 50, 50, .4);
   --textbox-border-color: #a0b3d6;
   --textbox-focus-border-color: #34538b;
 }
@@ -26,14 +26,13 @@
   --color-input-background-dark: #171a1a;
 }
 ::-webkit-scrollbar {
-  width: 3px;
+  width: 4px;
 }
 ::-webkit-scrollbar-track {
   background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-  -webkit-border-radius: 10px;
-  border-radius: 10px;
+  border-radius: 4px;
   background-color: var(--color-scrollbar-thumb);
 }
 * {

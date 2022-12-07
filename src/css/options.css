@@ -2,10 +2,16 @@
     --primary-color: #1abc9c;
     --base-height: 42px;
 }
-::-webkit-scrollbar {
+html::-webkit-scrollbar {
     display: none;
 }
-
+::-webkit-scrollbar {
+  width: 6px;
+}
+#customCSS::-webkit-scrollbar-thumb {
+  border-radius: 6px;
+  background-color: rgba(50, 50, 50, .4);
+}
 * {
     margin: 0;
     padding: 0;
@@ -187,6 +193,10 @@ html[lang=en] .button {
 }
 .tooltip:hover ~ .tooltiptext {
     visibility: visible;
+}
+
+#customCSS {
+    resize: vertical;
 }
 
 @media (prefers-color-scheme: dark) {
