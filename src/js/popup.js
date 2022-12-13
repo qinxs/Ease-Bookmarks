@@ -616,8 +616,6 @@ function setListSize($list, _length, id) {
         rowsCount = minItemsPerCol;
       }
     }
-    // data-rows 供左右快捷键使用
-    $list.setAttribute('data-rows', rowsCount);
   }
   var listHeight = rowsCount * itemHeight;
   $list.style.height = listHeight + 'px';
@@ -1008,7 +1006,6 @@ function hotskeyEvents(event) {
   }
 
   function getGoalItem($item, keyCode, $list) {
-    var rows = $list.getAttribute('data-rows');
     switch (keyCode) {
       case "Home":
         return $list.firstElementChild;
@@ -1027,17 +1024,21 @@ function hotskeyEvents(event) {
           return $list.firstElementChild;
         }
       case "ArrowLeft":
-        var $prev = $item;
-        while (rows-- && $prev) {
-          $prev = $prev.previousElementSibling;
+        if ($item) {
+          var rect = $item.getBoundingClientRect();
+          var $left = document.elementFromPoint(rect.x - rect.width / 2, rect.y + rect.height / 2);
+          return $left ? $left.closest('.item') : null;
+        } else {
+          return null;
         }
-        return $prev;
       case "ArrowRight":
-        var $next = $item;
-        while (rows-- && $next) {
-          $next = $next.nextElementSibling;
+        if ($item) {
+          var rect = $item.getBoundingClientRect();
+          var $right = document.elementFromPoint(rect.x + rect.width / 2 * 3, rect.y + rect.height / 2);
+          return $right ? $right.closest('.item') : null;
+        } else {
+          return null;
         }
-        return $next;
       default:
         return null;
     }
