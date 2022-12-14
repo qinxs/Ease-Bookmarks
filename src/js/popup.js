@@ -12,10 +12,11 @@ const $dialog = $('#dialog');
 const $itemForClone = $('#template > .item');
 const cachedFolderInfo = {
   length: {}, // 目录中书签个数
+  cols: {},
   hasScrollbar: {},
   links: {}, // 书签链接存在此处，不用渲染到dom中
   lists: {}, // 已加载的目录
-};
+}
 
 // 搜索框
 const $seachInput = $('#search-input');
@@ -69,6 +70,51 @@ const dataSetting = {
       window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
       document.body.classList.add("dark");
     }
+  }
+}
+
+// 精确布局 避免意外的空白列
+// 当 Math.ceil(length / cols) * (cols - 1) >= length 时
+const preciseLayout = {
+  nthChild: '',
+  ele: $('#preciseLayout'),
+  update(id) {
+    // console.log(id);
+    if (layoutCols < 3 || minItemsPerCol > 3) return; // 经计算，只有几组特殊解
+
+    var expression,
+      length = cachedFolderInfo.length[id],
+      cols = cachedFolderInfo.cols[id];
+
+    // 最后一列有元素
+    if (Math.ceil(length / cols) * (cols - 1) < length) {
+      expression = '';
+    } else {
+      var a = parseInt(length / cols),
+          b = (length % cols + 1) * (a + 1) - 1;
+      expression = `${a}n+${b}`;
+    }
+
+    this.setStyle(expression);
+  },
+  // @expression: an+b
+  setStyle(expression) {
+    if (expression == this.nthChild) return;
+
+    // console.log('expression');
+    if (!expression) {
+      this.clearStyle();
+    } else {
+      this.ele.textContent = `
+      .item:nth-child(${expression}) {
+          margin-bottom: 1px;
+      }`;
+    }
+    this.nthChild = expression;
+  },
+  clearStyle() {
+    this.ele.textContent = '';
+    this.nthChild = '';
   }
 }
 
@@ -348,7 +394,7 @@ const contextMenu = {
                   $curFolderList.innerHTML = htmlTemplate.nodata;
                 } else {
                   $fromTarget.closest('.item').remove();
-                  setListSize($curFolderList, --cachedFolderInfo.length[listId]);
+                  setListSize($curFolderList, cachedFolderInfo.length[listId] - 1, listId);
                 }
               });
             } else {
@@ -362,7 +408,7 @@ const contextMenu = {
               $curFolderList.innerHTML = htmlTemplate.nodata;
             } else {
               $fromTarget.closest('.item').remove();
-              setListSize($curFolderList, --cachedFolderInfo.length[listId]);
+              setListSize($curFolderList, cachedFolderInfo.length[listId] - 1, listId);
             }
           });
         }
@@ -458,7 +504,7 @@ const dialog = {
             'url': url
           }, results => {
             // console.log(results);
-            setListSize($curFolderList, ++cachedFolderInfo.length[listId]);
+            setListSize($curFolderList, cachedFolderInfo.length[listId] + 1, listId);
             $fromTarget.closest('.item').after(templateFragItem(results));
             handleFolderEvent($$('[type=folder]', $fromTarget.closest('.item').nextElementSibling));
             $fromTarget.remove();
@@ -472,7 +518,7 @@ const dialog = {
               'url': url
             }, results => {
               // console.log(results);
-              setListSize($curFolderList, ++cachedFolderInfo.length[listId]);
+              setListSize($curFolderList, cachedFolderInfo.length[listId] + 1, listId);
               $fromTarget.closest('.item').after(templateFragItem(results));
               handleFolderEvent($$('[type=folder]', $fromTarget.closest('.item').nextElementSibling));
             });
@@ -537,6 +583,7 @@ function renderListView(id, items, isStartup = false) {
     if (isStartup) {
       // 启动时延后渲染 避免长任务
       setTimeout(applyFrag);
+      preciseLayout.update(id);
     } else {
       applyFrag();
     }
@@ -598,6 +645,7 @@ function decodeBookmarklet(url) {
 function setListSize($list, _length, id) {
   var rowsCount, colsCount;
   var length = _length || 1;
+
   if (layoutCols === 1) {
     rowsCount = length;
   } else {
@@ -617,10 +665,13 @@ function setListSize($list, _length, id) {
       }
     }
   }
+
   var listHeight = rowsCount * itemHeight;
   $list.style.height = listHeight + 'px';
+  
   if (id) {
     cachedFolderInfo.length[id] = _length;
+    cachedFolderInfo.cols[id] = colsCount;
     // 504 main最大高度
     cachedFolderInfo.hasScrollbar[id] = listHeight > 504;
   }
@@ -645,6 +696,7 @@ function toggleList(id, searchMode = false) {
     $list.hidden = false;
     $searchList.hidden = true;
     isSeachView = false;
+    preciseLayout.update(id);
     $curFolderList = $list;
     if (cachedFolderScrollTop) {
       $main.scrollTop = cachedFolderScrollTop;
