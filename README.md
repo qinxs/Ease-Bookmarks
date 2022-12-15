@@ -13,7 +13,7 @@ Ease Bookmarks 是一款为了替代浏览器原有书签栏的扩展
 
 在此基础上，尽可能满足各类 书签使用习惯 用户的需求
 
-![2-popup.png](./screenshots/2-popup.png)
+![1-popup.png](./screenshots/1-popup.png)
 
 ## 主要功能
 
