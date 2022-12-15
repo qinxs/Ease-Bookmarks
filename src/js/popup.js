@@ -41,7 +41,7 @@ var minItemsPerCol;
 const rootStyle = document.documentElement.style;
 var itemHeight;
 
-const isBookmarklet = url => url.trim().startsWith('javascript:');
+const isBookmarklet = url => url.trimStart().startsWith('javascript:');
 const htmlTemplate = {
   nodata: `<div class="item nodata">${L("noBookmarksTip")}<div>`,
   noresult: `<div class="item noresult">${L("seachNoResultTip")}<div>`,
@@ -643,11 +643,12 @@ function decodeBookmarklet(url) {
 
 // id 仅渲染$list时 需要传入
 function setListSize($list, _length, id) {
-  var rowsCount, colsCount;
+  var rowsCount, colsCount, listHeight;
   var length = _length || 1;
 
   if (layoutCols === 1) {
     rowsCount = length;
+    listHeight = rowsCount * itemHeight;
   } else {
     if ($list === $searchList) {
       rowsCount = Math.ceil(length / curMaxCols);
@@ -664,10 +665,10 @@ function setListSize($list, _length, id) {
         rowsCount = minItemsPerCol;
       }
     }
-  }
 
-  var listHeight = rowsCount * itemHeight;
-  $list.style.height = listHeight + 'px';
+    listHeight = rowsCount * itemHeight;
+    $list.style.height = listHeight + 'px';
+  }
   
   if (id) {
     cachedFolderInfo.length[id] = _length;
