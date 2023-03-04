@@ -1,6 +1,8 @@
 "use strict";
 
 var settings;
+const ratio = window.devicePixelRatio || 1;
+const faviconPrefix = 'chrome://favicon/' + (ratio == 1 ? '' : `size/16@${ratio}x/`);
 const $nav = {
   header: $('nav'),
   footer: $('a.nav')
@@ -351,7 +353,7 @@ const contextMenu = {
           chrome.bookmarks.update(id, option, () => {
             cachedFolderInfo.links[id] = pageUrl;
             $fromTarget.title = $fromTarget.textContent + '\n' + pageUrl;
-            $fromTarget.previousElementSibling.src = 'chrome://favicon/' + pageUrl;
+            $fromTarget.previousElementSibling.src = faviconPrefix + pageUrl;
             if (option.title) {
               $fromTarget.textContent = option.title;
             }
@@ -536,7 +538,7 @@ const dialog = {
             cachedFolderInfo.links[id] = url;
             ele.title = title + '\n' + url;
             if (!isBookmarklet(url)) {
-              $fromTarget.previousElementSibling.src = 'chrome://favicon/' + url;
+              $fromTarget.previousElementSibling.src = faviconPrefix + url;
             } else {
               $fromTarget.previousElementSibling.src = 'icons/favicon/js.png';
             }
@@ -615,7 +617,7 @@ function templateFragItem(item) {
       favicon = 'icons/favicon/js.png';
       url = decodeBookmarklet(url);
     } else {
-      favicon = `chrome://favicon/${url}`;
+      favicon = faviconPrefix + url;
     }
     cachedFolderInfo.links[id] = url;
     itemA.title = `${title}\n${url}`;
@@ -865,7 +867,7 @@ function updateFolderList(id, type, data = {}) {
     var a = $(`[data-id="${data.id}"]`, $list);
     if (data.url) {
       var url = data.url;
-      var favicon = `chrome://favicon/${url}`;
+      var favicon = faviconPrefix + url;
       if (isBookmarklet(url)) {
         favicon = 'icons/favicon/js.png';
         url = decodeBookmarklet(url);
