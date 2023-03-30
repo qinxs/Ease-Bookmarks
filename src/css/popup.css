@@ -102,8 +102,9 @@ a {
 }
 
 nav {
-  pointer-events: none;
-  margin: 4px 0;
+  /* 8px 扩大点击区域 */
+  margin: 4px -8px;
+  padding: 0 8px;
   min-height: 24px;
   line-height: 1.65em;
   font-size: 16px;
@@ -118,7 +119,6 @@ nav {
   color: var(--color-theme);
 }
 nav > a {
-  pointer-events: auto;
   padding: 1px 4px;
   border-radius: 4px;
   color: #fff;

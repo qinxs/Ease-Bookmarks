@@ -820,7 +820,7 @@ function openFolderEvent(event) {
   var target = event.target;
   // 路径最末级不在打开文件夹
   var id = parseInt(target.getAttribute('data-id'));
-  if (id == nav.lastPathID) return;
+  if (!id || id == nav.lastPathID) return;
   var folderName = target.textContent;
   // 使用快捷键时 直接打开
   var delay = event.isTrusted ? settings.hoverEnter : 0;
@@ -897,6 +897,11 @@ function locationFolder(parentId, id) {
     $item.classList.add('active');
     $item.scrollIntoView(false);
   }
+}
+
+function goBack() {
+  var $back = $('a:nth-last-of-type(2)', $nav.header);
+  $back && $back.dispatchEvent(new Event(BM.openFolderEventType, {"bubbles": true}));
 }
 
 function openBookmarkManagerUrl(event) {
@@ -996,8 +1001,7 @@ function hotskeyEvents(event) {
       event.preventDefault();
       contextMenu.showing && contextMenu.close();
       $item && $item.classList.remove('active');
-      var $back = $('a:nth-last-of-type(2)', $nav.header);
-      $back && $back.dispatchEvent(new Event(BM.openFolderEventType, {"bubbles": true}));
+      goBack();
       break;
     case "Space":
       if ($item) {
@@ -1118,6 +1122,7 @@ function setLastData(event) {
 }
 /******************************************************/
 $main.addEventListener('click', handleMainClick, false);
+$nav.header.addEventListener('dblclick', goBack, false);
 $main.addEventListener('mousedown', handleMainMiddleClick, false);
 $('#bookmark-manager').addEventListener('click', openBookmarkManagerUrl, false);
 
