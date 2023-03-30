@@ -994,7 +994,11 @@ function hotskeyEvents(event) {
     case "Escape":
       if (!$seachInput.value) {
         event.preventDefault();
-        window.close()
+        // 获取当前扩展的所有视图
+        var views = chrome.extension.getViews({ type: "popup" });
+
+        // 当前扩展在弹出窗口中打开
+        views.length && window.close();
       }
       break;
     case "Tab":
@@ -1020,6 +1024,7 @@ function hotskeyEvents(event) {
       }
       break;
     case "F2":
+      event.preventDefault();
       $fromTarget = $('.item.active > a', $list);
       if (!$fromTarget) return;
       curContextMenuID = $fromTarget.type == 'folder' ? 'bookmark-edit-folder' : 'bookmark-edit';
