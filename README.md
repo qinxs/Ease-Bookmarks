@@ -32,6 +32,8 @@ Ease Bookmarks 是一款为了替代浏览器原有书签栏的扩展
 > 更新日志：[ChangeLog.md](ChangeLog.md)
 > 
 > 查看所有截图：[Screenshots](./screenshots/README.md#所有截图)
+>
+> 常见问题：[FAQ](https://github.com/qinxs/Ease-Bookmarks/wiki/常见问题（FAQ）)
 
 ## 使用快捷键
 
@@ -74,7 +76,7 @@ Ease Bookmarks 是一款为了替代浏览器原有书签栏的扩展
 
 ### `fastCreate`
 
-> 功能：中键点击**书签图标**，快速把当前网址添加到书签
+> 功能：中键点击**书签favicon图标**，快速把当前网址添加到书签（详见 [#15](https://github.com/qinxs/Ease-Bookmarks/issues/15)）
 
 - `0`：默认值，不启用
 - `2`：启用，只对文件夹有效，书签添加到该文件夹中
