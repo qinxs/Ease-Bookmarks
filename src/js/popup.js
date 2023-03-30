@@ -961,6 +961,8 @@ function dragToMove() {
 }
 
 function hotskeyEvents(event) {
+  if (event.isComposing) return;
+  
   var keyCode = event.code;
   // console.log(keyCode);
 
