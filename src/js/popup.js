@@ -207,7 +207,9 @@ const search = {
     }, false);
     $seachInput.addEventListener('compositionend', () => {
       inputFlag = true;
-      this.loadSearchView($seachInput.value);
+      if (event.data) {
+        this.loadSearchView($seachInput.value);
+      }
     }, false);
     $seachInput.addEventListener('input', event => {
       // console.log(event);
