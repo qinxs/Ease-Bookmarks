@@ -901,11 +901,6 @@ function locationFolder(parentId, id) {
   }
 }
 
-function goBack() {
-  var $back = $('a:nth-last-of-type(2)', $nav.header);
-  $back && $back.dispatchEvent(new Event(BM.openFolderEventType, {"bubbles": true}));
-}
-
 function openBookmarkManagerUrl(event) {
   const {bookmarksManagerUrl} = chrome.extension.getBackgroundPage();
   openUrl(bookmarksManagerUrl, event);
@@ -1007,7 +1002,8 @@ function hotskeyEvents(event) {
       event.preventDefault();
       contextMenu.showing && contextMenu.close();
       $item && $item.classList.remove('active');
-      goBack();
+      var $back = $('a:nth-last-of-type(2)', $nav.header);
+      $back && $back.dispatchEvent(new Event(BM.openFolderEventType, {"bubbles": true}));
       break;
     case "Space":
       if ($item) {
@@ -1113,6 +1109,27 @@ function hotskeyEvents(event) {
   }
 }
 
+// 模拟事件 简单实现
+// @keyCodeStr: 如'Ctrl + Z'，不支持多字母键（Ctrl + A + B）
+function simulateKeyboardEvent(ele, type, options = {}, keyCodeStr) {
+  if (!ele) return;
+
+  var keyCode = {};
+
+  if (keyCodeStr) {
+    keyCode.ctrlKey = keyCode.metaKey = /Ctrl/i.test(keyCodeStr);
+    keyCode.shiftKey = /Shift/i.test(keyCodeStr);
+    keyCode.altKey = /Alt/i.test(keyCodeStr);
+
+    var code = keyCodeStr.split('+').pop().trim();
+    keyCode.code = code.length === 1 ? 'Key' + code.toUpperCase() : code;
+  }
+
+  const event = new KeyboardEvent(type, Object.assign(options, keyCode));
+
+  ele.dispatchEvent(event);
+}
+
 function setLastData(event) {
   // Cancel the event as stated by the standard.
   event.preventDefault();
@@ -1129,7 +1146,7 @@ function setLastData(event) {
 }
 /******************************************************/
 $main.addEventListener('click', handleMainClick, false);
-$nav.header.addEventListener('dblclick', goBack, false);
+$nav.header.addEventListener('dblclick', () => simulateKeyboardEvent(document, 'keydown', {}, 'Tab'), false);
 $main.addEventListener('mousedown', handleMainMiddleClick, false);
 $('#bookmark-manager').addEventListener('click', openBookmarkManagerUrl, false);
 
