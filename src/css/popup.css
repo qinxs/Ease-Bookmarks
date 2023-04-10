@@ -175,6 +175,9 @@ nav > a:last-of-type {
   top: 50%;
   transform: translateY(-50%);
 }
+.folder-list .favicon {
+  cursor: move;
+}
 .item > a {
   display: block;
   padding-left: 24px;

@@ -938,6 +938,9 @@ function dragToMove() {
     os: 'pc',
     isContainer: function (el) {
       return el.classList.contains('folder-list');
+    },
+    moves: function (el, container, handle) {
+      return handle.classList.contains('favicon');
     }
   }).on('drop', (el, target, source, sibling, isHover) => {
     // console.log(el, target, source, sibling, isHover);
