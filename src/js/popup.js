@@ -236,6 +236,7 @@ const search = {
         $searchList.innerHTML = '';
         $searchList.append(frag);
         handleFolderEvent($$('[type=folder]', $searchList));
+        $searchList.firstElementChild.classList.add('active');
       } else {
         $searchList.innerHTML = htmlTemplate.noresult;
       }
