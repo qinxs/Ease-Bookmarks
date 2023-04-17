@@ -1,7 +1,6 @@
 "use strict";
 
 window.BM = {
-  preItems: null,
   // 选项必须与input的name和value一致
   default: {
     themeColor: 'light',
@@ -28,7 +27,7 @@ window.BM = {
     4: '660px',
     5: '800px',
   },
-  set(name, value) {
+  set: function(name, value) {
     if (this.defaultSys.hasOwnProperty(name)) {
       if (value == BM.defaultSys[name]) {
         chrome.storage.sync.remove(name);
@@ -39,8 +38,7 @@ window.BM = {
     } else {
       console.log(L('setInvalidTips'), Object.keys(BM.defaultSys).join());
     }
-  },
-  settingsReady: false
+  }
 }
 
 // @TODO 改为 localStorage？
@@ -48,7 +46,6 @@ window.BM = {
 var loadSettings = new Promise(function(resolve, reject) {
   chrome.storage.sync.get(null, function(items) {
     // console.log(items);
-    BM.userOptions = items;
     BM.settings = Object.assign({}, BM.default, BM.defaultSys, items);
     resolve();
   });
@@ -58,18 +55,19 @@ BM.startupReal = localStorage.getItem('startupID') || BM.default.startup;
 
 var loadPreItems;
 
+// 提前读取bookmarks数据，优化启动速度
 if (location.pathname === '/popup.html') {
   loadPreItems = new Promise(function(resolve, reject) {
     chrome.bookmarks.getChildren(BM.startupReal.toString(), (results) => {
       // console.log(results);
-      // 文件夹不存在了
+      // 启动文件件被删除了
       if (typeof results === 'undefined') {
         localStorage.setItem('startupID', BM.default.startup);
         chrome.storage.sync.set({startup: BM.default.startup}, () => {
           location.reload();
         });
       }
-      if (!BM.preItems) BM.preItems = results;
+      BM.preItems = results;
       resolve();
     });
   });

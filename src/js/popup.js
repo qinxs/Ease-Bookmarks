@@ -36,14 +36,22 @@ var cachedFolderScrollTop = 0;
 // 点击的右键菜单ID，需要弹出dialog时动态改变
 var curContextMenuID;
 
-var layoutCols;
 // 宽度只变大 不缩小
 var curMaxCols = 1;
-var minItemsPerCol;
-const rootStyle = document.documentElement.style;
 var itemHeight;
 
-const isBookmarklet = url => url.trimStart().startsWith('javascript:');
+const isBookmarklet = url => url.trimStart().startsWith('javascript:')
+const decodeBookmarklet = url => {
+  try {
+    url = decodeURI(url);
+  } catch {
+    // % 转义；比如css中的 width: 40%;
+    // https://stackoverflow.com/questions/20700393/urierror-malformed-uri-sequence
+    url = decodeURI(url.replace(/%(?![0-9A-F]{2})/gi, "%25"));
+  }
+  return url;
+}
+
 const htmlTemplate = {
   nodata: `<div class="item nodata">${L("noBookmarksTip")}<div>`,
   noresult: `<div class="item noresult">${L("seachNoResultTip")}<div>`,
@@ -51,8 +59,6 @@ const htmlTemplate = {
 
 const dataSetting = {
   init() {
-    layoutCols = settings.layoutCols;
-    minItemsPerCol = settings.minItemsPerCol;
     this.layout();
     this.switchTheme();
     BM.openFolderEventType = settings.hoverEnter == 0 ? 'click' : 'mouseover';
@@ -82,7 +88,7 @@ const preciseLayout = {
   ele: $('#preciseLayout'),
   update(id) {
     // console.log(id);
-    if (layoutCols < 3 || minItemsPerCol > 3) return; // 经计算，只有几组特殊解
+    if (settings.layoutCols < 3 || settings.minItemsPerCol > 3) return; // 经计算，只有几组特殊解
 
     var expression,
       length = cachedFolderInfo.length[id],
@@ -109,7 +115,7 @@ const preciseLayout = {
     } else {
       this.ele.textContent = `
       .item:nth-child(${expression}) {
-          margin-bottom: 1px;
+        margin-bottom: 1px;
       }`;
     }
     this.nthChild = expression;
@@ -124,7 +130,7 @@ const nav = {
   rootID: -1,
   lastPathID: -1,
   pathHtml: '',
-  $bookmarkManagerText: $('#bookmark-manager span'),
+  $bookmarkManagerText: $('#bookmark-manager > span'),
   init(id) {
     // console.log(settings.rootInfo);
     if (id < 3) {
@@ -135,7 +141,7 @@ const nav = {
     handleFolderEvent([$nav.header, $nav.footer]);
     this.$bookmarkManagerText.textContent = L('bookmarksManager');
   },
-  setNavPath(id, folderName, target, curIsSearchView=false) {
+  setNavPath(id, folderName, target, curIsSearchView = false) {
     folderName = this.replaceEmptyString(folderName);
     // console.log(target);
     if (id < 3 && id != this.rootID) {
@@ -225,7 +231,7 @@ const search = {
         !isSeachView && toggleList(null, true);
       });
     } else {
-      toggleList($curFolderList.id.replace('_', ''));
+      toggleList($curFolderList.id.slice(1));
     }
   },
   _loadSearchView(keyword) {
@@ -252,7 +258,6 @@ const contextMenu = {
   showing: false,
   init() {
     $contextMenu.insertAdjacentHTML('beforeend', this.html);
-    delete this.html;
     $main.addEventListener('contextmenu', this, false);
     $contextMenu.addEventListener('click', this, false);
     document.addEventListener('click', () => this.close(), false);
@@ -387,7 +392,7 @@ const contextMenu = {
         chrome.storage.sync.set({startup: id});
         break;
       case "bookmark-delete":
-        var listId = $curFolderList.id.replace('_', '');
+        var listId = $curFolderList.id.slice(1);
         if ($fromTarget.type === 'folder') {
           $fromTarget.closest('.item').classList.add('seleted');
           // 防止hover其他元素
@@ -400,6 +405,7 @@ const contextMenu = {
                 } else {
                   $fromTarget.closest('.item').remove();
                   setListSize($curFolderList, cachedFolderInfo.length[listId] - 1, listId);
+                  preciseLayout.update(listId);
                 }
               });
             } else {
@@ -433,7 +439,6 @@ const dialog = {
     this.$title = $('#edit-dialog-text > .title');
     this.$name = $('#edit-dialog-name');
     this.$url = $('#edit-dialog-url');
-    delete this.html;
     // 光标移到末尾
     this.$name.addEventListener('focus', () => {
       var range = window.getSelection();
@@ -501,7 +506,7 @@ const dialog = {
     switch(curContextMenuID) {
       case "bookmark-add-bookmark":
       case "bookmark-add-folder":
-        var listId = $curFolderList.id.replace('_', '');
+        var listId = $curFolderList.id.slice(1);
         if ($fromTarget.classList.contains('nodata')) {
           chrome.bookmarks.create({
             'parentId': listId,
@@ -525,6 +530,7 @@ const dialog = {
               // console.log(results);
               setListSize($curFolderList, cachedFolderInfo.length[listId] + 1, listId);
               $fromTarget.closest('.item').after(templateFragItem(results));
+              preciseLayout.update(listId);
               handleFolderEvent($$('[type=folder]', $fromTarget.closest('.item').nextElementSibling));
             });
           });
@@ -564,34 +570,24 @@ const dialog = {
   },
 }
 
-function loadChildrenView(id, isStartup = false, callback) {
+function loadChildrenView(id, callback) {
   chrome.bookmarks.getChildren(id.toString(), (results) => {
     // console.log(results);
-    renderListView(id, results, isStartup);
-    if (isStartup) {
-      $curFolderList = $(`#_${id}`);
-    } else {
-      toggleList(id);
-    }
+    renderListView(id, results);
+    toggleList(id);
     if (typeof callback === 'function') {
       setTimeout(callback);
     }
   })
 }
 
-function renderListView(id, items, isStartup = false) {
-  $searchList.insertAdjacentHTML('beforebegin', `<div class="folder-list" id=_${id}></div>`);
+function renderListView(id, items) {
+  $searchList.insertAdjacentHTML('beforebegin', `<div class="folder-list" id="_${id}"></div>`);
   var $list = $(`#_${id}`);
   setListSize($list, items.length, id);
   cachedFolderInfo.lists[id] = $list;
   if (items.length) {
-    if (isStartup) {
-      // 启动时延后渲染 避免长任务
-      setTimeout(applyFrag);
-      preciseLayout.update(id);
-    } else {
-      applyFrag();
-    }
+    applyFrag();
   } else {
     $list.insertAdjacentHTML('afterbegin', htmlTemplate.nodata);
   }
@@ -635,39 +631,28 @@ function templateFragItem(item) {
   return clone;
 }
 
-function decodeBookmarklet(url) {
-  try {
-    url = decodeURI(url);
-  } catch {
-    // % 转义；比如css中的 width: 40%;
-    // https://stackoverflow.com/questions/20700393/urierror-malformed-uri-sequence
-    url = decodeURI(url.replace(/%(?![0-9A-F]{2})/gi, "%25"));
-  }
-  return url;
-}
-
 // id 仅渲染$list时 需要传入
 function setListSize($list, _length, id) {
   var rowsCount, colsCount, listHeight;
   var length = _length || 1;
 
-  if (layoutCols === 1) {
+  if (settings.layoutCols === 1) {
     rowsCount = length;
     listHeight = rowsCount * itemHeight;
   } else {
     if ($list === $searchList) {
       rowsCount = Math.ceil(length / curMaxCols);
     } else {
-      colsCount = length > layoutCols * minItemsPerCol ? layoutCols : Math.ceil(length / minItemsPerCol);
+      colsCount = length > settings.layoutCols * settings.minItemsPerCol ? settings.layoutCols : Math.ceil(length / settings.minItemsPerCol);
       rowsCount = Math.ceil(length / colsCount);
 
       if (colsCount != curMaxCols && (colsCount > curMaxCols || !settings.keepMaxCols)) {
         document.body.style.width = BM.bodyWidth[colsCount];
-        rootStyle.setProperty('--width-item', parseInt(100 / colsCount) + "%");
+        document.documentElement.style.setProperty('--width-item', parseInt(100 / colsCount) + "%");
         curMaxCols = colsCount;
       }
-      if (rowsCount < minItemsPerCol && length > minItemsPerCol) {
-        rowsCount = minItemsPerCol;
+      if (rowsCount < settings.minItemsPerCol && length > settings.minItemsPerCol) {
+        rowsCount = settings.minItemsPerCol;
       }
     }
 
@@ -778,7 +763,7 @@ function addPathTitle(id, target) {
  */
 function openUrl(url, event) {
   var flag = settings.openIn;
-  if(event.metaKey || event.ctrlKey) flag ^= 0b10; 
+  if(event.ctrlKey || event.metaKey) flag ^= 0b10; 
   if(event.shiftKey) flag ^= 0b01;
   // console.log(event);
   // return
@@ -888,7 +873,7 @@ function locationFolder(parentId, id) {
   // console.log(event.target);
   contextMenu.close();
   if(!cachedFolderInfo.lists[parentId]) {
-    loadChildrenView(parentId, false, () => locationToItem(id));
+    loadChildrenView(parentId, () => locationToItem(id));
   } else {
     toggleList(parentId);
     locationToItem(id);
@@ -1036,20 +1021,20 @@ function hotskeyEvents(event) {
       dialog.show();
       break;
     case "KeyF":
-      if (!event.ctrlKey || dialog.showing) return;
+      if (!(event.ctrlKey || event.metaKey) || dialog.showing) return;
       event.preventDefault();
       contextMenu.showing && contextMenu.close();
       $seachInput.focus();
       break;
     case "KeyZ":
-      if (!event.ctrlKey || dialog.showing) return;
+      if (!(event.ctrlKey || event.metaKey) || dialog.showing) return;
       clearTimeout(openFolderDelay);
       event.preventDefault();
       $nav.footer.getAttribute('data-id') && $nav.footer.dispatchEvent(new Event(BM.openFolderEventType));
       break;
     case "ArrowLeft":
     case "ArrowRight":
-      if (layoutCols === 1) break;
+      if (settings.layoutCols === 1) break;
     case "Home":
     case "End":
     case "ArrowUp":
@@ -1165,12 +1150,11 @@ Promise.all([
   settings = BM.settings;
   dataSetting.init();
 
-  var startupReal = BM.startupReal;
-  renderListView(startupReal, BM.preItems, true);
-  BM.preItems = 'done';
-  $curFolderList = $(`#_${startupReal}`);
+  renderListView(BM.startupReal, BM.preItems, true);
+  preciseLayout.update(BM.startupReal);
+  $curFolderList = $(`#_${BM.startupReal}`);
   
-  nav.init(startupReal);
+  nav.init(BM.startupReal);
   
   setTimeout(() => {
     $main.addEventListener('scroll', function() {
