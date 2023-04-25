@@ -1,24 +1,27 @@
 :root {
-  --color-theme: #75c3b4;
   --height-item: 28px;
   --width-item: 100%;
   /* 浅色模式 */
-  --color-text: #333;
+  --color-theme: #4db6ac;
+  --color-text: #232529;
+  --color-nav-text: #fff;
   --color-background: #fff;
   --color-background-dialog: rgba(255, 255, 255, .96);
   --color-border: #ddd;
-  --color-hover: #d3ece7;
-  --color-scrollbar-thumb: rgba(50, 50, 50, .4);
+  --color-hover: #cbede9;
+  --color-scrollbar-thumb: #b8c8c6;
   --textbox-border-color: #a0b3d6;
   --textbox-focus-border-color: #34538b;
 }
 .dark {
-  --color-text: #adaaa6;
+  --color-theme: #369;
+  --color-text: #cbc8c4;
+  --color-nav-text: #e3e3e3;
   --color-background: #3a3a3a;
   --color-background-dialog: #3a3a3a;
   --color-border: #666;
   --color-hover: #545454;
-  --color-scrollbar-thumb: #bf7e09;
+  --color-scrollbar-thumb: #8ac;
   --textbox-border-color: #666;
   --textbox-focus-border-color: #e29c45;
   /* 深色模式独有 */
@@ -121,7 +124,7 @@ nav {
 nav > a {
   padding: 1px 4px;
   border-radius: 4px;
-  color: #fff;
+  color: var(--color-nav-text);
   background-color: var(--color-theme);
 }
 
@@ -161,6 +164,7 @@ nav > a:last-of-type {
   width: var(--width-item);
   height: var(--height-item);
   line-height: var(--height-item);
+  border-radius: 2px;
 }
 .item:hover,
 .item:focus,
@@ -199,7 +203,7 @@ nav > a:last-of-type {
   position: relative;
   top: 50%;
   transform: translateY(-50%);
-  opacity: .5;
+  opacity: .51;
 }
 
 #context-menu,
@@ -292,7 +296,7 @@ hr {
   outline: none;
   margin: 10px 0;
   width: 100%;
-  border: 1px solid var(--textbox-border-color);
+  border: 1px solid var(--color-border);
   border-radius: 3px;
   color: var(--color-text);
   font-size: 14px;
@@ -305,11 +309,15 @@ hr {
   content: attr(placeholder);
 }
 
+.dialog-btns {
+  display: flex;
+  justify-content: space-evenly;
+}
 #dialog input:focus,
 #dialog .textbox:focus,
-#dialog button:focus {
-  border-color: var(--textbox-focus-border-color);
-  box-shadow: 0 0 2px rgba(0, 100, 255, .45);
+#dialog button:focus,
+#dialog button:hover {
+  border-bottom-color: var(--textbox-focus-border-color);
 }
 
 #edit-dialog-text {
@@ -325,7 +333,7 @@ hr {
   max-height: 60vh;
 }
 .title {
-  padding: 0 10px;
+  padding: 1px 10px;
   border-radius: 5px;
   background-color: var(--color-hover);
 }

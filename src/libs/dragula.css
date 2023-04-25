@@ -17,7 +17,7 @@
   opacity: .2
 }
 .gu-drop-overlay {
-  background-color: #d3ece7;
-  border: 1px solid #75c3b4;
+  background-color: var(--color-hover);
+  border: 1px solid var(--color-theme);
   border-radius: 2px
 }
