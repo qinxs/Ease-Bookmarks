@@ -84,6 +84,9 @@ body {
     user-select: none;
     position: relative;
 }
+.compact > label > span {
+    min-width: 40px;
+}
 
 .clear {
     clear: both;

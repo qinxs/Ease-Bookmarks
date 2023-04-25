@@ -62,8 +62,8 @@ loadSettings.then(() => {
   // 读数据
   // console.log(BM.settings);
   for (var key in BM.default) {
-    // console.log(`${key}: ${value}`);
     var value = BM.settings[key];
+    // console.log(`${key}: ${value}`);
     var ele = $(`input[name=${key}][value="${value}"]`);
     if (ele) {
       ele.checked = true;
@@ -86,6 +86,7 @@ loadSettings.then(() => {
 
   // 写数据
   for (var ele of $$('input[type=radio]')) {
+    // console.log(ele);
     ele.addEventListener('change', (event) => {
       // console.log(event.target);
       var {name, value} = event.target;
@@ -105,15 +106,15 @@ loadSettings.then(() => {
     this.value = this.value.replace(/[^0-9]/g, '');
   });
   $minItemsPerCol.addEventListener('change', function() {
-    if (this.value < 1) this.value = BM.default.minItemsPerCol;
-    setSyncItem('minItemsPerCol', this.value);
+    if (this.value < 1) this.value = BM.default[this.name];
+    setSyncItem(this.name, this.value);
   });
 
   $bookmarksBar.addEventListener('change', bookmarksAlias);
   $otherBookmarks.addEventListener('change', bookmarksAlias);
   
   $customCSS.addEventListener('change', function() {
-    setSyncItem('customCSS', this.value);
+    setSyncItem(this.name, this.value);
   });
 
   // 预览自定义头像
