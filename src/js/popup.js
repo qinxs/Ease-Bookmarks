@@ -293,6 +293,7 @@ const contextMenu = {
       $contextMenu.classList.add('hidden');
       this.showing = false;
       $('.item.active') && $('.item.active').classList.remove('active');
+      $seachInput.focus();
     }
   },
   handleEvent(event) {
@@ -567,6 +568,7 @@ const dialog = {
     event.preventDefault();
     $dialog.hidden = true;
     this.showing = false;
+    $seachInput.focus();
   },
 }
 
@@ -1138,7 +1140,10 @@ function setLastData(event) {
 }
 /******************************************************/
 $main.addEventListener('click', handleMainClick, false);
-$nav.header.addEventListener('dblclick', () => simulateKeyboardEvent(document, 'keydown', {}, 'Tab'), false);
+$nav.header.addEventListener('dblclick', () => {
+  simulateKeyboardEvent(document, 'keydown', {}, 'Tab');
+  $seachInput.focus();
+}, false);
 $main.addEventListener('mousedown', handleMainMiddleClick, false);
 $('#bookmark-manager').addEventListener('click', openBookmarkManagerUrl, false);
 
