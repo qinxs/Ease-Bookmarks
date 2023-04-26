@@ -1,31 +1,8 @@
-::-webkit-scrollbar {
-  display: none;
-}
-
-body {
-  margin: 0 auto;
-  width: 720px;
-  min-height: calc(100vh + 15px);
-  box-shadow: 0 0 60px rgb(0 0 0 / 10%);
-}
-.btns {
-  position: fixed;
-  display: block;
-  top: 2px;
-  right: calc(50vw - 360px + 30px);
-  opacity: .5;
-  cursor: pointer;
-}
-.btns img {
-  width: 24px;
-}
-
 /* 根据该字体大小，统一调整文章整体大小 */
 /* 间距，其他字体，代码块以及注脚 */
 /* 不会控制微信代码块 */
-#nice {
+#usage {
   margin-top: -15px;
-  padding: 15px 30px;
   font-size: 16px;
   line-height: 1.6;
   letter-spacing: 0px;
@@ -37,11 +14,11 @@ body {
 }
 
 /* 颜色管理 */
-#nice a {
+#usage a {
   color: #3e64ff;
 }
-#nice code {
-  color: #1abc9c;
+#usage code {
+  color: var(--primary-color);
   background-color: #efefef;
   font-size: 14px;
   word-wrap: break-word;
@@ -51,150 +28,150 @@ body {
   font-family: Operator Mono, Consolas, Monaco, Menlo, monospace;
 }
 /* 避免被翻译（但保持原来样式） */
-#nice strong > code {
+#usage strong > code {
   color: unset;
   background: none;
   font-size: 16px;
 }
-#nice .footnote-word,
-#nice .footnote-ref {
+#usage .footnote-word,
+#usage .footnote-ref {
   color: #004a7c;
 }
-#nice .footnote-item em {
+#usage .footnote-item em {
   color: #004a7c;
 }
 
 /* 统一间距 */
-#nice p,
-#nice section,
-#nice h1,
-#nice h2,
-#nice h3,
-#nice h4,
-#nice h5,
-#nice h6,
-#nice pre,
-#nice figure,
-#nice ul,
-#nice hr {
+#usage p,
+#usage section,
+#usage h1,
+#usage h2,
+#usage h3,
+#usage h4,
+#usage h5,
+#usage h6,
+#usage pre,
+#usage figure,
+#usage ul,
+#usage hr {
   margin: 1em 0;
   color: #333;
 }
 
-#nice * {
+#usage * {
   line-height: 1.6 !important;
 }
 
-#nice hr {
+#usage hr {
   border-top: 1px solid #dfe2e5
 }
 
 /* 标题调整 */
-#nice h1 {
+#usage h1 {
   font-size: 1.4em;
 }
-#nice h2 {
+#usage h2 {
   font-size: 1.3em;
 }
-#nice h1,
-#nice h2 {
+#usage h1,
+#usage h2 {
   padding-bottom: .3em;
   border-bottom: 1px solid #dfe2e5;
 }
-#nice h3 {
+#usage h3 {
   font-size: 1.2em;
 }
-#nice h4 {
+#usage h4 {
   font-size: 1.1em;
 }
-#nice h5 {
+#usage h5 {
   font-size: 1em;
 }
-#nice h6 {
+#usage h6 {
   font-size: 1em;
 }
 
 /* 段落调整 */
-#nice p {
+#usage p {
   padding: 0;
   font-size: inherit;
   color: #333;
 }
-#nice blockquote {
+#usage blockquote {
   background: none;
   border-left: 4px solid #ddd;
   padding: 0 1em;
 }
-#nice blockquote p {
+#usage blockquote p {
   margin: 0;
   color: #666;
 }
-#nice strong {
+#usage strong {
   color: #333;
 }
 
-#nice a {
+#usage a {
   font-weight: normal;
   border-color: inherit;
 }
 
 /* 列表调整 */
-#nice li section {
+#usage li section {
   margin-top: .3em;
   margin-bottom: .3em;
   font-weight: normal;
 }
-#nice li ul {
+#usage li ul {
   margin: 0;
 }
 
 /* 代码块调整 */
-#nice pre {
+#usage pre {
   border-radius: 4px;
 }
-#nice section pre {
+#usage section pre {
   margin: 0;
   padding-top: 0;
   padding-bottom: 0;
 }
-#nice p code {
+#usage p code {
   font-size: .875em;
 }
-#nice pre code {
+#usage pre code {
   font-size: .875em;
 }
 
-#nice figure img {
+#usage figure img {
   max-width: 100%;
   width: auto;
   margin: 0 auto;
 }
 
 /* table 调整 */
-#nice table tr th,
-#nice table tr td {
+#usage table tr th,
+#usage table tr td {
   font-size: 1em;
 }
 
 /* 注脚调整 */
-#nice .footnotes-sep {
+#usage .footnotes-sep {
   font-size: 1.3em;
 }
-#nice .footnote-item {
+#usage .footnote-item {
   margin: .4em 0;
 }
-#nice .footnote-item * {
+#usage .footnote-item * {
   line-height: 1.4 !important;
 }
-#nice .footnote-item p {
+#usage .footnote-item p {
   margin: 0;
   font-size: .9em;
 }
-#nice .footnote-item em {
+#usage .footnote-item em {
   font-style: normal;
   padding-left: .5em;
 }
-#nice .footnote-item span {
+#usage .footnote-item span {
   flex: 0 0 1.5em;
   margin-right: 10px;
   font-size: .9em;

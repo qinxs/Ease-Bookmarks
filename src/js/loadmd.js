@@ -9,7 +9,7 @@ if (UsageLang.startsWith('zh')) {
   mdUrl = `../md/usage-en.md`;
 }
 
-renderMd(mdUrl, document.querySelector('#nice'));
+renderMd(mdUrl, document.querySelector('#usage'));
 
 function renderMd(url, ele) {
   var xhr = new XMLHttpRequest();

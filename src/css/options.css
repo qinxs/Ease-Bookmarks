@@ -1,46 +1,8 @@
-:root {
-    --primary-color: #1abc9c;
-    --base-height: 42px;
-}
-html::-webkit-scrollbar {
-    display: none;
-}
-::-webkit-scrollbar {
-  width: 6px;
-}
-#customCSS::-webkit-scrollbar-thumb {
-  border-radius: 6px;
-  background-color: rgba(50, 50, 50, .4);
-}
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-body {
-    margin: 0 auto;
-    width: 720px;
-    min-height: 100vh;
-    font-size: 16px;
-    box-shadow: 0 0 60px rgb(0 0 0 / 10%);
-}
-.btns {
-    position: fixed;
-    display: block;
-    top: 2px;
-    right: calc(50vw - 360px + 30px);
-    opacity: .5;
-    cursor: pointer;
-}
-.btns img {
-    width: 24px;
-}
 #options {
-    padding: 15px 30px 0;
+    padding-bottom: 0;
 }
 
 .ul_box {
-    padding: 0;
     list-style: none;
 }
 .ul_box > li {

@@ -1,0 +1,69 @@
+:root {
+    --body-width: 720px;
+    --base-height: 42px;
+    --primary-color: #1abc9c;
+}
+html::-webkit-scrollbar {
+    display: none;
+}
+/* 页面内的输入框滚动条需要显示 */
+::-webkit-scrollbar {
+  width: 6px;
+}
+#customCSS::-webkit-scrollbar-thumb {
+  border-radius: 6px;
+  background-color: rgba(50, 50, 50, .4);
+}
+* {
+    margin: 0;
+    box-sizing: border-box;
+}
+body {
+    margin: 0 auto;
+    width: var(--body-width);
+    min-height: 100vh;
+    font-size: 16px;
+    box-shadow: 0 0 60px rgb(0 0 0 / 10%);
+}
+.btns {
+    position: fixed;
+    top: 4px;
+    right: calc(50vw - var(--body-width) / 2 + 30px);
+    display: flex;
+    justify-content: space-between;
+}
+.btns > a {
+    margin-left: 9px;
+}
+
+.btns img {
+    width: 24px;
+}
+
+.btns:hover > .item {
+    display: block;
+}
+.list,
+.item {
+    user-select: none;
+    opacity: .5;
+}
+.item {
+    display: none;
+}
+.item.active {
+    opacity: 1;
+    pointer-events: none;
+}
+.item:hover {
+    opacity: 1;
+    border-bottom: 2px solid var(--primary-color);
+}
+
+.hash-tab {
+    display: none;
+    padding: 15px 30px;
+}
+.hash-tab.active {
+    display: block;
+}
