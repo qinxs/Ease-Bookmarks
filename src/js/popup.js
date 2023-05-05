@@ -52,6 +52,15 @@ const decodeBookmarklet = url => {
   return url;
 }
 
+// 新标签页打开popup窗口 ESC不关闭页面
+// 兼容Vivaldi 不能使用chrome.extension.getViews({ type: "popup" })
+var isPopupWindow = true;
+
+chrome.tabs.getCurrent( tab => {
+    if (tab !== undefined) isPopupWindow = false;
+  }
+);
+
 const htmlTemplate = {
   nodata: `<div class="item nodata">${L("noBookmarksTip")}<div>`,
   noresult: `<div class="item noresult">${L("seachNoResultTip")}<div>`,
@@ -457,8 +466,8 @@ const dialog = {
   },
   html: `
     <div id="edit-dialog-text"><span class="title"></span></div>
-    <div id="edit-dialog-name" class="textbox" contenteditable="true" placeholder="${L("name")}"></div>
-    <div type="url" id="edit-dialog-url" class="textbox" contenteditable="true" placeholder="${L("URL")}"></div>
+    <div id="edit-dialog-name" class="textbox" contenteditable="true" spellcheck="false" placeholder="${L("name")}"></div>
+    <div type="url" id="edit-dialog-url" class="textbox" contenteditable="true" spellcheck="false" placeholder="${L("URL")}"></div>
     <div class="dialog-btns">
       <button id="edit-save" tabindex="-1">${L("save")}</button>
       <button id="edit-cancel" tabindex="-1">${L("cancel")}</button>
@@ -775,18 +784,20 @@ function openUrl(url, event) {
       // console.log(pageUrl);
       // 官方页面 不能直接执行js
       if (/^(about|chrome|chrome-extension|https:\/\/chrome\.google\.com|edge|extension|https:\/\/microsoftedge\.microsoft\.com)/.test(pageUrl) || !pageUrl) {
-        !pageUrl && chrome.tabs.remove(tabs[0].id);
+        isPopupWindow && !pageUrl && chrome.tabs.remove(tabs[0].id);
         chrome.tabs.create({ url: url, active: true });
       } else { 
         chrome.tabs.executeScript({ code: url });
+        isPopupWindow && window.close();
       }
     });
   } else if(flag >> 1 == 0) {
     chrome.tabs.update({ url: url });
-    window.close();
+    isPopupWindow && window.close();
   } else {
     var active = Boolean(flag & 1);
     chrome.tabs.create({ url: url, active });
+    active && window.close();
   }
 }
 
@@ -985,11 +996,7 @@ function hotskeyEvents(event) {
     case "Escape":
       if (!$seachInput.value) {
         event.preventDefault();
-        // 获取当前扩展的所有视图
-        var views = chrome.extension.getViews({ type: "popup" });
-
-        // 当前扩展在弹出窗口中打开
-        views.length && window.close();
+        isPopupWindow && window.close();
       }
       break;
     case "Tab":
@@ -1146,6 +1153,15 @@ $nav.header.addEventListener('dblclick', () => {
 }, false);
 $main.addEventListener('mousedown', handleMainMiddleClick, false);
 $('#bookmark-manager').addEventListener('click', openBookmarkManagerUrl, false);
+$$('a.btn').forEach(function(a) { 
+  if (!a.href) return;
+  a.addEventListener('click', function(event) {
+    event.preventDefault();
+    chrome.tabs.create({ url: a.href });
+    window.close();
+  });
+});
+
 
 Promise.all([
   loadSettings,
