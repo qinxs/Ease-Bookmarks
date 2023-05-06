@@ -139,7 +139,7 @@ const nav = {
   rootID: -1,
   lastPathID: -1,
   pathHtml: '',
-  $bookmarkManagerText: $('#bookmark-manager > span'),
+  $bookmarkManager: $('#bookmark-manager'),
   init(id) {
     // console.log(settings.rootInfo);
     if (id < 3) {
@@ -148,7 +148,7 @@ const nav = {
       nav.resetNavPath(id);
     }
     handleFolderEvent([$nav.header, $nav.footer]);
-    this.$bookmarkManagerText.textContent = L('bookmarksManager');
+    this.$bookmarkManager.textContent = L('bookmarksManager');
   },
   setNavPath(id, folderName, target, curIsSearchView = false) {
     folderName = this.replaceEmptyString(folderName);
@@ -200,11 +200,11 @@ const nav = {
       if (results.length) {
         $nav.footer.setAttribute('data-id', _id);
         $nav.footer.textContent = settings.rootInfo[_id];
-        this.$bookmarkManagerText.hidden = true;
+        this.$bookmarkManager.classList.add('hidden');
       } else if ($nav.footer.getAttribute('data-id')) {
         $nav.footer.removeAttribute('data-id');
         $nav.footer.textContent = '';
-        this.$bookmarkManagerText.hidden = false;
+        this.$bookmarkManager.classList.remove('hidden');
       }
     });
   }
@@ -908,12 +908,12 @@ function locationFolder(parentId, id) {
   }
 }
 
-function openBookmarkManagerUrl(event) {
-  var bookmarksManagerUrl = localStorage.getItem('bookmarksManagerUrl');
-  if (!bookmarksManagerUrl) {
-    bookmarksManagerUrl = 'chrome://bookmarks/';
+function openStarUrl(event) {
+  var starUrl = localStorage.getItem('starUrl');
+  if (!starUrl) {
+    starUrl = 'chrome://bookmarks/';
   }
-  openUrl(bookmarksManagerUrl, event);
+  openUrl(starUrl, event);
 }
 
 function loadJS(url, callback) {
@@ -1160,7 +1160,7 @@ $nav.header.addEventListener('dblclick', () => {
   $seachInput.focus();
 }, false);
 $main.addEventListener('mousedown', handleMainMiddleClick, false);
-$('#bookmark-manager').addEventListener('click', openBookmarkManagerUrl, false);
+$('#star-url').addEventListener('click', openStarUrl, false);
 $$('a.btn').forEach(function(a) { 
   if (!a.href) return;
   a.addEventListener('click', function(event) {

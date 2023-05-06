@@ -42,7 +42,7 @@
   box-sizing: border-box;
 }
 .hidden {
-  display: none;
+  display: none !important;
 }
 
 body {
@@ -116,10 +116,12 @@ nav {
 }
 #bookmark-manager,
 .nav {
-  margin-right: auto;
   font-size: 15px;
   font-weight: bold;
   color: var(--color-theme);
+}
+.nav {
+  margin-right: auto;
 }
 nav > a {
   padding: 1px 4px;
@@ -191,18 +193,19 @@ nav > a:last-of-type {
   text-overflow:ellipsis;
   white-space:nowrap;
 }
-#bookmark-manager {
-  margin: 0 7px 0 -3px;
+#star-url {
+  margin: 0 6px 0 -3px;
 }
 .btn {
+  display: flex;
+  align-items: center;
+  outline: none;
+}
+.gap {
   margin-left: 2px;
-  height: 100%;
 }
 
 .btn svg {
-  position: relative;
-  top: 50%;
-  transform: translateY(-50%);
   opacity: .51;
 }
 
