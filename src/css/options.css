@@ -154,7 +154,7 @@ html[lang=en] .button {
     left: 40px;
     border-width: 5px;
     border-style: solid;
-    border-color: #666 transparent transparent transparent;
+    border-color: #666666e0 transparent transparent transparent;
 }
 .tooltip:hover ~ .tooltiptext {
     visibility: visible;
@@ -162,15 +162,4 @@ html[lang=en] .button {
 
 #customCSS {
     resize: vertical;
-}
-
-@media (prefers-color-scheme: dark) {
-    body {
-        background: rgb(38, 38, 38) !important;
-        color: #fff;
-    }
-
-    .label_box > label > span{
-        color: rgb(247, 247, 247) !important;
-    }
 }
