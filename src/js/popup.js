@@ -903,7 +903,7 @@ function locationFolder(parentId, id) {
 function openBookmarkManagerUrl(event) {
   var bookmarksManagerUrl = localStorage.getItem('bookmarksManagerUrl');
   if (!bookmarksManagerUrl) {
-    ({ bookmarksManagerUrl } = chrome.extension.getBackgroundPage());
+    bookmarksManagerUrl = 'chrome://bookmarks/';
   }
   openUrl(bookmarksManagerUrl, event);
 }
