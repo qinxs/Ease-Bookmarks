@@ -216,20 +216,28 @@ const search = {
     this.handleEvent();
   },
   handleEvent() {
-    // 实时搜索 兼容中文
-    $seachInput.addEventListener('compositionstart', () => {
-      inputFlag = false;
-    }, false);
-    $seachInput.addEventListener('compositionend', () => {
-      inputFlag = true;
-      if (event.data) {
+    var UILang = chrome.i18n.getUILanguage();
+
+    if (UILang.startsWith('zh')) {
+      // 实时搜索 兼容中文
+      $seachInput.addEventListener('compositionstart', () => {
+        inputFlag = false;
+      }, false);
+      $seachInput.addEventListener('compositionend', () => {
+        inputFlag = true;
+        if (event.data) {
+          this.loadSearchView($seachInput.value);
+        }
+      }, false);
+      $seachInput.addEventListener('input', event => {
+        // console.log(event);
+        inputFlag && this.loadSearchView($seachInput.value);
+      }, false);
+    } else {
+      $seachInput.addEventListener('input', event => {
         this.loadSearchView($seachInput.value);
-      }
-    }, false);
-    $seachInput.addEventListener('input', event => {
-      // console.log(event);
-      inputFlag && this.loadSearchView($seachInput.value);
-    }, false);
+      }, false);
+    }
   },
   loadSearchView(keyword) {
     if (keyword) {
