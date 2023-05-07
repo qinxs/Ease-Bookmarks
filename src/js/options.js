@@ -15,14 +15,29 @@ if (lang.startsWith('zh')) {
 // 多语言
 for (var ele of $$('[data-i18n]')) {
     // console.log(ele);
+    // 单独处理的元素
+    if (ele.id === 'customCSS' ) {
+      ele.placeholder = L(ele.dataset.i18n) + ele.placeholder;
+      continue;
+    }
+    // 多属性或者非常规属性 翻译
+    if (ele.dataset.i18n.includes('=')) {
+      var i18nStr = ele.dataset.i18n.replaceAll(' ', '');
+      // console.log(i18nStr);
+      for(var _i18nStr of i18nStr.split(',')) {
+        var [ key, value ] = _i18nStr.split('=');
+        ele.setAttribute(key, L(value));
+      }
+      continue;
+    }
+    // 普通翻译
     switch(ele.tagName) {
       case "INPUT":
       case "TEXTAREA":
-        // console.log(ele.placeholder)
-        ele.placeholder = chrome.i18n.getMessage(ele.dataset.i18n) + ele.placeholder;
+        ele.placeholder = L(ele.dataset.i18n);
         break;
       default:
-        ele.textContent = chrome.i18n.getMessage(ele.dataset.i18n);
+        ele.textContent = L(ele.dataset.i18n);
     }
 }
 
