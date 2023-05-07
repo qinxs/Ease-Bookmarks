@@ -805,7 +805,7 @@ function openUrl(url, event) {
   } else {
     var active = Boolean(flag & 1);
     chrome.tabs.create({ url: url, active });
-    active && window.close();
+    isPopupWindow && active && window.close();
   }
 }
 
@@ -1165,8 +1165,7 @@ $$('a.btn').forEach(function(a) {
   if (!a.href) return;
   a.addEventListener('click', function(event) {
     event.preventDefault();
-    chrome.tabs.create({ url: a.href });
-    window.close();
+    openUrl(a.href, event);
   });
 });
 
