@@ -34,7 +34,6 @@ window.BM = {
       } else {
         chrome.storage.sync.set({[name]: value});
       }
-      location.reload();
     } else {
       console.log(L('setInvalidTips'), Object.keys(BM.defaultSys).join());
     }

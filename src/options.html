@@ -8,6 +8,7 @@
     <base target="_blank">
     <link rel="stylesheet" href="css/common.css">
     <link rel="stylesheet" href="css/options.css">
+    <link rel="stylesheet" href="css/configTable.css">
     <link rel="stylesheet" href="css/markdown.css">
     <script src='js/config.js'></script>
 </head>
@@ -15,6 +16,7 @@
 <body>
 <div class="btns">
     <a href="#options" class="item" target="_self"><img src="icons/options.svg"></a>
+    <a href="#configTable" class="item" target="_self"><img src="icons/edit.svg"></a>
     <a href="#usage" class="item" target="_self"><img src="icons/usage.svg"></a>
     <a class="list"><img src="icons/list.svg"></a>
 </div>
@@ -171,9 +173,14 @@
             </div>
         </li>
     </ul>
+    <div id="configTable" class="hash-tab">
+        <p class="page-title">内置参数：</p>
+        <span class="note">注：用于 开关/修改 本插件内的小众功能（或者浏览器本身的默认行为）</span>
+    </div>
     <div id="usage" class="hash-tab"></div>
 </div>
 <script src='js/changeTabByHash.js'></script>
+<script src='js/configTable.js'></script>
 <script src='js/options.js'></script>
 <script src="libs/marked.min.js"></script>
 <script src="js/loadmd.js"></script>
