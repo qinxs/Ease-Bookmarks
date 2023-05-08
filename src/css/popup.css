@@ -12,6 +12,7 @@
   --color-scrollbar-thumb: #b8c8c6;
   --textbox-border-color: #a0b3d6;
   --textbox-focus-border-color: #34538b;
+  --mask-background-color: rgba(9, 9, 9, .3);
 }
 .dark {
   --color-theme: #369;
@@ -24,6 +25,7 @@
   --color-scrollbar-thumb: #8ac;
   --textbox-border-color: #666;
   --textbox-focus-border-color: #e29c45;
+  --mask-background-color: rgba(0, 0, 0, .48);
   /* 深色模式独有 */
   --color-footer-background-dark: #333;
   --color-input-background-dark: #171a1a;
@@ -77,6 +79,17 @@ footer {
   height: 28px;
   color: var(--color-text);
   background-color: #eee;
+}
+
+.mask {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background-color: var(--mask-background-color);
+  transition: all .3s ease-out;
+  z-index: 1;
 }
 
 input {

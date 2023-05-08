@@ -11,6 +11,7 @@ const $main = $('main');
 const $searchList = $('#search-list');
 const $contextMenu = $('#context-menu');
 const $dialog = $('#dialog');
+const $mask = $('#mask');
 const $itemForClone = $('#template > .item');
 const cachedFolderInfo = {
   length: {}, // 目录中书签个数
@@ -512,6 +513,7 @@ const dialog = {
     }
     $dialog.hidden = false;
     this.showing = true;
+    $mask.classList.add('mask');
     this.$name.focus();
   },
   save(event) {
@@ -578,13 +580,13 @@ const dialog = {
         });
         break;
     }
-    $dialog.hidden = true;
-    this.showing = false;
+    this.close(event);
   },
   close(event) {
     event.preventDefault();
     $dialog.hidden = true;
     this.showing = false;
+    $mask.classList.remove('mask');
     $seachInput.focus();
   },
 }
@@ -794,7 +796,7 @@ function openUrl(url, event) {
       if (/^(about|chrome|chrome-extension|https:\/\/chrome\.google\.com|edge|extension|https:\/\/microsoftedge\.microsoft\.com)/.test(pageUrl) || !pageUrl) {
         isPopupWindow && !pageUrl && chrome.tabs.remove(tabs[0].id);
         chrome.tabs.create({ url: url, active: true });
-      } else { 
+      } else {
         chrome.tabs.executeScript({ code: url });
         isPopupWindow && window.close();
       }
