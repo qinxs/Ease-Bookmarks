@@ -7,7 +7,7 @@ html::-webkit-scrollbar {
     display: none;
 }
 /* 页面内的输入框滚动条需要显示 */
-::-webkit-scrollbar {
+textarea::-webkit-scrollbar {
   width: 6px;
 }
 #customCSS::-webkit-scrollbar-thumb {
@@ -63,6 +63,7 @@ body {
 .hash-tab {
     display: none;
     padding: 15px 30px;
+    min-height: 100vh;
 }
 .hash-tab.active {
     display: block;
