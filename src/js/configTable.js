@@ -24,7 +24,7 @@ class TableRenderer {
     let headTr = document.createElement('tr');
     headTr.innerHTML = `<th>Key</th>
       <th class="cell-info">Value
-        <a href="https://github.com/qinxs/Ease-Bookmarks#控制台设置">
+        <a href="https://github.com/qinxs/Ease-Bookmarks#内置参数">
           <img src="icons/i.svg">
         </a>
         <input class="cTable-input" hidden/>
