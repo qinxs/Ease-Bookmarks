@@ -191,5 +191,11 @@
   },
   "setInvalidTips": {
       "message": "無效選項！可選設置:"
+  },
+  "Built_inVariables": {
+      "message": "內置參數："
+  },
+  "Built_inVariablesTip": {
+      "message": "注：用於 開關/修改 本插件內的小衆功能（或者瀏覽器本身的默認行爲）"
   }
 }

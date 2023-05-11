@@ -191,5 +191,11 @@
   },
   "setInvalidTips": {
       "message": "无效选项！可选设置:"
+  },
+  "Built_inVariables": {
+      "message": "内置参数："
+  },
+  "Built_inVariablesTip": {
+      "message": "注：用于 开关/修改 本插件内的小众功能（或者浏览器本身的默认行为）"
   }
 }

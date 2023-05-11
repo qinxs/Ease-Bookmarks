@@ -191,5 +191,11 @@
   },
   "setInvalidTips": {
       "message": "Invalid option! Optional Settings:"
+  },
+  "Built_inVariables": {
+      "message": "Built-in variables"
+  },
+  "Built_inVariablesTip": {
+      "message": "Note: Used to switch/modify minor features within this plugin (or the default behavior of the browser itself)"
   }
 }
