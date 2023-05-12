@@ -58,11 +58,6 @@ const decodeBookmarklet = url => {
 var isPopupWindow;
 chrome.tabs.getCurrent( tab => isPopupWindow = tab === undefined );
 
-const htmlTemplate = {
-  nodata: `<div class="item nodata">${L("noBookmarksTip")}<div>`,
-  noresult: `<div class="item noresult">${L("seachNoResultTip")}<div>`,
-}
-
 const dataSetting = {
   init() {
     this.layout();
@@ -258,7 +253,7 @@ const search = {
         handleFolderEvent($$('[type=folder]', $searchList));
         $searchList.firstElementChild.classList.add('active');
       } else {
-        $searchList.innerHTML = htmlTemplate.noresult;
+        $searchList.innerHTML = '';
       }
     })
   }
@@ -300,7 +295,7 @@ const contextMenu = {
     $contextMenu.classList.remove('hidden');
     this.showing = true;
     $('.item.active') && $('.item.active').classList.remove('active');
-    $fromTarget.closest('.item').classList.add('active');
+    $fromTarget && $fromTarget.closest('.item').classList.add('active');
   },
   close() {
     if (this.showing) {
@@ -314,10 +309,17 @@ const contextMenu = {
     switch(event.type) {
       case "contextmenu":
         event.preventDefault();
-        if(event.target.tagName === 'A' || event.target.classList.contains('nodata')) {
-          // console.log(event);
-          $fromTarget = event.target;
-          $contextMenu.className = $fromTarget.type || 'nodata';
+        // console.log(event.target);
+        var target = event.target;
+        if(target.tagName === 'A' || target.classList.contains('folder-list')) {
+          if (target.tagName === 'A') {
+            $fromTarget = target;
+            $contextMenu.className = $fromTarget.type;
+          } else {
+            $fromTarget = null;
+            $contextMenu.className = 'nodata';
+          }
+          
           $contextMenu.type = isSeachView ? 'search' : '';
           this.pos.left = event.clientX;
           var mainWidth = $main.clientWidth;
@@ -348,8 +350,11 @@ const contextMenu = {
   handleMenuItem(target) {
     // console.log($fromTarget);
     // console.log(target);
-    var id = $fromTarget.getAttribute('data-id');
-    var url = cachedFolderInfo.links[id];
+    var id, url;
+    if ($fromTarget) {
+      var id = $fromTarget.getAttribute('data-id');
+      var url = cachedFolderInfo.links[id];
+    }
     switch(target.id) {
       case "bookmark-new-tab":
       case "bookmark-new-tab-background": 
@@ -415,13 +420,9 @@ const contextMenu = {
           chrome.bookmarks.getChildren(id, results => {
             if (!results.length || confirm(`[ ${$fromTarget.textContent} - ${results.length} ]:\n${L("deleteFolderConfirm")}`)) {
               chrome.bookmarks.removeTree(id, () => {
-                if ($curFolderList.childElementCount === 1) {
-                  $curFolderList.innerHTML = htmlTemplate.nodata;
-                } else {
-                  $fromTarget.closest('.item').remove();
-                  setListSize($curFolderList, cachedFolderInfo.length[listId] - 1, listId);
-                  preciseLayout.update(listId);
-                }
+                $fromTarget.closest('.item').remove();
+                setListSize($curFolderList, cachedFolderInfo.length[listId] - 1, listId);
+                preciseLayout.update(listId);
               });
             } else {
               $fromTarget.closest('.item').classList.remove('seleted');
@@ -430,12 +431,8 @@ const contextMenu = {
           });
         } else {
           chrome.bookmarks.remove(id, () => {
-            if ($curFolderList.childElementCount === 1) {
-              $curFolderList.innerHTML = htmlTemplate.nodata;
-            } else {
-              $fromTarget.closest('.item').remove();
-              setListSize($curFolderList, cachedFolderInfo.length[listId] - 1, listId);
-            }
+            $fromTarget.closest('.item').remove();
+            setListSize($curFolderList, cachedFolderInfo.length[listId] - 1, listId);
           });
         }
         isSeachView && updateFolderList($fromTarget.getAttribute('data-parent-id'), 'delete', {
@@ -514,8 +511,7 @@ const dialog = {
   },
   save(event) {
     event.preventDefault();
-    var ele = $fromTarget;
-    var id = ele.getAttribute('data-id');
+    var id = $fromTarget ? $fromTarget.getAttribute('data-id') : undefined;
     var title = this.$name.textContent;
     var url = this.$url.hidden ? null : this.$url.textContent;
     // console.log(this.$name.textContent);
@@ -523,7 +519,7 @@ const dialog = {
       case "bookmark-add-bookmark":
       case "bookmark-add-folder":
         var listId = $curFolderList.id.slice(1);
-        if ($fromTarget.classList.contains('nodata')) {
+        if (!$fromTarget) {
           chrome.bookmarks.create({
             'parentId': listId,
             'title': title,
@@ -531,9 +527,8 @@ const dialog = {
           }, results => {
             // console.log(results);
             setListSize($curFolderList, cachedFolderInfo.length[listId] + 1, listId);
-            $fromTarget.closest('.item').after(templateFragItem(results));
-            handleFolderEvent($$('[type=folder]', $fromTarget.closest('.item').nextElementSibling));
-            $fromTarget.remove();
+            $curFolderList.appendChild(templateFragItem(results));
+            handleFolderEvent($$('[type=folder]', $curFolderList));
           });
         } else {
           chrome.bookmarks.get(id, item => {
@@ -558,10 +553,11 @@ const dialog = {
           title: title,
           url: url
         }, () => {
-          ele.textContent = title;
+          $fromTarget.textContent = title;
           if ($fromTarget.type === 'link') {
             cachedFolderInfo.links[id] = url;
-            ele.title = title + '\n' + url;
+            $fromTarget.title = title + '\n' + url;
+            
             if (isBookmarklet(url)) {
               $fromTarget.previousElementSibling.src = 'icons/favicon/js.png';
             } else {
@@ -605,8 +601,6 @@ function renderListView(id, items) {
   cachedFolderInfo.lists[id] = $list;
   if (items.length) {
     applyFrag();
-  } else {
-    $list.insertAdjacentHTML('afterbegin', htmlTemplate.nodata);
   }
   function applyFrag() {
     var frag = templateFrag(items);
@@ -865,11 +859,7 @@ function updateFolderList(id, type, data = {}) {
     $list.remove();
     delete cachedFolderInfo.lists[id];
   } else if (type === 'delete') {
-    if ($list.childElementCount === 1) {
-      $list.innerHTML = htmlTemplate.nodata;
-    } else {
-      $(`[data-id="${data.id}"]`, $list).closest('.item').remove();
-    }
+    $(`[data-id="${data.id}"]`, $list).closest('.item').remove();
   } else {
     var a = $(`[data-id="${data.id}"]`, $list);
     if (data.url) {
