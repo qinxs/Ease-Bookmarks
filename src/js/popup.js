@@ -139,8 +139,9 @@ const nav = {
     } else {
       nav.resetNavPath(id);
     }
-    handleFolderEvent([$nav.header, $nav.footer]);
     this.$bookmarkManager.textContent = L('bookmarksManager');
+    handleFolderEvent($nav.header);
+    handleFolderEvent($nav.footer);
   },
   setNavPath(id, folderName, target, curIsSearchView = false) {
     folderName = this.replaceEmptyString(folderName);
@@ -250,7 +251,6 @@ const search = {
         var frag = templateFrag(results);
         $searchList.innerHTML = '';
         $searchList.append(frag);
-        handleFolderEvent($$('[type=folder]', $searchList));
         $searchList.firstElementChild.classList.add('active');
       } else {
         $searchList.innerHTML = '';
@@ -528,7 +528,6 @@ const dialog = {
             // console.log(results);
             setListSize($curFolderList, cachedFolderInfo.length[listId] + 1, listId);
             $curFolderList.appendChild(templateFragItem(results));
-            handleFolderEvent($$('[type=folder]', $curFolderList));
           });
         } else {
           chrome.bookmarks.get(id, item => {
@@ -542,7 +541,6 @@ const dialog = {
               setListSize($curFolderList, cachedFolderInfo.length[listId] + 1, listId);
               $fromTarget.closest('.item').after(templateFragItem(results));
               preciseLayout.update(listId);
-              handleFolderEvent($$('[type=folder]', $fromTarget.closest('.item').nextElementSibling));
             });
           });
         }
@@ -605,7 +603,6 @@ function renderListView(id, items) {
   function applyFrag() {
     var frag = templateFrag(items);
     $list.append(frag);
-    handleFolderEvent($$('[type=folder]', $list));
   }
 }
 
@@ -634,6 +631,7 @@ function templateFragItem(item) {
   } else {
     favicon = 'icons/favicon/folder.png';
     itemA.type = 'folder';
+    handleFolderEvent(clone);
   }
   clone.firstElementChild.src = favicon;
   itemA.setAttribute('data-id', id);
@@ -801,15 +799,18 @@ function openUrl(url, event) {
   }
 }
 
-function handleFolderEvent(nodelist) {
-  for (var ele of nodelist) {
-    if (settings.hoverEnter == 0) {
-      ele.addEventListener('click', openFolderEvent, false);
-    } else {
-      ele.addEventListener('mouseover', openFolderEvent, false);
-      ele.addEventListener('mouseout', clearOpenFolderDelay, false);
+function handleFolderEvent(node) {
+  if (settings.hoverEnter == 0) {
+    handleFolderEvent = (node) => {
+      node.addEventListener('click', openFolderEvent, false);
+    }
+  } else {
+    handleFolderEvent = (node) => {
+      node.addEventListener('mouseover', openFolderEvent, false);
+      node.addEventListener('mouseout', clearOpenFolderDelay, false);
     }
   }
+  handleFolderEvent(node);
 }
 
 function clearOpenFolderDelay() {
