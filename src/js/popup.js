@@ -55,12 +55,8 @@ const decodeBookmarklet = url => {
 
 // 新标签页打开popup窗口 ESC不关闭页面
 // 兼容Vivaldi 不能使用chrome.extension.getViews({ type: "popup" })
-var isPopupWindow = true;
-
-chrome.tabs.getCurrent( tab => {
-    if (tab !== undefined) isPopupWindow = false;
-  }
-);
+var isPopupWindow;
+chrome.tabs.getCurrent( tab => isPopupWindow = tab === undefined );
 
 const htmlTemplate = {
   nodata: `<div class="item nodata">${L("noBookmarksTip")}<div>`,
@@ -566,10 +562,10 @@ const dialog = {
           if ($fromTarget.type === 'link') {
             cachedFolderInfo.links[id] = url;
             ele.title = title + '\n' + url;
-            if (!isBookmarklet(url)) {
-              $fromTarget.previousElementSibling.src = faviconPrefix + url;
-            } else {
+            if (isBookmarklet(url)) {
               $fromTarget.previousElementSibling.src = 'icons/favicon/js.png';
+            } else {
+              $fromTarget.previousElementSibling.src = faviconPrefix + url;
             }
           }
           isSeachView && updateFolderList($fromTarget.getAttribute('data-parent-id'), 'edit', {
@@ -622,7 +618,7 @@ function renderListView(id, items) {
 function templateFrag(treeData) {
   const fragment = document.createDocumentFragment();
   for (let item of treeData) {
-    fragment.append(templateFragItem(item));
+    fragment.appendChild(templateFragItem(item));
   }
   return fragment;
 }
@@ -830,7 +826,7 @@ function openFolderEvent(event) {
   if (contextMenu.showing || dialog.showing) return;
   var target = event.target;
   // 路径最末级不在打开文件夹
-  var id = parseInt(target.getAttribute('data-id'));
+  var id = target.getAttribute('data-id');
   if (!id || id == nav.lastPathID) return;
   var folderName = target.textContent;
   // 使用快捷键时 直接打开
