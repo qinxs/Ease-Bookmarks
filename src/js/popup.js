@@ -162,7 +162,7 @@ const nav = {
   addPath(id, folderName) {
     var symbol = isSeachView ? '?' : '>';
     var html = `
-    <span>${symbol}</span> <a type="folder" data-id="${id}" data-role="path">${folderName}</a>
+    <i>${symbol}</i> <a type="folder" data-id="${id}" data-role="path">${folderName}</a>
     `;
     $nav.header.insertAdjacentHTML('beforeend', html);
   },
@@ -201,13 +201,13 @@ const nav = {
       chrome.bookmarks.get(id.toString(), (item) => {
         var folderName = this.replaceEmptyString(item[0].title);
         this.pathHtml = `
-        <span>></span> <a type="folder" data-id="${id}" data-role="path">${folderName}</a>` + this.pathHtml;
+        <i>></i> <a type="folder" data-id="${id}" data-role="path">${folderName}</a>` + this.pathHtml;
         this._resetNavPath(item[0].parentId, callback);
       })
     }
   },
   replaceEmptyString(folderName) {
-    return folderName || '&ensp;';
+    return folderName || '&emsp;';
   },
   setFooterNav(_id) {
     chrome.bookmarks.getChildren(_id.toString(), (results) => {

@@ -148,7 +148,12 @@ nav > a {
 nav > a:last-of-type {
   pointer-events: none;
 }
-
+i {
+  display: inline-block;
+  width: .65em;
+  font-style: normal;
+  text-align: center;
+}
 .folder-list,
 #search-list {
   display: flex;
