@@ -132,9 +132,11 @@ nav {
   font-size: 15px;
   font-weight: bold;
   color: var(--color-theme);
-}
-.nav {
   margin-right: auto;
+}
+.nav:empty,
+.nav:not(:empty) + #bookmark-manager {
+  display: none;
 }
 nav > a {
   padding: 1px 4px;

@@ -131,73 +131,92 @@ const nav = {
   rootID: -1,
   lastPathID: -1,
   pathHtml: '',
-  $bookmarkManager: $('#bookmark-manager'),
+  toggledHtml: '',
   init(id) {
     // console.log(settings.rootInfo);
     if (id < 3) {
-      this.setNavPath(id, settings.rootInfo[id]);
+      $nav.header.innerHTML = `<a type="folder" data-id="${id}" data-role="path">${settings.rootInfo[id]}</a>`;
+      this.rootID = id;
+      this.lastPathID = id;
+      // 底部其他书签（与书签栏切换使用）
+      this.setFooterNav(3 - id);
     } else {
       nav.resetNavPath(id);
     }
-    this.$bookmarkManager.textContent = L('bookmarksManager');
+    $('#bookmark-manager').textContent = L('bookmarksManager');
     handleFolderEvent($nav.header);
     handleFolderEvent($nav.footer);
   },
-  setNavPath(id, folderName, target, curIsSearchView = false) {
+  setNavPath(id, folderName, target) {
     folderName = this.replaceEmptyString(folderName);
     // console.log(target);
-    if (id < 3 && id != this.rootID) {
-      $nav.header.innerHTML = `<a type="folder" data-id="${id}" data-role="path">${folderName}</a>`;
-      this.rootID = id;
-      // 底部其他书签（与书签栏切换使用）
-      this.setFooterNav(id);
+    if (target && target == $nav.footer) {
+      this.togglePath(id, folderName);
     } else if (target && target.getAttribute('data-role') === 'path') {
-      while (target.nextElementSibling) {
-        target.nextElementSibling.remove();
-      }
+      this.removePath(target);
     } else {
-      var symbol = curIsSearchView ? '?' : '>';
-      var html = `
-      <span>${symbol}</span> <a type="folder" data-id="${id}" data-role="path">${folderName}</a>
-      `;
-      $nav.header.insertAdjacentHTML('beforeend', html);
+      this.addPath(id, folderName);
     }
     this.lastPathID = id;
   },
+  addPath(id, folderName) {
+    var symbol = isSeachView ? '?' : '>';
+    var html = `
+    <span>${symbol}</span> <a type="folder" data-id="${id}" data-role="path">${folderName}</a>
+    `;
+    $nav.header.insertAdjacentHTML('beforeend', html);
+  },
+  removePath(target) {
+    while (target.nextElementSibling) {
+      target.nextElementSibling.remove();
+    }
+  },
+  togglePath(id, folderName) {
+    var $lastPathEle = $nav.header.lastElementChild;
+    $nav.footer.setAttribute('data-id', $lastPathEle.getAttribute('data-id'));
+    $nav.footer.textContent = $lastPathEle.textContent;
+
+    if (this.toggledHtml) {
+      $nav.header.innerHTML = this.toggledHtml;
+      this.toggledHtml = '';
+    } else {
+      this.toggledHtml = $nav.header.innerHTML;
+      this._resetNavPath(id);
+    }
+  },
   resetNavPath(id) {
-    this._resetNavPath(id);
+    this._resetNavPath(id, this.setFooterNav);
     this.lastPathID = id;
   },
-  _resetNavPath(id) {
+  _resetNavPath(id, callback) {
     if (id < 3) {
       this.pathHtml = `<a type="folder" data-id="${id}" data-role="path">${settings.rootInfo[id]}</a>` + this.pathHtml;
       $nav.header.innerHTML = this.pathHtml;
       this.rootID = id;
-      this.setFooterNav(id);
       this.pathHtml = '';
+      if (typeof callback === 'function') {
+        callback(3 - id);
+      }
     } else {
       chrome.bookmarks.get(id.toString(), (item) => {
         var folderName = this.replaceEmptyString(item[0].title);
         this.pathHtml = `
         <span>></span> <a type="folder" data-id="${id}" data-role="path">${folderName}</a>` + this.pathHtml;
-        this._resetNavPath(item[0].parentId);
+        this._resetNavPath(item[0].parentId, callback);
       })
     }
   },
   replaceEmptyString(folderName) {
     return folderName || '&ensp;';
   },
-  setFooterNav(id) {
-    var _id = 3 - id;
+  setFooterNav(_id) {
     chrome.bookmarks.getChildren(_id.toString(), (results) => {
       if (results.length) {
         $nav.footer.setAttribute('data-id', _id);
         $nav.footer.textContent = settings.rootInfo[_id];
-        this.$bookmarkManager.classList.add('hidden');
       } else if ($nav.footer.getAttribute('data-id')) {
         $nav.footer.removeAttribute('data-id');
         $nav.footer.textContent = '';
-        this.$bookmarkManager.classList.remove('hidden');
       }
     });
   }
@@ -835,7 +854,7 @@ function openFolder(id, folderName, target) {
   // 防止搜索到当前文件夹 通过Enter打开
   if (id == nav.lastPathID) return;
   // console.log(target);
-  var curIsSearchView = isSeachView;
+  nav.setNavPath(id, folderName, target);
   var $list = cachedFolderInfo.lists[id];
   if(!$list) {
     loadChildrenView(id);
@@ -843,7 +862,6 @@ function openFolder(id, folderName, target) {
     !settings.keepMaxCols && setListSize($list, $list.childElementCount);
     toggleList(id);
   }
-  nav.setNavPath(id, folderName, target, curIsSearchView);
 }
 
 /**
