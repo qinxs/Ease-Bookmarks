@@ -67,6 +67,7 @@ header {
 }
 main {
   position: relative;
+  padding: 0 2px;
   max-height: 504px;
   min-height: 400px;
   overflow-x: hidden;
@@ -196,7 +197,7 @@ i {
 
 .item {
   position: relative;
-  padding-left: 8px;
+  padding: 0 6px;
   width: var(--width-item);
   height: var(--height-item);
   line-height: var(--height-item);
