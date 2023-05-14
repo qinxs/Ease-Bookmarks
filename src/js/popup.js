@@ -1189,6 +1189,14 @@ Promise.all([
     document.addEventListener('keydown', hotskeyEvents);
     BM.settings.startup < 0 && window.addEventListener('unload', setLastData);
     $searchList.addEventListener('mouseover', handleSearchResultsHover, false);
+    $searchList.addEventListener('mouseenter', () => {
+      var $activeItem = $('.item.active', $searchList);
+      if ($activeItem) {
+        setTimeout(() => {
+          $activeItem.classList.remove('active');
+        }, 200);
+      }
+    }, false);
     loadCSS('libs/dragula.css');
     loadJS('libs/dragula.min.js', dragToMove);
   }, 60)
