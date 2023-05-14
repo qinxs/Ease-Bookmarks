@@ -433,7 +433,7 @@ const contextMenu = {
       case "bookmark-delete":
         var listId = $curFolderList.id.slice(1);
         if ($fromTarget.type === 'folder') {
-          $fromTarget.closest('.item').classList.add('seleted');
+          $fromTarget.closest('.item').classList.add('selected');
           // 防止hover其他元素
           $main.style.pointerEvents = 'none';
           chrome.bookmarks.getChildren(id, results => {
@@ -444,7 +444,7 @@ const contextMenu = {
                 preciseLayout.update(listId);
               });
             } else {
-              $fromTarget.closest('.item').classList.remove('seleted');
+              $fromTarget.closest('.item').classList.remove('selected');
             }
             $main.style.pointerEvents = 'auto';
           });
@@ -470,6 +470,7 @@ const dialog = {
     this.$title = $('#edit-dialog-text > .title');
     this.$name = $('#edit-dialog-name');
     this.$url = $('#edit-dialog-url');
+    $mask.addEventListener('click', event => this.close(event), false);
     // 光标移到末尾
     this.$name.addEventListener('focus', () => {
       var range = window.getSelection();
@@ -499,6 +500,7 @@ const dialog = {
       contextMenu.close();
     }
     this.$title.textContent = this.title[curContextMenuID];
+    $fromTarget && $fromTarget.closest('.item').classList.add('selected');
     switch(curContextMenuID) {
       case "bookmark-add-bookmark":
         chrome.tabs.query({active: true, currentWindow: true}, (tabs) => {
@@ -596,6 +598,7 @@ const dialog = {
     $dialog.hidden = true;
     this.showing = false;
     $mask.classList.remove('mask');
+    $fromTarget && $fromTarget.closest('.item').classList.remove('selected');
     $seachInput.focus();
   },
 }

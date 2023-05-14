@@ -83,7 +83,7 @@ footer {
 }
 
 .mask {
-  position: absolute;
+  position: fixed;
   top: 0;
   right: 0;
   bottom: 0;
@@ -206,7 +206,7 @@ i {
 .item:hover,
 .item:focus,
 .item.active,
-.item.seleted {
+.item.selected {
   background-color: var(--color-hover);
 }
 
