@@ -16,7 +16,6 @@ const $itemForClone = $('#template > .item');
 const cachedFolderInfo = {
   length: {}, // 目录中书签个数
   cols: {},
-  hasScrollbar: {},
   links: {}, // 书签链接存在此处，不用渲染到dom中
   lists: {}, // 已加载的目录
 }
@@ -694,15 +693,13 @@ function setListSize($list, _length, id) {
   if (id) {
     cachedFolderInfo.length[id] = _length;
     cachedFolderInfo.cols[id] = colsCount;
-    // 504 main最大高度
-    cachedFolderInfo.hasScrollbar[id] = listHeight > 504;
   }
 }
 
 // 视图切换
 function toggleList(id, searchMode = false) {
   // console.log($curFolderList);
-  if (mainScrollTop && (cachedFolderInfo.hasScrollbar[id] || searchMode)) {
+  if (mainScrollTop || searchMode) {
     if (searchMode) {
       cachedFolderScrollTop = mainScrollTop;
     }
