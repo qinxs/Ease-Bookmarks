@@ -854,13 +854,26 @@ function openFolder(id, folderName, target) {
   // 防止搜索到当前文件夹 通过Enter打开
   if (id == nav.lastPathID) return;
   // console.log(target);
-  nav.setNavPath(id, folderName, target);
+
   var $list = cachedFolderInfo.lists[id];
+
+  // 从搜索结果打开目录 返回时 保持搜索视图
+  var backSeachView = Boolean(target && target.nextElementSibling
+    && target.nextElementSibling.textContent == '?'
+    && $seachInput.value);
+  
+  nav.setNavPath(id, folderName, target);
+
   if(!$list) {
     loadChildrenView(id);
   } else {
     !settings.keepMaxCols && setListSize($list, $list.childElementCount);
-    toggleList(id);
+    if (backSeachView) {
+      toggleList(null, true);
+      $curFolderList = $list;
+    } else {
+      toggleList(id);
+    }
   }
 }
 
