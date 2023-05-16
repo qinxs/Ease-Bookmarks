@@ -396,14 +396,7 @@ const contextMenu = {
           if (settings.updateBookmarkOpt == 2) {
             option.title = tabs[0].title;
           }
-          chrome.bookmarks.update(id, option, () => {
-            cachedFolderInfo.links[id] = pageUrl;
-            $fromTarget.title = $fromTarget.textContent + '\n' + pageUrl;
-            $fromTarget.previousElementSibling.src = faviconPrefix + pageUrl;
-            if (option.title) {
-              $fromTarget.textContent = option.title;
-            }
-          });
+          chrome.bookmarks.update(id, option);
         });
         break;
       case "bookmark-open-all":
@@ -437,25 +430,15 @@ const contextMenu = {
           $main.style.pointerEvents = 'none';
           chrome.bookmarks.getChildren(id, results => {
             if (!results.length || confirm(`[ ${$fromTarget.textContent} - ${results.length} ]:\n${L("deleteFolderConfirm")}`)) {
-              chrome.bookmarks.removeTree(id, () => {
-                $fromTarget.closest('.item').remove();
-                setListSize($curFolderList, cachedFolderInfo.length[listId] - 1, listId);
-                preciseLayout.update(listId);
-              });
+              chrome.bookmarks.removeTree(id);
             } else {
               $fromTarget.closest('.item').classList.remove('selected');
             }
             $main.style.pointerEvents = 'auto';
           });
         } else {
-          chrome.bookmarks.remove(id, () => {
-            $fromTarget.closest('.item').remove();
-            setListSize($curFolderList, cachedFolderInfo.length[listId] - 1, listId);
-          });
+          chrome.bookmarks.remove(id);
         }
-        isSeachView && updateFolderList($fromTarget.getAttribute('data-parent-id'), 'delete', {
-          id: id
-        });
         break;
       default: break;
     }
@@ -544,10 +527,6 @@ const dialog = {
             'parentId': listId,
             'title': title,
             'url': url
-          }, results => {
-            // console.log(results);
-            setListSize($curFolderList, cachedFolderInfo.length[listId] + 1, listId);
-            $curFolderList.appendChild(templateFragItem(results));
           });
         } else {
           chrome.bookmarks.get(id, item => {
@@ -556,11 +535,6 @@ const dialog = {
               'index': item[0].index + 1,
               'title': title,
               'url': url
-            }, results => {
-              // console.log(results);
-              setListSize($curFolderList, cachedFolderInfo.length[listId] + 1, listId);
-              $fromTarget.closest('.item').after(templateFragItem(results));
-              preciseLayout.update(listId);
             });
           });
         }
@@ -570,23 +544,6 @@ const dialog = {
         chrome.bookmarks.update(id, {
           title: title,
           url: url
-        }, () => {
-          $fromTarget.textContent = title;
-          if ($fromTarget.type === 'link') {
-            cachedFolderInfo.links[id] = url;
-            $fromTarget.title = title + '\n' + url;
-            
-            if (isBookmarklet(url)) {
-              $fromTarget.previousElementSibling.src = 'icons/favicon/js.png';
-            } else {
-              $fromTarget.previousElementSibling.src = faviconPrefix + url;
-            }
-          }
-          isSeachView && updateFolderList($fromTarget.getAttribute('data-parent-id'), 'edit', {
-            id: id,
-            title: title,
-            url: url
-          });
         });
         break;
     }
@@ -744,7 +701,7 @@ function handleMainMiddleClick(event) {
       url: cachedFolderInfo.links[id],
       active: false
     });
-  } else if (settings.fastCreate === 2 && $fromTarget.classList.contains('favicon')) {
+  } else if (settings.fastCreate == 2 && $fromTarget.classList.contains('favicon')) {
     var a = $fromTarget.nextElementSibling;
     if (a.type === 'folder') {
       // console.log(target);
@@ -753,8 +710,6 @@ function handleMainMiddleClick(event) {
           'parentId': a.getAttribute('data-id'),
           'title': tabs[0].title,
           'url': tabs[0].url
-        }, results => {
-          updateFolderList(a.getAttribute('data-id'), 'add');
         });
       });
     }
@@ -877,36 +832,85 @@ function openFolder(id, folderName, target) {
   }
 }
 
-/**
- * 清除已存在的list，保持数据一致
- * @param  {[type]} id   folder-list ID
- * @param  {[type]} type 书签操作类型：add、edit、delete
- * @param  {Object} data edit 数据
- */
-function updateFolderList(id, type, data = {}) {
-  var $list = cachedFolderInfo.lists[id];
-  if (!$list) return;
+// 根据chrome.bookmarks.onXXX事件 来更新DOM视图
+function onBookmarkEvents() {
+  chrome.bookmarks.onCreated.addListener((id, bookmark) => {
+      // console.log(id, bookmark);
+      // @TODO chrome.bookmarks.onCreated 有BUG
+      // 地址栏图标增加书签 bookmark的parentId 返回的是上次添加书签的目录
+      // chrome.bookmarks.get 重新查询 问题依旧
+      var { parentId, index} = bookmark;
+      var $list = cachedFolderInfo.lists[parentId];
 
-  if (type === 'add') {
-    $list.remove();
-    delete cachedFolderInfo.lists[id];
-  } else if (type === 'delete') {
-    $(`[data-id="${data.id}"]`, $list).closest('.item').remove();
-  } else {
-    var a = $(`[data-id="${data.id}"]`, $list);
-    if (data.url) {
-      var url = data.url;
+      if ($list) {
+        if (index > 0) {
+          var indexEle = $(`.item:nth-of-type(${index})`, $list);
+          setListSize($list, cachedFolderInfo.length[parentId] + 1, parentId);
+          indexEle.after(templateFragItem(bookmark));
+        } else {
+          $list.appendChild(templateFragItem(bookmark));
+        }
+        
+        preciseLayout.update(parentId);
+      }
+    }
+  );
+
+  chrome.bookmarks.onChanged.addListener((id, changeInfo) => {
+      // console.log(id, changeInfo);
+      updateItem($(`.folder-list [data-id="${id}"]`), id, changeInfo);
+      updateItem($(`#search-list [data-id="${id}"]`), id, changeInfo);
+    }
+  );
+
+  chrome.bookmarks.onRemoved.addListener((id, removeInfo) => {
+      // console.log(id, removeInfo);
+      var parentId = removeInfo.parentId;
+      var $list = cachedFolderInfo.lists[parentId];
+
+      if ($list) {
+        $(`[data-id="${id}"]`, $list).closest('.item').remove();
+        setListSize($list, cachedFolderInfo.length[parentId] - 1, parentId);
+        preciseLayout.update(parentId);
+      };
+
+      if (isSeachView) {
+        $(`[data-id="${id}"]`, $searchList).closest('.item').remove();
+      }
+    }
+  );
+
+  // dragula中处理了
+  // 注：如果通过书签管理器移动书签，（已打开的popup窗口）dom视图并不会更新
+  // chrome.bookmarks.onMoved.addListener((id, moveInfo) => {
+  //     console.log(id, moveInfo);
+  //   }
+  // );
+
+  function updateItem(itemA, id, changeInfo) {
+    if (!itemA) return;
+
+    var {title, url} = changeInfo;
+
+    if (title) {
+      itemA.textContent = title;
+    }
+    if (url) {
       var favicon = faviconPrefix + url;
       if (isBookmarklet(url)) {
         favicon = 'icons/favicon/js.png';
         url = decodeBookmarklet(url);
       }
-      a.textContent = data.title;
+      
+      itemA.previousElementSibling.src = favicon;
       cachedFolderInfo.links[id] = url;
-      a.previousElementSibling.src = favicon;
-    } else if (data.title) {
-      a.textContent = data.title;
     }
+    
+    if (itemA.type === 'link') {
+      itemA.title = title + (url ? ('\n' + url) : '');
+    }
+    
+    isSeachView && itemA.removeAttribute('data-path');
   }
 }
 
@@ -983,12 +987,22 @@ function dragToMove() {
       // 此时，lastElementChild 为拖动元素本身
       sibling = source.lastElementChild.previousElementSibling;
     }
-    var id_sibling = sibling.lastElementChild.getAttribute('data-id');
+    var parentId = sibling.lastElementChild.getAttribute('data-id');
     if (isHover) {
-      chrome.bookmarks.move(id, {parentId: id_sibling});
-      updateFolderList(id_sibling, 'add');
+      chrome.bookmarks.move(id, {parentId});
+
+      var $list = cachedFolderInfo.lists[parentId];
+
+      if ($list) {
+        setListSize($list, cachedFolderInfo.length[parentId] + 1, parentId);
+        var item = el.cloneNode(true);
+        item.classList.remove('gu-transit');
+        $list.appendChild(item);
+        
+        preciseLayout.update(parentId);
+      }
     } else {
-      chrome.bookmarks.get(id_sibling.toString(), item => {
+      chrome.bookmarks.get(parentId.toString(), item => {
         chrome.bookmarks.move(id, {index: item[0].index + lastFlag});
       })
     }
@@ -1218,6 +1232,7 @@ Promise.all([
     contextMenu.init();
     dialog.init();
     document.addEventListener('keydown', hotskeyEvents);
+    onBookmarkEvents();
     BM.settings.startup < 0 && window.addEventListener('unload', setLastData);
     $searchList.addEventListener('mouseover', handleSearchResultsHover, false);
     $searchList.addEventListener('mouseenter', () => {
