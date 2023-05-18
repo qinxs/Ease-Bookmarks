@@ -1,6 +1,6 @@
 :root {
   --height-item: 28px;
-  --width-item: 100%;
+  --list-cols: 1;
   /* 浅色模式 */
   --color-theme: #4db6ac;
   --color-text: #232529;
@@ -198,7 +198,7 @@ i {
 .item {
   position: relative;
   padding: 0 6px;
-  width: var(--width-item);
+  width: calc(100% / var(--list-cols));
   height: var(--height-item);
   line-height: var(--height-item);
   border-radius: 2px;

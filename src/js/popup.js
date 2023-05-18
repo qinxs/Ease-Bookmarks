@@ -573,8 +573,9 @@ function loadChildrenView(id, callback) {
 function renderListView(id, items) {
   $searchList.insertAdjacentHTML('beforebegin', `<div class="folder-list" id="_${id}"></div>`);
   var $list = $(`#_${id}`);
-  setListSize($list, items.length, id);
   cachedFolderInfo.lists[id] = $list;
+  setListSize($list, items.length, id);
+
   if (items.length) {
     applyFrag();
   }
@@ -619,36 +620,32 @@ function templateFragItem(item) {
 }
 
 // id 仅渲染$list时 需要传入
-function setListSize($list, _length, id) {
+function setListSize($list, length, id) {
+  if (settings.layoutCols == 1) return;
+
   var rowsCount, colsCount, listHeight;
-  var length = _length || 1;
 
-  if (settings.layoutCols === 1) {
-    rowsCount = length;
-    listHeight = rowsCount * itemHeight;
+  if ($list === $searchList) {
+    rowsCount = Math.ceil(length / curMaxCols);
   } else {
-    if ($list === $searchList) {
-      rowsCount = Math.ceil(length / curMaxCols);
-    } else {
-      colsCount = length > settings.layoutCols * settings.minItemsPerCol ? settings.layoutCols : Math.ceil(length / settings.minItemsPerCol);
-      rowsCount = Math.ceil(length / colsCount);
+    colsCount = length > settings.layoutCols * settings.minItemsPerCol ? settings.layoutCols : Math.ceil(length / settings.minItemsPerCol);
+    rowsCount = Math.ceil(length / colsCount);
 
-      if (colsCount != curMaxCols && (colsCount > curMaxCols || !settings.keepMaxCols)) {
-        document.body.style.width = BM.bodyWidth[colsCount > 5 ? 5 : colsCount];
-        document.documentElement.style.setProperty('--width-item', 100 / colsCount + "%");
-        curMaxCols = colsCount;
-      }
-      if (rowsCount < settings.minItemsPerCol && length > settings.minItemsPerCol) {
-        rowsCount = settings.minItemsPerCol;
-      }
+    if (colsCount != curMaxCols && (colsCount > curMaxCols || settings.keepMaxCols == 0)) {
+      document.body.style.width = BM.bodyWidth[colsCount > 5 ? 5 : colsCount];
+      document.documentElement.style.setProperty('--list-cols', colsCount);
+      curMaxCols = colsCount;
     }
-
-    listHeight = rowsCount * itemHeight;
-    $list.style.height = listHeight + 'px';
+    if (rowsCount < settings.minItemsPerCol && length > settings.minItemsPerCol) {
+      rowsCount = settings.minItemsPerCol;
+    }
   }
-  
+
+  listHeight = rowsCount * itemHeight;
+  $list.style.height = listHeight + 'px';
+
   if (id) {
-    cachedFolderInfo.length[id] = _length;
+    cachedFolderInfo.length[id] = length;
     cachedFolderInfo.cols[id] = colsCount;
   }
 }
@@ -822,7 +819,7 @@ function openFolder(id, folderName, target) {
   if(!$list) {
     loadChildrenView(id);
   } else {
-    !settings.keepMaxCols && setListSize($list, $list.childElementCount);
+    settings.keepMaxCols == 0 && setListSize($list, $list.childElementCount);
     if (backSeachView) {
       toggleList(null, true);
       $curFolderList = $list;
@@ -845,12 +842,12 @@ function onBookmarkEvents() {
       if ($list) {
         if (index > 0) {
           var indexEle = $(`.item:nth-of-type(${index})`, $list);
-          setListSize($list, cachedFolderInfo.length[parentId] + 1, parentId);
           indexEle.after(templateFragItem(bookmark));
         } else {
           $list.appendChild(templateFragItem(bookmark));
         }
         
+        setListSize($list, cachedFolderInfo.length[parentId] + 1, parentId);
         preciseLayout.update(parentId);
       }
     }
@@ -880,12 +877,28 @@ function onBookmarkEvents() {
     }
   );
 
-  // dragula中处理了
+  // dragula中处理了item移动
   // 注：如果通过书签管理器移动书签，（已打开的popup窗口）dom视图并不会更新
-  // chrome.bookmarks.onMoved.addListener((id, moveInfo) => {
-  //     console.log(id, moveInfo);
-  //   }
-  // );
+  chrome.bookmarks.onMoved.addListener((id, moveInfo) => {
+      // console.log(id, moveInfo);
+      var { oldParentId, parentId } = moveInfo;
+
+      // debugger
+      if (parentId != oldParentId) {
+        var $list = cachedFolderInfo.lists[oldParentId];
+
+        if ($list) {
+          setListSize($list, cachedFolderInfo.length[oldParentId] - 1, oldParentId);
+          preciseLayout.update(oldParentId);
+        }
+
+        $list = cachedFolderInfo.lists[parentId];
+        if ($list) {
+          setListSize($list, cachedFolderInfo.length[parentId] + 1, parentId);
+        }
+      }
+    }
+  );
 
   function updateItem(itemA, id, changeInfo) {
     if (!itemA) return;
@@ -992,14 +1005,10 @@ function dragToMove() {
       chrome.bookmarks.move(id, {parentId});
 
       var $list = cachedFolderInfo.lists[parentId];
-
       if ($list) {
-        setListSize($list, cachedFolderInfo.length[parentId] + 1, parentId);
         var item = el.cloneNode(true);
         item.classList.remove('gu-transit');
         $list.appendChild(item);
-        
-        preciseLayout.update(parentId);
       }
     } else {
       chrome.bookmarks.get(parentId.toString(), item => {
