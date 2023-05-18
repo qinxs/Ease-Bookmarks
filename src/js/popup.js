@@ -631,11 +631,6 @@ function setListSize($list, length, id) {
     colsCount = length > settings.layoutCols * settings.minItemsPerCol ? settings.layoutCols : Math.ceil(length / settings.minItemsPerCol);
     rowsCount = Math.ceil(length / colsCount);
 
-    if (colsCount != curMaxCols && (colsCount > curMaxCols || settings.keepMaxCols == 0)) {
-      document.body.style.width = BM.bodyWidth[colsCount > 5 ? 5 : colsCount];
-      document.documentElement.style.setProperty('--list-cols', colsCount);
-      curMaxCols = colsCount;
-    }
     if (rowsCount < settings.minItemsPerCol && length > settings.minItemsPerCol) {
       rowsCount = settings.minItemsPerCol;
     }
@@ -648,6 +643,25 @@ function setListSize($list, length, id) {
     cachedFolderInfo.length[id] = length;
     cachedFolderInfo.cols[id] = colsCount;
   }
+}
+
+// 应用setListSize计算的样式 除了$list.style.height（内链样式）
+function applyListCols(id) {
+  if (settings.layoutCols == 1) return;
+  if (cachedFolderInfo.lists[id] != $curFolderList) return;
+
+  var colsCount = cachedFolderInfo.cols[id];
+
+  if (colsCount > curMaxCols || settings.keepMaxCols == 0) {
+    document.body.style.width = BM.bodyWidth[colsCount > 5 ? 5 : colsCount];
+    document.documentElement.style.setProperty('--list-cols', colsCount);
+  }
+
+  if (colsCount > curMaxCols) {
+    curMaxCols = colsCount;
+  }
+
+  preciseLayout.update(id);
 }
 
 // 视图切换
@@ -669,8 +683,8 @@ function toggleList(id, searchMode = false) {
     $list.hidden = false;
     $searchList.hidden = true;
     isSeachView = false;
-    preciseLayout.update(id);
     $curFolderList = $list;
+    applyListCols(id);
     if (cachedFolderScrollTop) {
       $main.scrollTop = cachedFolderScrollTop;
       cachedFolderScrollTop = 0;
@@ -848,7 +862,7 @@ function onBookmarkEvents() {
         }
         
         setListSize($list, cachedFolderInfo.length[parentId] + 1, parentId);
-        preciseLayout.update(parentId);
+        applyListCols(parentId);
       }
     }
   );
@@ -868,7 +882,7 @@ function onBookmarkEvents() {
       if ($list) {
         $(`[data-id="${id}"]`, $list).closest('.item').remove();
         setListSize($list, cachedFolderInfo.length[parentId] - 1, parentId);
-        preciseLayout.update(parentId);
+        applyListCols(parentId);
       };
 
       if (isSeachView) {
@@ -889,12 +903,13 @@ function onBookmarkEvents() {
 
         if ($list) {
           setListSize($list, cachedFolderInfo.length[oldParentId] - 1, oldParentId);
-          preciseLayout.update(oldParentId);
+          applyListCols(oldParentId);
         }
 
         $list = cachedFolderInfo.lists[parentId];
         if ($list) {
           setListSize($list, cachedFolderInfo.length[parentId] + 1, parentId);
+          applyListCols(parentId);
         }
       }
     }
@@ -1222,8 +1237,8 @@ Promise.all([
   dataSetting.init();
 
   renderListView(BM.startupReal, BM.preItems, true);
-  preciseLayout.update(BM.startupReal);
   $curFolderList = $(`#_${BM.startupReal}`);
+  applyListCols(BM.startupReal);
   
   nav.init(BM.startupReal);
   
