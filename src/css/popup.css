@@ -55,6 +55,7 @@ body {
   background-color: var(--color-background);
   overflow: hidden;
   user-select: none;
+  transition: width .05s;
 }
 header,
 footer {
@@ -107,11 +108,14 @@ input::placeholder,
 button {
   outline: none;
   cursor: pointer;
-  margin-right: 0.5em;
   padding: .15em .5em;
   border: 1px solid var(--textbox-border-color);
+  border-bottom-width: 2px;
+  border-radius: 3px;
   background-color: transparent;
   color: var(--color-text);
+  letter-spacing: 1px;
+  text-indent: 1px;
 }
 a {
   text-decoration: none;
@@ -256,7 +260,7 @@ i {
   background-color: var(--color-background-dialog);
   box-shadow: 0 2px 6px rgba(0, 0, 0, .2);
   list-style: none;
-  outline: 0;
+  outline: none;
 }
 #context-menu {
   left:0;
@@ -356,7 +360,6 @@ hr {
 }
 #dialog input:focus,
 #dialog .textbox:focus,
-#dialog button:focus,
 #dialog button:hover {
   border-bottom-color: var(--textbox-focus-border-color);
 }

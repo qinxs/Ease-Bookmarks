@@ -57,6 +57,12 @@ const decodeBookmarklet = url => {
 var isPopupWindow;
 chrome.tabs.getCurrent( tab => isPopupWindow = tab === undefined );
 
+const getCurrentTab = (callback) => {
+  chrome.tabs.query({ active: true, lastFocusedWindow: true }, ([tab]) => {
+    callback(tab);
+  });
+}
+
 const dataSetting = {
   init() {
     this.layout();
@@ -388,13 +394,13 @@ const contextMenu = {
         });
         break;
       case "bookmark-update-url": 
-        chrome.tabs.query({active: true, currentWindow: true}, (tabs) => {
-          var pageUrl = tabs[0].url;
+        getCurrentTab((tab) => {
+          var pageUrl = tab.url;
           var option = {
             url: pageUrl,
           }
           if (settings.updateBookmarkOpt == 2) {
-            option.title = tabs[0].title;
+            option.title = tab.title;
           }
           chrome.bookmarks.update(id, option);
         });
@@ -485,10 +491,10 @@ const dialog = {
     $fromTarget && $fromTarget.closest('.item').classList.add('selected');
     switch(curContextMenuID) {
       case "bookmark-add-bookmark":
-        chrome.tabs.query({active: true, currentWindow: true}, (tabs) => {
-          this.$name.textContent = tabs[0].title;
+        getCurrentTab((tab) => {
+          this.$name.textContent = tab.title;
           this.$url.hidden = false;
-          this.$url.textContent = tabs[0].url;
+          this.$url.textContent = tab.url;
         });
         break;
       case "bookmark-add-folder":
@@ -577,11 +583,7 @@ function renderListView(id, items) {
   setListSize($list, items.length, id);
 
   if (items.length) {
-    applyFrag();
-  }
-  function applyFrag() {
-    var frag = templateFrag(items);
-    $list.append(frag);
+    $list.append(templateFrag(items));
   }
 }
 
@@ -716,11 +718,11 @@ function handleMainMiddleClick(event) {
     var a = $fromTarget.nextElementSibling;
     if (a.type === 'folder') {
       // console.log(target);
-      chrome.tabs.query({active: true, currentWindow: true}, (tabs) => {
+      getCurrentTab((tab) => {
         chrome.bookmarks.create({
           'parentId': a.getAttribute('data-id'),
-          'title': tabs[0].title,
-          'url': tabs[0].url
+          'title': tab.title,
+          'url': tab.url
         });
       });
     }
@@ -762,12 +764,12 @@ function openUrl(url, event) {
   // console.log(event);
   // return
   if (isBookmarklet(url)) {
-    chrome.tabs.query({active: true, currentWindow: true}, (tabs) => {
-      var pageUrl = tabs[0].url;
+    getCurrentTab((tab) => {
+      var pageUrl = tab.url;
       // console.log(pageUrl);
       // 官方页面 不能直接执行js
       if (/^(about|chrome|chrome-extension|https:\/\/chrome\.google\.com|edge|extension|https:\/\/microsoftedge\.microsoft\.com)/.test(pageUrl) || !pageUrl) {
-        isPopupWindow && !pageUrl && chrome.tabs.remove(tabs[0].id);
+        isPopupWindow && !pageUrl && chrome.tabs.remove(tab.id);
         chrome.tabs.create({ url: url, active: true });
       } else {
         chrome.tabs.executeScript({ code: url });
@@ -1236,7 +1238,7 @@ Promise.all([
   settings = BM.settings;
   dataSetting.init();
 
-  renderListView(BM.startupReal, BM.preItems, true);
+  renderListView(BM.startupReal, BM.preItems);
   $curFolderList = $(`#_${BM.startupReal}`);
   applyListCols(BM.startupReal);
   
