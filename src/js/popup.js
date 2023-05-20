@@ -26,7 +26,7 @@ const $seachInput = $('#search-input');
 var inputFlag = true;
 var isSeachView = false;
 // 当前视图
-var $curFolderList;
+var $curFolderList = $('#startup');
 // 中间变量
 var $fromTarget = null;
 var pathTitle = '';
@@ -566,9 +566,15 @@ const dialog = {
 }
 
 function loadChildrenView(id, callback) {
+
+  var $list = $curFolderList.cloneNode(false);
+  $list.id = `_${id}`;
+  cachedFolderInfo.lists[id] = $list;
+  $main.insertBefore($list, $searchList);
+
   chrome.bookmarks.getChildren(id.toString(), (results) => {
     // console.log(results);
-    renderListView(id, results);
+    renderListView($list, id, results);
     toggleList(id);
     if (typeof callback === 'function') {
       setTimeout(callback);
@@ -576,12 +582,9 @@ function loadChildrenView(id, callback) {
   })
 }
 
-function renderListView(id, items) {
-  $searchList.insertAdjacentHTML('beforebegin', `<div class="folder-list" id="_${id}"></div>`);
-  var $list = $(`#_${id}`);
-  cachedFolderInfo.lists[id] = $list;
+function renderListView($list, id, items) {
   setListSize($list, items.length, id);
-
+  
   if (items.length) {
     $list.append(templateFrag(items));
   }
@@ -1238,8 +1241,10 @@ Promise.all([
   settings = BM.settings;
   dataSetting.init();
 
-  renderListView(BM.startupReal, BM.preItems);
-  $curFolderList = $(`#_${BM.startupReal}`);
+  $curFolderList.id = `_${BM.startupReal}`;
+  cachedFolderInfo.lists[BM.startupReal] = $curFolderList;
+  
+  renderListView($curFolderList, BM.startupReal, BM.preItems);
   applyListCols(BM.startupReal);
   
   nav.init(BM.startupReal);
