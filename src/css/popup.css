@@ -1,6 +1,7 @@
 :root {
   --height-item: 28px;
   --list-cols: 1;
+  --scrollbar-width: 3px;
   /* 浅色模式 */
   --color-theme: #4db6ac;
   --color-text: #232529;
@@ -31,7 +32,7 @@
   --color-input-background-dark: #171a1a;
 }
 ::-webkit-scrollbar {
-  width: 4px;
+  width: var(--scrollbar-width);
 }
 ::-webkit-scrollbar-track {
   background: transparent;
@@ -72,7 +73,7 @@ main {
   max-height: 504px;
   min-height: 400px;
   overflow-x: hidden;
-  overflow-y: overlay;
+  overflow-y: auto;
 }
 footer {
   display: flex;
@@ -175,9 +176,11 @@ i {
 .folder-list:empty::after,
 #search-list:empty::after {
   position: absolute;
-  width: 100%;
-  height: 100%;
-  padding: 2px 8px;
+  right: 0;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  margin: 2px 8px;
   box-sizing: border-box;
   opacity: .8;
 }
@@ -205,7 +208,6 @@ i {
   width: calc(100% / var(--list-cols));
   height: var(--height-item);
   line-height: var(--height-item);
-  border-radius: 2px;
 }
 .item:hover,
 .item:focus,
