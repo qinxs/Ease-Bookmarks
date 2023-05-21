@@ -1169,8 +1169,18 @@ function hotskeyEvents(event) {
       case "ArrowRight":
         if ($item) {
           var rect = $item.getBoundingClientRect();
-          var $right = document.elementFromPoint(rect.x + rect.width / 2 * 3, rect.y + rect.height / 2);
-          return $right ? $right.closest('.item') : null;
+          var $right, findHeight = rect.y + rect.height / 2;
+          while (1) {
+            $right = document.elementFromPoint(rect.x + rect.width / 2 * 3, findHeight);
+            if ($right && $right.closest('.item')) {
+              return $right.closest('.item');
+            } else if ($right == $curFolderList || $right == $searchList) {
+              findHeight = findHeight - rect.height;
+              continue;
+            } else {
+              return null;
+            }
+          }
         } else {
           return null;
         }
