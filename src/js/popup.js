@@ -284,10 +284,8 @@ const search = {
 }
 
 const contextMenu = {
-  pos: {
-    left: 0,
-    top:0,
-  },
+  posX: 0,
+  posY: 0,
   showing: false,
   init() {
     $contextMenu.insertAdjacentHTML('beforeend', this.html);
@@ -315,7 +313,7 @@ const contextMenu = {
     <li id="bookmark-delete">${L("delete")}</li>
   `,
   show() {
-    $contextMenu.style.transform = `translate(${this.pos.left}px, ${this.pos.top}px)`;
+    $contextMenu.style.transform = `translate(${this.posX}px, ${this.posY}px)`;
     $contextMenu.classList.remove('hidden');
     this.showing = true;
     $('.item.active') && $('.item.active').classList.remove('active');
@@ -345,21 +343,22 @@ const contextMenu = {
           }
           
           $contextMenu.type = isSeachView ? 'search' : '';
-          this.pos.left = event.clientX;
+          this.posX = event.clientX;
           var mainWidth = $main.clientWidth;
           var mainHeight = $main.clientHeight;
           var menuWidth = $contextMenu.offsetWidth;
           var menuHeight = $contextMenu.offsetHeight;
           // 数值4: 右键菜单的边距
-          if (this.pos.left + menuWidth > mainWidth - 4) {
-            this.pos.left = mainWidth - menuWidth - 4;
+          if (this.posX + menuWidth > mainWidth - 4) {
+            this.posX = mainWidth - menuWidth - 4;
           }
-          this.pos.top = event.clientY - $main.offsetTop;
-          var overflow = this.pos.top + menuHeight - mainHeight;
+          this.posY = event.clientY - $main.offsetTop;
+          var overflow = this.posY + menuHeight - mainHeight;
           if (overflow > 0) {
-            this.pos.top -= (this.pos.top > menuHeight) ? menuHeight : overflow;
+            this.posY -= (this.posY > menuHeight) ? menuHeight : overflow;
           }
-          this.pos.top += $main.scrollTop;
+          this.posY += $main.scrollTop;
+
           this.show();
         }
         break;
