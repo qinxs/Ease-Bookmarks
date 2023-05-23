@@ -184,7 +184,7 @@ i {
   box-sizing: border-box;
   opacity: .8;
 }
-.folder-list:empty::after {
+.folder-list.show-tip:empty::after {
   content: "__MSG_noBookmarksTip__";
 }
 #search-list:empty::after {

@@ -586,6 +586,8 @@ function renderListView($list, id, items) {
   
   if (items.length) {
     $list.append(templateFrag(items));
+  } else {
+    $list.classList.add('show-tip');
   }
 }
 
