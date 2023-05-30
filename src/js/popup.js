@@ -889,6 +889,10 @@ function onBookmarkEvents() {
         $(`[data-id="${id}"]`, $list).closest('.item').remove();
         setListSize($list, cachedFolderInfo.length[parentId] - 1, parentId);
         applyListCols(parentId);
+
+        if (!$list.hasChildNodes()) {
+          $list.classList.add('show-tip');
+        }
       };
 
       if (isSeachView) {
