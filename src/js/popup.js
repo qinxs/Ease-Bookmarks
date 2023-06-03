@@ -769,11 +769,20 @@ function openUrl(url, event) {
   // return
   if (isBookmarklet(url)) {
     getCurrentTab((tab) => {
+      // alert(JSON.stringify(tab));
+      if (!tab) {
+        chrome.tabs.create({ url: url, active: true });
+        return;
+      }
       var pageUrl = tab.url;
       // console.log(pageUrl);
-      // 官方页面 不能直接执行js
-      if (/^(about|chrome|chrome-extension|https:\/\/chrome\.google\.com|edge|extension|https:\/\/microsoftedge\.microsoft\.com)/.test(pageUrl) || !pageUrl) {
-        isPopupWindow && !pageUrl && chrome.tabs.remove(tab.id);
+      if (!pageUrl) {
+        if (pageUrl == '') {
+          isPopupWindow && chrome.tabs.remove(tab.id);
+        }
+        chrome.tabs.create({ url: url, active: true });
+      } else if (/^(about|chrome|chrome-extension|https:\/\/chrome\.google\.com|edge|extension|https:\/\/microsoftedge\.microsoft\.com)/.test(pageUrl)) {
+        // 官方页面 不能直接执行js
         chrome.tabs.create({ url: url, active: true });
       } else {
         chrome.tabs.executeScript({ code: url });
