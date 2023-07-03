@@ -9,7 +9,7 @@
     "message": "Bookmarks Manager"
   },
 
-  "seachPlaceholder":
+  "searchPlaceholder":
   {
     "message": "Search Bookmarks..."
   },
@@ -17,7 +17,7 @@
   {
     "message": "There is no bookmark here."
   },
-  "seachNoResultTip":
+  "searchNoResultTip":
   {
     "message": "No matching bookmark."
   },

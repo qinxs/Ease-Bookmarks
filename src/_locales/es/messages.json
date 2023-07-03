@@ -9,7 +9,7 @@
     "message": "Administrador de &marcadores"
   },
 
-  "seachPlaceholder":
+  "searchPlaceholder":
   {
     "message": "Buscar marcadores..."
   },
@@ -17,7 +17,7 @@
   {
     "message": "No hay marcadores aquí."
   },
-  "seachNoResultTip":
+  "searchNoResultTip":
   {
     "message": "No hay marcadores coincidentes."
   },

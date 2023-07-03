@@ -9,7 +9,7 @@
     "message": "書籤管理器"
   },
   
-  "seachPlaceholder":
+  "searchPlaceholder":
   {
     "message": "搜索書籤..."
   },
@@ -17,7 +17,7 @@
   {
     "message": "這裏沒有書籤呢~"
   },
-  "seachNoResultTip":
+  "searchNoResultTip":
   {
     "message": "沒有匹配的書籤~"
   },

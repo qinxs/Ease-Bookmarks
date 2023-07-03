@@ -9,7 +9,7 @@
     "message": "ブックマーク マネージャ"
   },
 
-  "seachPlaceholder":
+  "searchPlaceholder":
   {
     "message": "ブックマークを検索..."
   },
@@ -17,7 +17,7 @@
   {
     "message": "ブックマークはありません"
   },
-  "seachNoResultTip":
+  "searchNoResultTip":
   {
     "message": "一致するブックマークはありません〜。"
   },

@@ -21,10 +21,10 @@ const cachedFolderInfo = {
 }
 
 // 搜索框
-const $seachInput = $('#search-input');
+const $searchInput = $('#search-input');
 // 中文拼音输入中，但未合成汉字
 var inputFlag = true;
-var isSeachView = false;
+var isSearchView = false;
 // 当前视图
 var $curFolderList = $('#startup');
 // 中间变量
@@ -165,7 +165,7 @@ const nav = {
     this.lastPathID = id;
   },
   addPath(id, folderName) {
-    var symbol = isSeachView ? '?' : '>';
+    var symbol = isSearchView ? '?' : '>';
     var html = `
     <i>${symbol}</i> <a type="folder" data-id="${id}" data-role="path">${folderName}</a>
     `;
@@ -229,7 +229,7 @@ const nav = {
 
 const search = {
   init() {
-    $seachInput.placeholder = L("seachPlaceholder");
+    $searchInput.placeholder = L("searchPlaceholder");
     this.handleEvent();
   },
   handleEvent() {
@@ -237,32 +237,32 @@ const search = {
 
     if (UILang.startsWith('zh')) {
       // 实时搜索 兼容中文
-      $seachInput.addEventListener('compositionstart', () => {
+      $searchInput.addEventListener('compositionstart', () => {
         inputFlag = false;
       }, false);
-      $seachInput.addEventListener('compositionend', () => {
+      $searchInput.addEventListener('compositionend', () => {
         inputFlag = true;
         if (event.data) {
-          this.loadSearchView($seachInput.value);
+          this.loadSearchView($searchInput.value);
         }
       }, false);
-      $seachInput.addEventListener('input', event => {
+      $searchInput.addEventListener('input', event => {
         // console.log(event);
-        inputFlag && this.loadSearchView($seachInput.value);
+        inputFlag && this.loadSearchView($searchInput.value);
       }, false);
     } else {
-      $seachInput.addEventListener('input', event => {
-        this.loadSearchView($seachInput.value);
+      $searchInput.addEventListener('input', event => {
+        this.loadSearchView($searchInput.value);
       }, false);
     }
   },
   loadSearchView(keyword) {
     if (keyword) {
-      // console.log($seachInput.value);
-      this._loadSearchView($seachInput.value);
+      // console.log($searchInput.value);
+      this._loadSearchView($searchInput.value);
       // 防止抖动
       requestIdleCallback(() => {
-        !isSeachView && toggleList(null, true);
+        !isSearchView && toggleList(null, true);
       });
     } else {
       toggleList($curFolderList.id.slice(1));
@@ -324,7 +324,7 @@ const contextMenu = {
       $contextMenu.classList.add('hidden');
       this.showing = false;
       $('.item.active') && $('.item.active').classList.remove('active');
-      $seachInput.focus();
+      $searchInput.focus();
     }
   },
   handleEvent(event) {
@@ -342,7 +342,7 @@ const contextMenu = {
             $contextMenu.className = 'nodata';
           }
           
-          $contextMenu.type = isSeachView ? 'search' : '';
+          $contextMenu.type = isSearchView ? 'search' : '';
           this.posX = event.clientX;
           var mainWidth = $main.clientWidth;
           var mainHeight = $main.clientHeight;
@@ -560,7 +560,7 @@ const dialog = {
     this.showing = false;
     $mask.classList.remove('mask');
     $fromTarget && $fromTarget.closest('.item').classList.remove('selected');
-    $seachInput.focus();
+    $searchInput.focus();
   },
 }
 
@@ -621,7 +621,7 @@ function templateFragItem(item) {
   clone.firstElementChild.src = favicon;
   itemA.setAttribute('data-id', id);
   itemA.textContent = title;
-  isSeachView && itemA.setAttribute('data-parent-id', item.parentId);
+  isSearchView && itemA.setAttribute('data-parent-id', item.parentId);
   return clone;
 }
 
@@ -680,15 +680,15 @@ function toggleList(id, searchMode = false) {
     $main.scrollTop = 0;
   }
   $curFolderList.hidden = true;
-  // SeachView 会多次调用 单独处理
+  // SearchView 会多次调用 单独处理
   if (searchMode) {
     $searchList.hidden = false;
-    isSeachView = true;
+    isSearchView = true;
   } else {
     var $list = cachedFolderInfo.lists[id];
     $list.hidden = false;
     $searchList.hidden = true;
-    isSeachView = false;
+    isSearchView = false;
     $curFolderList = $list;
     applyListCols(id);
     if (cachedFolderScrollTop) {
@@ -839,9 +839,9 @@ function openFolder(id, folderName, target) {
   var $list = cachedFolderInfo.lists[id];
 
   // 从搜索结果打开目录 返回时 保持搜索视图
-  var backSeachView = Boolean(target && target.nextElementSibling
+  var backSearchView = Boolean(target && target.nextElementSibling
     && target.nextElementSibling.textContent == '?'
-    && $seachInput.value);
+    && $searchInput.value);
   
   nav.setNavPath(id, folderName, target);
 
@@ -849,7 +849,7 @@ function openFolder(id, folderName, target) {
     loadChildrenView(id);
   } else {
     settings.keepMaxCols == 0 && setListSize($list, $list.childElementCount);
-    if (backSeachView) {
+    if (backSearchView) {
       toggleList(null, true);
       $curFolderList = $list;
     } else {
@@ -904,7 +904,7 @@ function onBookmarkEvents() {
         }
       };
 
-      if (isSeachView) {
+      if (isSearchView) {
         $(`[data-id="${id}"]`, $searchList).closest('.item').remove();
       }
     }
@@ -957,7 +957,7 @@ function onBookmarkEvents() {
       itemA.title = title + (url ? ('\n' + url) : '');
     }
     
-    isSeachView && itemA.removeAttribute('data-path');
+    isSearchView && itemA.removeAttribute('data-path');
   }
 }
 
@@ -1074,12 +1074,12 @@ function hotskeyEvents(event) {
     return;
   }
 
-  var $list = isSeachView ? $searchList : $curFolderList;
+  var $list = isSearchView ? $searchList : $curFolderList;
   var $item = $('.item.active', $list);
 
   switch (keyCode) {
     case "Escape":
-      if (!$seachInput.value) {
+      if (!$searchInput.value) {
         event.preventDefault();
         isPopupWindow && window.close();
       }
@@ -1118,7 +1118,7 @@ function hotskeyEvents(event) {
       if (!(event.ctrlKey || event.metaKey) || dialog.showing) return;
       event.preventDefault();
       contextMenu.showing && contextMenu.close();
-      $seachInput.focus();
+      $searchInput.focus();
       break;
     case "KeyZ":
       if (!(event.ctrlKey || event.metaKey) || dialog.showing) return;
@@ -1244,7 +1244,7 @@ function setLastData(event) {
 $main.addEventListener('click', handleMainClick, false);
 $nav.header.addEventListener('dblclick', () => {
   simulateKeyboardEvent(document, 'keydown', {}, 'Tab');
-  $seachInput.focus();
+  $searchInput.focus();
 }, false);
 $main.addEventListener('mousedown', handleMainMiddleClick, false);
 $('#star-url').addEventListener('click', openStarUrl, false);

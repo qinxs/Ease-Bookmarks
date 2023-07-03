@@ -9,7 +9,7 @@
     "message": "书签管理器"
   },
 
-  "seachPlaceholder":
+  "searchPlaceholder":
   {
     "message": "搜索书签..."
   },
@@ -17,7 +17,7 @@
   {
     "message": "这里没有书签呢~"
   },
-  "seachNoResultTip":
+  "searchNoResultTip":
   {
     "message": "没有匹配的书签~"
   },

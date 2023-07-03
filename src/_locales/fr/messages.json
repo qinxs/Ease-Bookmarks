@@ -9,7 +9,7 @@
     "message": "Gestionnaire de favoris"
   },
 
-  "seachPlaceholder":
+  "searchPlaceholder":
   {
     "message": "Rechercher dans les favoris..."
   },
@@ -17,7 +17,7 @@
   {
     "message": "Il n’y a pas de signet ici."
   },
-  "seachNoResultTip":
+  "searchNoResultTip":
   {
     "message": "Aucun signet correspondant."
   },

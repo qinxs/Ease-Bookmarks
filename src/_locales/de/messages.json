@@ -9,7 +9,7 @@
     "message": "Lesezeichen-Manager"
   },
 
-  "seachPlaceholder":
+  "searchPlaceholder":
   {
     "message": "In Lesezeichen suchen..."
   },
@@ -17,7 +17,7 @@
   {
     "message": "Hier gibt es kein Lesezeichen."
   },
-  "seachNoResultTip":
+  "searchNoResultTip":
   {
     "message": "Kein passendes Lesezeichen."
   },

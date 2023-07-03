@@ -9,7 +9,7 @@
     "message": "Диспетчер закладок"
   },
 
-  "seachPlaceholder":
+  "searchPlaceholder":
   {
     "message": "Искать в закладках..."
   },
@@ -17,7 +17,7 @@
   {
     "message": "Здесь нет закладки."
   },
-  "seachNoResultTip":
+  "searchNoResultTip":
   {
     "message": "Нет соответствующей закладки."
   },
