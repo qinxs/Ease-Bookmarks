@@ -778,7 +778,7 @@ function openUrl(url, event) {
       // console.log(pageUrl);
       if (!pageUrl) {
         if (pageUrl == '') {
-          isPopupWindow && chrome.tabs.remove(tab.id);
+          isPopupWindow && tab.status === 'complete' && chrome.tabs.remove(tab.id);
         }
         chrome.tabs.create({ url: url, active: true });
       } else if (/^(about|chrome|chrome-extension|https:\/\/chrome\.google\.com|edge|extension|https:\/\/microsoftedge\.microsoft\.com)/.test(pageUrl)) {
