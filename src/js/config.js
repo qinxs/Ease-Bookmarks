@@ -15,17 +15,15 @@ window.BM = {
   defaultSys: {
     fastCreate: 0, // 0-2
     keepMaxCols: 1, // 0-1 保持最大宽度
-     // 1-2
-     // 1：仅url 
-     // 2：url和title
+    // 1-2
+    // 1：仅url 
+    // 2：url和title
     updateBookmarkOpt: 1,
-  },
-  bodyWidth: {
-    1: '280px',
-    2: '400px',
-    3: '530px',
-    4: '660px',
-    5: '800px',
+    bodyWidth_1: '280px',
+    bodyWidth_2: '400px',
+    bodyWidth_3: '530px',
+    bodyWidth_4: '660px',
+    bodyWidth_5: '800px',
   },
   set: function(name, value) {
     if (this.defaultSys.hasOwnProperty(name)) {

@@ -76,6 +76,9 @@ const dataSetting = {
     } else {
       itemHeight = '28'; // --height-item的默认值
     }
+    if (settings.layoutCols == 1) {
+      document.body.style.width = settings['bodyWidth_1'];
+    }
   },
   switchTheme() {
     // 媒体查询，用户系统是否启动暗色模式
@@ -659,7 +662,7 @@ function applyListCols(id) {
   var colsCount = cachedFolderInfo.cols[id];
 
   if (colsCount > curMaxCols || settings.keepMaxCols == 0) {
-    document.body.style.width = BM.bodyWidth[colsCount > 5 ? 5 : colsCount];
+    document.body.style.width = settings[`bodyWidth_${colsCount > 5 ? 5 : colsCount}`];
     document.documentElement.style.setProperty('--list-cols', colsCount);
   }
 
