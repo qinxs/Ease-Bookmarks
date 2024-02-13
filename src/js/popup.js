@@ -1134,7 +1134,7 @@ function hotskeyEvents(event) {
       break;
     case "ArrowLeft":
     case "ArrowRight":
-      if (settings.layoutCols === 1) break;
+      if (curListCols == 1) break;
     case "Home":
     case "End":
     case "ArrowUp":

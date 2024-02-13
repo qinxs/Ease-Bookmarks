@@ -16,7 +16,7 @@ function checkRootInfo(argument) {
           1: results[0].title,
           2: results[1].title,
         }
-        chrome.storage.sync.set({rootInfo: rootInfo}, () => {});
+        chrome.storage.sync.set({rootInfo: rootInfo});
       });
     }
   });
@@ -28,8 +28,8 @@ function updataOldData() {
   chrome.storage.sync.get(null, results => {
     var startup = results.startupFromLast;
     if (startup) {
-      chrome.storage.sync.set({'startup': startup}, () => {});
-      chrome.storage.sync.remove('startupFromLast', () => {});
+      chrome.storage.sync.set({'startup': startup});
+      chrome.storage.sync.remove('startupFromLast');
       localStorage.setItem('startupID', localStorage.LastFolderID);
       localStorage.removeItem('LastFolderID');
     }
