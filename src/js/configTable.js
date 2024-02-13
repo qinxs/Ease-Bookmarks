@@ -1,3 +1,14 @@
+JSON.stringify2 = value => typeof value === 'object' 
+  ? JSON.stringify(value) 
+  : value;
+JSON.parse2 = (...args) => {
+  try {
+    return JSON.parse(...args);
+  } catch {
+    return args[0];
+  }
+}
+
 class TableRenderer {
   constructor(container, defaultSys, userSettings) {
     this.container = container;
@@ -51,7 +62,7 @@ class TableRenderer {
 
       let tdValue = tdKey.nextSibling;
       tdValue.setAttribute('name', key);
-      tdValue.textContent = this.userSettings[key];
+      tdValue.textContent = JSON.stringify2(this.userSettings[key]);
 
       let tdReset = tdValue.nextSibling;
       tdReset.className = 'cell-reset';
@@ -117,7 +128,7 @@ class TableRenderer {
 
         let tdValue = tr.querySelector('.cell-value');
         let name = tdValue.getAttribute('name');
-        let defaultValue = this.defaultSys[name];
+        let defaultValue = JSON.stringify2(this.defaultSys[name]);
         tdValue.textContent = defaultValue;
 
         this.trigger('configCanged', { name, value: defaultValue });
@@ -132,7 +143,7 @@ class TableRenderer {
       let { name, value } = event.target;
       let tr = this.editInput.closest('tr');
       
-      this.editInput.closest('td').textContent = value;
+      this.editInput.closest('td').textContent = JSON.stringify2(value);
 
       if ( value != this.defaultSys[name]) {
         tr.classList.add('has-user-value');
