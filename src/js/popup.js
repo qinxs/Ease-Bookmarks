@@ -38,6 +38,7 @@ var curContextMenuID;
 
 // 宽度只变大 不缩小
 var curMaxCols = 1;
+var curListCols = 1;
 var itemHeight;
 
 const isBookmarklet = url => url.trimStart().startsWith('javascript:')
@@ -635,7 +636,8 @@ function setListSize($list, length, id) {
   var rowsCount, colsCount, listHeight;
 
   if ($list === $searchList) {
-    rowsCount = Math.ceil(length / curMaxCols);
+    // 搜索时 不改变布局列数 避免popup窗口跳动
+    rowsCount = Math.ceil(length / curListCols);
   } else {
     colsCount = length > settings.layoutCols * settings.minItemsPerCol ? settings.layoutCols : Math.ceil(length / settings.minItemsPerCol);
     rowsCount = Math.ceil(length / colsCount);
@@ -664,6 +666,7 @@ function applyListCols(id) {
   if (colsCount > curMaxCols || settings.keepMaxCols == 0) {
     document.body.style.width = settings[`bodyWidth_${colsCount > 5 ? 5 : colsCount}`];
     document.documentElement.style.setProperty('--list-cols', colsCount);
+    curListCols = colsCount;
   }
 
   if (colsCount > curMaxCols) {
