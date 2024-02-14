@@ -19,6 +19,7 @@ window.BM = {
     // 1：仅url 
     // 2：url和title
     updateBookmarkOpt: 1,
+    compositionEvent: 0,
     bodyWidth_1: '280px',
     bodyWidth_2: '400px',
     bodyWidth_3: '530px',

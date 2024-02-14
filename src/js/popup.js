@@ -239,7 +239,7 @@ const search = {
   handleEvent() {
     var UILang = chrome.i18n.getUILanguage();
 
-    if (UILang.startsWith('zh')) {
+    if (UILang.startsWith('zh') || settings.compositionEvent == 1) {
       // 实时搜索 兼容中文
       $searchInput.addEventListener('compositionstart', () => {
         inputFlag = false;
