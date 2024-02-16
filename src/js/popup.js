@@ -1232,7 +1232,7 @@ function simulateKeyboardEvent(ele, type, options = {}, keyCodeStr) {
   ele.dispatchEvent(event);
 }
 
-function setLastData(event) {
+function saveLastData(event) {
   // Cancel the event as stated by the standard.
   event.preventDefault();
   // Chrome requires returnValue to be set.
@@ -1264,8 +1264,8 @@ $$('a.btn').forEach(function(a) {
 
 
 Promise.all([
-  loadSettings,
-  loadPreItems,
+    loadSettings,
+    loadPreItems,
   ]).then(() => {
   // console.log(BM.settings);
   settings = BM.settings;
@@ -1279,13 +1279,11 @@ Promise.all([
   
   nav.init(BM.startupReal);
   
-  setTimeout(() => {
-    $main.addEventListener('scroll', function() {
-      mainScrollTop = this.scrollTop;
-    }, false);
-    var LastScrollTop = localStorage.getItem('LastScrollTop') || 0;
-    if (LastScrollTop) $main.scrollTop = LastScrollTop;
-  }, 17);
+  var LastScrollTop = localStorage.getItem('LastScrollTop') || 0;
+  if (LastScrollTop) $main.scrollTop = LastScrollTop;
+  $main.addEventListener('scroll', function() {
+    mainScrollTop = this.scrollTop;
+  }, false);
 
   // 优化 FCP
   setTimeout(() => {
@@ -1294,7 +1292,7 @@ Promise.all([
     dialog.init();
     document.addEventListener('keydown', hotskeyEvents);
     onBookmarkEvents();
-    BM.settings.startup < 0 && window.addEventListener('unload', setLastData);
+    BM.settings.startup < 0 && window.addEventListener('unload', saveLastData);
     $searchList.addEventListener('mouseover', handleSearchResultsHover, false);
     $searchList.addEventListener('mouseenter', () => {
       var $activeItem = $('.item.active', $searchList);
@@ -1306,5 +1304,5 @@ Promise.all([
     }, false);
     loadCSS('libs/dragula.css');
     loadJS('libs/dragula.min.js', dragToMove);
-  }, 60)
+  }, 17);
 });
