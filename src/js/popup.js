@@ -653,7 +653,6 @@ function setListSize($list) {
 
     if (colsCount > curMaxCols || settings.keepMaxCols == 0) {
       document.documentElement.style.setProperty('--list-cols', colsCount);
-      document.documentElement.style.setProperty('--cols-change', Math.abs(colsCount - curListCols));
       document.body.style.width = settings[`bodyWidth_${colsCount > 5 ? 5 : colsCount}`];
     }
 
@@ -1286,6 +1285,7 @@ Promise.all([
     dialog.init();
     document.addEventListener('keydown', hotskeyEvents);
     onBookmarkEvents();
+    document.documentElement.style.setProperty('--cols-change', 1);
     BM.settings.startup < 0 && window.addEventListener('unload', saveLastData);
     $searchList.addEventListener('mouseover', handleSearchResultsHover, false);
     $searchList.addEventListener('mouseenter', () => {
