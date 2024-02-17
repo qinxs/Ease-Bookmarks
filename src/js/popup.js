@@ -700,7 +700,13 @@ function toggleList(id, searchMode = false) {
 function handleMainClick(event) {
   var target = event.target;
   // console.log(target);
-  if (target.type !== 'link') return;
+  if (target.type !== 'link') {
+    var $activeItem = $('.item.active', $curFolderList);
+    if ($activeItem && !isSearchView) {
+      $activeItem.classList.remove('active');
+    }
+    return;
+  }
   var id = target.getAttribute('data-id');
   openUrl(cachedFolderInfo.links[id], event);
 }
