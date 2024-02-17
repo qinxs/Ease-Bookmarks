@@ -1,6 +1,8 @@
 :root {
   --height-item: 28px;
   --list-cols: 1;
+  --list-rows: 10;
+  --cols-change: 0;
   --scrollbar-width: 3px;
   /* 浅色模式 */
   --color-theme: #4db6ac;
@@ -56,7 +58,7 @@ body {
   background-color: var(--color-background);
   overflow: hidden;
   user-select: none;
-  transition: width .05s;
+  transition: width calc(.05s * var(--cols-change));
 }
 header,
 footer {
@@ -162,10 +164,10 @@ i {
 }
 .folder-list,
 #search-list {
-  display: flex;
-  flex-direction: column;
-  flex-wrap: wrap;
-  align-content: flex-start;
+  display: grid;
+  grid-auto-flow: column;
+  grid-template-rows: repeat(var(--list-rows), 1fr);
+  grid-template-columns: repeat(var(--list-cols), calc(100% / var(--list-cols)));
   font-size: 13px;
 }
 .folder-list[hidden],
@@ -205,7 +207,6 @@ i {
 .item {
   position: relative;
   padding: 0 8px;
-  width: calc(100% / var(--list-cols));
   height: var(--height-item);
   line-height: var(--height-item);
 }

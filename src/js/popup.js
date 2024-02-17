@@ -14,8 +14,6 @@ const $dialog = $('#dialog');
 const $mask = $('#mask');
 const $itemForClone = $('#template > .item');
 const cachedFolderInfo = {
-  length: {}, // 目录中书签个数
-  cols: {},
   links: {}, // 书签链接存在此处，不用渲染到dom中
   lists: {}, // 已加载的目录
 }
@@ -38,7 +36,7 @@ var curContextMenuID;
 
 // 宽度只变大 不缩小
 var curMaxCols = 1;
-var curListCols = 1;
+var curListCols, curListRows;
 var itemHeight;
 
 const isBookmarklet = url => url.trimStart().startsWith('javascript:')
@@ -66,6 +64,8 @@ const getCurrentTab = (callback) => {
 
 const dataSetting = {
   init() {
+    curListCols = settings.layoutCols;
+    curListRows = settings.minItemsPerCol;
     this.layout();
     this.switchTheme();
     BM.openFolderEventType = settings.hoverEnter == 0 ? 'click' : 'mouseover';
@@ -96,13 +96,14 @@ const dataSetting = {
 const preciseLayout = {
   nthChild: '',
   ele: $('#preciseLayout'),
-  update(id) {
+  update() {
     // console.log(id);
     if (settings.layoutCols < 3 || settings.minItemsPerCol > 3) return; // 经计算，只有几组特殊解
 
+    var $list = isSearchView ? $searchList : $curFolderList;
     var expression,
-      length = cachedFolderInfo.length[id],
-      cols = cachedFolderInfo.cols[id];
+      length = $list.childElementCount,
+      cols = curListCols;
 
     // 最后一列有元素
     if (Math.ceil(length / cols) * (cols - 1) < length) {
@@ -110,7 +111,7 @@ const preciseLayout = {
     } else {
       var a = parseInt(length / cols),
           b = (length % cols + 1) * (a + 1) - 1;
-      expression = `${a}n+${b}`;
+      expression = `${a}n+${b+1}`;
     }
 
     this.setStyle(expression);
@@ -125,7 +126,7 @@ const preciseLayout = {
     } else {
       this.ele.textContent = `
       .item:nth-child(${expression}) {
-        margin-bottom: 1px;
+        grid-row: 1;
       }`;
     }
     this.nthChild = expression;
@@ -274,7 +275,6 @@ const search = {
   },
   _loadSearchView(keyword) {
     chrome.bookmarks.search(keyword, (results) => {
-      setListSize($searchList, results.length);
       if (results.length) {
         var frag = templateFrag(results);
         $searchList.innerHTML = '';
@@ -283,6 +283,7 @@ const search = {
       } else {
         $searchList.innerHTML = '';
       }
+      setListSize($searchList);
     })
   }
 }
@@ -586,8 +587,6 @@ function loadChildrenView(id, callback) {
 }
 
 function renderListView($list, id, items) {
-  setListSize($list, items.length, id);
-  
   if (items.length) {
     $list.append(templateFrag(items));
   } else {
@@ -629,14 +628,20 @@ function templateFragItem(item) {
   return clone;
 }
 
-// id 仅渲染$list时 需要传入
-function setListSize($list, length, id) {
-  if (settings.layoutCols == 1) return;
+function setListSize($list) {
+  if ($list.hidden) return;
 
-  var rowsCount, colsCount, listHeight;
+  var length = $list.childElementCount;
+  if (settings.layoutCols == 1) {
+    document.documentElement.style.setProperty('--list-rows', length);
+    return;
+  }
 
-  if ($list === $searchList) {
+  var rowsCount, colsCount;
+
+  if (isSearchView) {
     // 搜索时 不改变布局列数 避免popup窗口跳动
+    // colsCount = curListCols;
     rowsCount = Math.ceil(length / curListCols);
   } else {
     colsCount = length > settings.layoutCols * settings.minItemsPerCol ? settings.layoutCols : Math.ceil(length / settings.minItemsPerCol);
@@ -645,35 +650,23 @@ function setListSize($list, length, id) {
     if (rowsCount < settings.minItemsPerCol && length > settings.minItemsPerCol) {
       rowsCount = settings.minItemsPerCol;
     }
-  }
 
-  listHeight = rowsCount * itemHeight;
-  $list.style.height = listHeight + 'px';
+    if (colsCount > curMaxCols || settings.keepMaxCols == 0) {
+      document.documentElement.style.setProperty('--list-cols', colsCount);
+      document.documentElement.style.setProperty('--cols-change', Math.abs(colsCount - curListCols));
+      document.body.style.width = settings[`bodyWidth_${colsCount > 5 ? 5 : colsCount}`];
+    }
 
-  if (id) {
-    cachedFolderInfo.length[id] = length;
-    cachedFolderInfo.cols[id] = colsCount;
-  }
-}
-
-// 应用setListSize计算的样式 除了$list.style.height（内链样式）
-function applyListCols(id) {
-  if (settings.layoutCols == 1) return;
-  if (cachedFolderInfo.lists[id] != $curFolderList) return;
-
-  var colsCount = cachedFolderInfo.cols[id];
-
-  if (colsCount > curMaxCols || settings.keepMaxCols == 0) {
-    document.body.style.width = settings[`bodyWidth_${colsCount > 5 ? 5 : colsCount}`];
-    document.documentElement.style.setProperty('--list-cols', colsCount);
     curListCols = colsCount;
+    if (colsCount > curMaxCols) {
+      curMaxCols = colsCount;
+    }
   }
 
-  if (colsCount > curMaxCols) {
-    curMaxCols = colsCount;
-  }
+  curListRows = rowsCount;
+  document.documentElement.style.setProperty('--list-rows', rowsCount);
 
-  preciseLayout.update(id);
+  preciseLayout.update();
 }
 
 // 视图切换
@@ -696,7 +689,7 @@ function toggleList(id, searchMode = false) {
     $searchList.hidden = true;
     isSearchView = false;
     $curFolderList = $list;
-    applyListCols(id);
+    setListSize($curFolderList);
     if (cachedFolderScrollTop) {
       $main.scrollTop = cachedFolderScrollTop;
       cachedFolderScrollTop = 0;
@@ -854,7 +847,6 @@ function openFolder(id, folderName, target) {
   if(!$list) {
     loadChildrenView(id);
   } else {
-    settings.keepMaxCols == 0 && setListSize($list, $list.childElementCount);
     if (backSearchView) {
       toggleList(null, true);
       $curFolderList = $list;
@@ -882,8 +874,7 @@ function onBookmarkEvents() {
           $list.appendChild(templateFragItem(bookmark));
         }
         
-        setListSize($list, cachedFolderInfo.length[parentId] + 1, parentId);
-        applyListCols(parentId);
+        setListSize($list);
       }
     }
   );
@@ -902,8 +893,7 @@ function onBookmarkEvents() {
 
       if ($list) {
         $(`[data-id="${id}"]`, $list).closest('.item').remove();
-        setListSize($list, cachedFolderInfo.length[parentId] - 1, parentId);
-        applyListCols(parentId);
+        setListSize($list);
 
         if (!$list.hasChildNodes()) {
           $list.classList.add('show-tip');
@@ -927,14 +917,12 @@ function onBookmarkEvents() {
         var $list = cachedFolderInfo.lists[oldParentId];
 
         if ($list) {
-          setListSize($list, cachedFolderInfo.length[oldParentId] - 1, oldParentId);
-          applyListCols(oldParentId);
+          setListSize($list);
         }
 
         $list = cachedFolderInfo.lists[parentId];
         if ($list) {
-          setListSize($list, cachedFolderInfo.length[parentId] + 1, parentId);
-          applyListCols(parentId);
+          setListSize($list);
         }
       }
     }
@@ -1275,7 +1263,7 @@ Promise.all([
   cachedFolderInfo.lists[BM.startupReal] = $curFolderList;
   
   renderListView($curFolderList, BM.startupReal, BM.preItems);
-  applyListCols(BM.startupReal);
+  setListSize($curFolderList);
   
   nav.init(BM.startupReal);
   
