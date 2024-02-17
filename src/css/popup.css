@@ -3,6 +3,7 @@
   --list-cols: 1;
   --list-rows: 10;
   --cols-change: 0;
+  --base-font-size: 14px;
   --scrollbar-width: 3px;
   /* 浅色模式 */
   --color-theme: #4db6ac;
@@ -168,7 +169,7 @@ i {
   grid-auto-flow: column;
   grid-template-rows: repeat(var(--list-rows), 1fr);
   grid-template-columns: repeat(var(--list-cols), calc(100% / var(--list-cols)));
-  font-size: 13px;
+  font-size: var(--base-font-size);
 }
 .folder-list[hidden],
 #search-list[hidden] {
@@ -258,6 +259,7 @@ i {
   margin: 0;
   min-width: 120px;
   max-width: 100%;
+  font-size: calc(var(--base-font-size) - 1px);
   border: 1px solid #bbb;
   border-radius: 5px;
   background-color: var(--color-background-dialog);
