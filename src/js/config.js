@@ -13,20 +13,20 @@ window.BM = {
     startup: 1,
   },
   defaultSys: {
-    fastCreate: 0, // 0-2
-    keepMaxCols: 1, // 0-1 保持最大宽度
-    // 1-2
-    // 1：仅url 
-    // 2：url和title
-    updateBookmarkOpt: 1,
-    compositionEvent: 0,
     bodyWidth_1: '280px',
     bodyWidth_2: '400px',
     bodyWidth_3: '530px',
     bodyWidth_4: '660px',
     bodyWidth_5: '800px',
-    hotkeyDelete: '-Delete',
+    compositionEvent: 0,
+    fastCreate: 0, // 0-2
     hotkeyCancelSeleted: 'Space',
+    hotkeyDelete: '-Delete',
+    keepMaxCols: 1, // 0-1 保持最大宽度
+    // 1-2
+    // 1：仅url 
+    // 2：url和title
+    updateBookmarkOpt: 1,
   },
   set: function(name, value) {
     if (this.defaultSys.hasOwnProperty(name)) {
