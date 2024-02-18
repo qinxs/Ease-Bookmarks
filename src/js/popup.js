@@ -1051,7 +1051,7 @@ function dragToMove() {
   });
 }
 
-function hotskeyEvents(event) {
+function hotkeyEvents(event) {
   if (event.isComposing) return;
   
   var keyCode = event.code;
@@ -1090,7 +1090,7 @@ function hotskeyEvents(event) {
       var $back = $('a:nth-last-of-type(2)', $nav.header);
       $back && $back.dispatchEvent(new Event(BM.openFolderEventType, {"bubbles": true}));
       break;
-    case "Space":
+    case settings.hotkeyCancelSeleted: // 原Space
       if ($item) {
         event.preventDefault();
         $item.classList.remove('active');
@@ -1118,6 +1118,17 @@ function hotskeyEvents(event) {
       event.preventDefault();
       contextMenu.showing && contextMenu.close();
       $searchInput.focus();
+      break;
+    case settings.hotkeyDelete:
+      if (dialog.showing) return;
+      event.preventDefault();
+      $fromTarget = $('.item.active > a', $list);
+      if (!$fromTarget) return;
+      var $nextActiveItem = $fromTarget.closest('.item').nextElementSibling || $fromTarget.closest('.item').previousElementSibling;
+      $('#bookmark-delete').dispatchEvent(new MouseEvent('click', {"bubbles": true}));
+      if ($nextActiveItem) {
+         $nextActiveItem.classList.add('active');
+      }
       break;
     case "KeyZ":
       if (!(event.ctrlKey || event.metaKey) || dialog.showing) return;
@@ -1283,7 +1294,7 @@ Promise.all([
     search.init();
     contextMenu.init();
     dialog.init();
-    document.addEventListener('keydown', hotskeyEvents);
+    document.addEventListener('keydown', hotkeyEvents);
     onBookmarkEvents();
     document.documentElement.style.setProperty('--cols-change', 1);
     BM.settings.startup < 0 && window.addEventListener('unload', saveLastData);

@@ -25,6 +25,8 @@ window.BM = {
     bodyWidth_3: '530px',
     bodyWidth_4: '660px',
     bodyWidth_5: '800px',
+    hotkeyDelete: '-Delete',
+    hotkeyCancelSeleted: 'Space',
   },
   set: function(name, value) {
     if (this.defaultSys.hasOwnProperty(name)) {
