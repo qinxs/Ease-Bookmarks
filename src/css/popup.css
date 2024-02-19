@@ -141,7 +141,7 @@ nav {
   font-size: 15px;
   font-weight: bold;
   color: var(--color-theme);
-  margin-right: auto;
+  margin-inline-end: auto;
 }
 .nav:empty,
 .nav:not(:empty) + #bookmark-manager {
@@ -229,7 +229,7 @@ i {
 }
 .item > a {
   display: block;
-  padding-left: 24px;
+  padding-inline-start: 24px;
   /* 防止空名称文件夹不能打开 */
   height: 100%;
   overflow:hidden;
@@ -237,7 +237,9 @@ i {
   white-space:nowrap;
 }
 #star-url {
-  margin: 0 6px 0 -3px;
+  margin: 0;
+  margin-inline-start: -3px;
+  margin-inline-end: 6px;
 }
 .btn {
   display: flex;
@@ -245,7 +247,7 @@ i {
   outline: none;
 }
 .gap {
-  margin-left: 3px;
+  margin-inline-start: 3px;
 }
 
 .btn svg {

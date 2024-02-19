@@ -20,7 +20,7 @@
 .ul_box > li > div:nth-child(1) {
     min-width: 160px;
     text-align: right;
-    padding-right: 5px;
+    padding-inline-end: 5px;
 }
 
 .label_box > label {

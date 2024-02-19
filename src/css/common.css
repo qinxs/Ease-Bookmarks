@@ -33,7 +33,7 @@ body {
     justify-content: space-between;
 }
 .btns > a {
-    margin-left: 9px;
+    margin-inline-start: 9px;
 }
 
 .btns img {

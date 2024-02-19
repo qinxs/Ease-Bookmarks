@@ -36,7 +36,7 @@ th, td {
     border: 1px solid transparent;
 }
 td:first-child {
-    padding-left: 30px;
+    padding-inline-start: 30px;
     text-align: start;
 }
 
