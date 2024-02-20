@@ -73,12 +73,43 @@ Ease Bookmarks 是一款为了替代浏览器原有书签栏的扩展
 在该页面（`/options.html#configTable`）修改
 
 
+
+### `bodyWidth_*`
+
+> 功能：修改多列布局时的popup窗口宽度
+
+由于chrome对扩展的限制，最大有效值为800px
+
+### `compositionEvent`
+
+> 功能：是否开启搜索输入合成事件（中文强制开启）
+
+- `0`：默认值，不启用
+- `1`：启用
+
 ### `fastCreate`
 
 > 功能：中键点击**书签favicon图标**，快速把当前网址添加到书签（详见 [#15](https://github.com/qinxs/Ease-Bookmarks/issues/15)）
 
 - `0`：默认值，不启用
 - `2`：启用，只对文件夹有效，书签添加到该文件夹中
+
+### `hotkeyCancelSeleted`
+
+> 功能：取消选择快捷键
+
+- `Space`：默认值，开启（空格键）
+- `-Space`：关闭
+
+其他`hotkey*`快捷键同理（键值前添加`-`表示关闭）
+
+[快捷键获取](https://www.toptal.com/developers/keycode)，使用event.code的值
+
+### `hotkeyDelete`
+
+> 功能：删除书签快捷键
+
+- `-Delete`：默认值，关闭
 
 ### `keepMaxCols`
 
@@ -99,6 +130,7 @@ Ease Bookmarks 是一款为了替代浏览器原有书签栏的扩展
 
 - `chrome://bookmarks/` -> `F12`，[参考](docs/chrome_bookmarks.png)
 - Chrome 的 pak 文件，路径`Chromium\94.0.4606.81\Locales`
+  
   > 使用 `ChromePAK解包打包工具.exe` 解包搜索对比
 - [Microsoft Translator](https://cn.bing.com/translator)，并用其他翻译验证
 
