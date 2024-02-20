@@ -629,7 +629,7 @@ function templateFragItem(item) {
 }
 
 function setListSize($list) {
-  if ($list.hidden) return;
+  if ($list !== $searchList && $list.hidden) return;
 
   var length = $list.childElementCount;
   if (settings.layoutCols == 1) {
@@ -639,7 +639,7 @@ function setListSize($list) {
 
   var rowsCount, colsCount;
 
-  if (isSearchView) {
+  if ($list === $searchList) {
     // 搜索时 不改变布局列数 避免popup窗口跳动
     // colsCount = curListCols;
     rowsCount = Math.ceil(length / curListCols);
