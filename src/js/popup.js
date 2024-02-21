@@ -1,8 +1,6 @@
 "use strict";
 
 var settings;
-const ratio = window.devicePixelRatio || 1;
-const faviconPrefix = 'chrome://favicon/' + (ratio == 1 ? '' : `size/16@${ratio}x/`);
 const $nav = {
   header: $('nav'),
   footer: $('a.nav')
@@ -612,7 +610,7 @@ function templateFragItem(item) {
       favicon = 'icons/favicon/js.png';
       url = decodeBookmarklet(url);
     } else {
-      favicon = faviconPrefix + url;
+      favicon = `_favicon/?pageUrl=${url}&size=32`;
     }
     cachedFolderInfo.links[id] = url;
     itemA.title = `${title}\n${url}`;
@@ -789,8 +787,9 @@ function openUrl(url, event) {
         // 官方页面 不能直接执行js
         chrome.tabs.create({ url: url, active: true });
       } else {
-        chrome.tabs.executeScript({ code: url });
-        isPopupWindow && window.close();
+        // @TODO
+        // chrome.tabs.executeScript({ code: url });
+        // isPopupWindow && window.close();
       }
     });
   } else if(flag >> 1 == 0) {
@@ -942,7 +941,7 @@ function onBookmarkEvents() {
       itemA.textContent = title;
     }
     if (url) {
-      var favicon = faviconPrefix + url;
+      var favicon = `_favicon/?pageUrl=${url}&size=32`;
       if (isBookmarklet(url)) {
         favicon = 'icons/favicon/js.png';
         url = decodeBookmarklet(url);
