@@ -938,7 +938,7 @@ function onBookmarkEvents() {
 
     var {title, url} = changeInfo;
 
-    if (title) {
+    if (title !== undefined) {
       itemA.textContent = title;
     }
     if (url) {
