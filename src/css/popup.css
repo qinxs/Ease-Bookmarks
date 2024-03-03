@@ -36,6 +36,7 @@
 }
 ::-webkit-scrollbar {
   width: var(--scrollbar-width);
+  height: var(--scrollbar-width);
 }
 ::-webkit-scrollbar-track {
   background: transparent;
@@ -75,8 +76,7 @@ main {
   padding: 0;
   max-height: 504px;
   min-height: 400px;
-  overflow-x: hidden;
-  overflow-y: auto;
+  overflow: auto;
 }
 footer {
   display: flex;
