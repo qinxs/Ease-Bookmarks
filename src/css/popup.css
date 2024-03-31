@@ -10,7 +10,6 @@
   --color-text: #232529;
   --color-nav-text: #fff;
   --color-background: #fff;
-  --color-background-dialog: rgba(255, 255, 255, .96);
   --color-border: #ddd;
   --color-hover: #cbede9;
   --color-scrollbar-thumb: #b8c8c6;
@@ -22,10 +21,9 @@
   --color-theme: #369;
   --color-text: #cbc8c4;
   --color-nav-text: #e3e3e3;
-  --color-background: #3a3a3a;
-  --color-background-dialog: #3a3a3a;
+  --color-background: #232529;
   --color-border: #666;
-  --color-hover: #545454;
+  --color-hover: #455769;
   --color-scrollbar-thumb: #8ac;
   --textbox-border-color: #666;
   --textbox-focus-border-color: #e29c45;
@@ -265,9 +263,8 @@ i {
   min-width: 120px;
   max-width: 100%;
   font-size: calc(var(--base-font-size) - 1px);
-  border: 1px solid #bbb;
   border-radius: 5px;
-  background-color: var(--color-background-dialog);
+  background-color: var(--color-background);
   box-shadow: 0 2px 6px rgba(0, 0, 0, .2);
   list-style: none;
   outline: none;
@@ -275,6 +272,7 @@ i {
 #context-menu {
   left:0;
   top:0;
+  border: 1px solid #bbb;
 }
 #context-menu > li {
   display: none;
@@ -339,10 +337,11 @@ hr {
 
 #dialog {
   position: absolute;
+  left: 50%;
   width: 96%;
   max-width: 360px;
   line-height: 2em;
-  left: 50%;
+  border: 1px solid var(--color-border);
   transform: translateX(-50%);
   z-index: 9999;
 }
@@ -393,6 +392,9 @@ hr {
 }
 
 /* 深色模式 */
+.dark main {
+  filter: brightness(0.8) contrast(1.2);
+}
 .dark footer {
   background-color: var(--color-footer-background-dark);
 }
@@ -400,12 +402,9 @@ hr {
 .dark .textbox {
   background-color: var(--color-input-background-dark);
 }
-.dark .item {
-  filter: brightness(0.9);
-}
+
 .dark .item:hover,
 .dark .item.active {
-  filter: none;
   color: #eee;
 }
 .dark svg {
