@@ -296,7 +296,9 @@ const contextMenu = {
     $contextMenu.insertAdjacentHTML('beforeend', this.html);
     $main.addEventListener('contextmenu', this, false);
     $contextMenu.addEventListener('click', this, false);
-    document.addEventListener('click', () => this.close(), false);
+    document.addEventListener('click', () => {
+      this.close();
+    }, false);
     $('footer').addEventListener('contextmenu', (event) => {
       event.preventDefault();
     }, false);
@@ -697,17 +699,17 @@ function toggleList(id, searchMode = false) {
 }
 
 function handleMainClick(event) {
-  var target = event.target;
-  // console.log(target);
-  if (target.type !== 'link') {
-    var $activeItem = $('.item.active', $curFolderList);
-    if ($activeItem && !isSearchView) {
-      $activeItem.classList.remove('active');
-    }
+  event.stopPropagation();
+  if (contextMenu.showing) {
+    contextMenu.close();
     return;
   }
-  var id = target.getAttribute('data-id');
-  openUrl(cachedFolderInfo.links[id], event);
+
+  var target = event.target;
+  if (target.type == 'link') {
+    var id = target.getAttribute('data-id');
+    openUrl(cachedFolderInfo.links[id], event);
+  }
 }
 
 function handleMainMiddleClick(event) {
@@ -979,6 +981,8 @@ function locationFolder(parentId, id) {
 }
 
 function openStarUrl(event) {
+  event.preventDefault();
+  event.stopPropagation();
   var starUrl = localStorage.getItem('starUrl');
   if (!starUrl) {
     starUrl = 'chrome://bookmarks/';
@@ -1052,7 +1056,7 @@ function dragToMove() {
 }
 
 function hotkeyEvents(event) {
-  if (event.isComposing) return;
+  if (event.isComposing || contextMenu.showing) return;
   
   var keyCode = event.code;
   // console.log(keyCode);
@@ -1262,6 +1266,7 @@ $$('a.btn').forEach(function(a) {
   if (!a.href) return;
   a.addEventListener('click', function(event) {
     event.preventDefault();
+    event.stopPropagation();
     openUrl(a.href, event);
   });
 });
