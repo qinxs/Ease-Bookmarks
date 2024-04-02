@@ -276,7 +276,7 @@ const search = {
   _loadSearchView(keyword) {
     chrome.bookmarks.search(keyword, (results) => {
       if (results.length) {
-        var frag = templateFrag(results);
+        var frag = templateFrag(results, true);
         $searchList.innerHTML = '';
         $searchList.append(frag);
         $searchList.firstElementChild.classList.add('active');
@@ -596,15 +596,15 @@ function renderListView($list, id, items) {
   }
 }
 
-function templateFrag(treeData) {
+function templateFrag(treeData, isSearchTemplate = false) {
   const fragment = document.createDocumentFragment();
   for (let item of treeData) {
-    fragment.appendChild(templateFragItem(item));
+    fragment.appendChild(templateFragItem(item, isSearchTemplate));
   }
   return fragment;
 }
 
-function templateFragItem(item) {
+function templateFragItem(item, isSearchTemplate = false) {
   var clone = $itemForClone.cloneNode(true);
   var itemA = clone.lastElementChild;
   var favicon;
@@ -626,7 +626,7 @@ function templateFragItem(item) {
   clone.firstElementChild.src = favicon;
   itemA.setAttribute('data-id', id);
   itemA.textContent = title;
-  isSearchView && itemA.setAttribute('data-parent-id', item.parentId);
+  isSearchTemplate && itemA.setAttribute('data-parent-id', item.parentId);
   return clone;
 }
 
