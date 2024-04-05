@@ -18,6 +18,15 @@ Ease Bookmarks 是一款为了替代浏览器原有书签栏的扩展
 
 ## 更新日志
 
+> 1.6.6（2024-04-05）  
+功能：
+增加配置参数openBookmarkAfterCurrentTab  
+参数说明：https://github.com/qinxs/Ease-Bookmarks#内置参数  
+Bugs：
+打开所在目录可能的undefined；空白标题时更新dom视图  
+其他：
+黑暗模式样式优化，pop页面操作和事件优化
+
 > 1.6.5（2024-02-19）  
 功能：
 增加一些配置参数，允许修改多列布局时的popup窗口宽度等  
