@@ -26,6 +26,7 @@ window.BM = {
     // 1-2
     // 1：仅url 
     // 2：url和title
+    openBookmarkAfterCurrentTab: 0, // 当前标签页右边打开书签
     updateBookmarkOpt: 1,
   },
   set: function(name, value) {

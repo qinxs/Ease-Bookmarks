@@ -57,7 +57,7 @@ var isPopupWindow;
 chrome.tabs.getCurrent( tab => isPopupWindow = tab === undefined );
 
 const getCurrentTab = (callback) => {
-  chrome.tabs.query({ active: true, lastFocusedWindow: true }, ([tab]) => {
+  chrome.tabs.query({ active: true, currentWindow: true }, ([tab]) => {
     callback(tab);
   });
 }
@@ -773,8 +773,8 @@ function openUrl(url, event) {
   if(event.shiftKey) flag ^= 0b01;
   // console.log(event);
   // return
-  if (isBookmarklet(url)) {
-    getCurrentTab((tab) => {
+  getCurrentTab((tab) => {
+    if (isBookmarklet(url)) {
       // alert(JSON.stringify(tab));
       if (!tab) {
         chrome.tabs.create({ url: url, active: true });
@@ -794,15 +794,19 @@ function openUrl(url, event) {
         chrome.tabs.executeScript({ code: url });
         isPopupWindow && window.close();
       }
-    });
-  } else if(flag >> 1 == 0) {
-    chrome.tabs.update({ url: url });
-    isPopupWindow && window.close();
-  } else {
-    var active = Boolean(flag & 1);
-    chrome.tabs.create({ url: url, active });
-    isPopupWindow && active && window.close();
-  }
+    } else if(flag >> 1 == 0) {
+      chrome.tabs.update({ url: url });
+      isPopupWindow && window.close();
+    } else {
+      var active = Boolean(flag & 1);
+      var options = { url: url, active };
+      if (settings.openBookmarkAfterCurrentTab != 0) {
+        options.index = tab.index + 1;
+      }
+      chrome.tabs.create(options);
+      isPopupWindow && active && window.close();
+    }
+  });
 }
 
 function handleFolderEvent(node) {
