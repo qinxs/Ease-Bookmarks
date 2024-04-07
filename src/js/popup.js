@@ -769,8 +769,8 @@ function addPathTitle(id, target) {
  */
 function openUrl(url, event) {
   var flag = settings.openIn;
-  if(event.ctrlKey || event.metaKey) flag ^= 0b10; 
-  if(event.shiftKey) flag ^= 0b01;
+  if(event.ctrlKey || event.metaKey) flag ^= 0b01;
+  if(event.shiftKey) flag ^= 0b10;
   // console.log(event);
   // return
   getCurrentTab((tab) => {

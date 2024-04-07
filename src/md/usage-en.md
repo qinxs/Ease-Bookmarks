@@ -41,8 +41,8 @@ The default shortcut is `Ctrl + Q`, you can
 
 ### Modifier keys
 
-- `Ctrl`: open page in current tab/new tab
-- `Shift`: whether to open the page in the background
+- `Ctrl`: whether to open the page in the background
+- `Shift`: open page in current tab/new tab
 
 ## Customize
 
