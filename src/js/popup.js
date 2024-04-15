@@ -95,6 +95,7 @@ const dataSetting = {
 // 当 Math.ceil(length / cols) * (cols - 1) >= length 时
 const preciseLayout = {
   nthChild: '',
+  N: 0, // 正常布局列的尾元素序号
   ele: $('#preciseLayout'),
   update() {
     // console.log(id);
@@ -108,10 +109,12 @@ const preciseLayout = {
     // 最后一列有元素
     if (Math.ceil(length / cols) * (cols - 1) < length) {
       expression = '';
+      this.N = 0;
     } else {
       var a = parseInt(length / cols),
           b = (length % cols + 1) * (a + 1) - 1;
       expression = `${a}n+${b+1}`;
+      this.N = b + 1 - curListRows;
     }
 
     this.setStyle(expression);
@@ -127,6 +130,7 @@ const preciseLayout = {
       this.ele.textContent = `
       .item:nth-child(${expression}) {
         grid-row: 1;
+        // color: red;
       }`;
     }
     this.nthChild = expression;
@@ -1192,34 +1196,34 @@ function hotkeyEvents(event) {
           return $list.firstElementChild;
         }
       case "ArrowLeft":
-        if ($item) {
-          var rect = $item.getBoundingClientRect();
-          var $left = document.elementFromPoint(rect.x - rect.width / 2, rect.y + rect.height / 2);
-          return $left ? $left.closest('.item') : null;
-        } else {
-          return null;
+        if (!$item) break;
+        var $prev = $item;
+        var rows = curListRows;
+        if (preciseLayout.N) {
+          var itemIndex = [...$list.childNodes].indexOf($item) + 1;
+          if (itemIndex > (preciseLayout.N + curListRows - 1)) rows--;
         }
+        while (rows-- && $prev) {
+          $prev = $prev.previousElementSibling;
+        }
+        return $prev;
       case "ArrowRight":
-        if ($item) {
-          var rect = $item.getBoundingClientRect();
-          var $right, findHeight = rect.y + rect.height / 2;
-          while (1) {
-            $right = document.elementFromPoint(rect.x + rect.width / 2 * 3, findHeight);
-            if ($right && $right.closest('.item')) {
-              return $right.closest('.item');
-            } else if ($right == $curFolderList || $right == $searchList) {
-              findHeight = findHeight - rect.height;
-              continue;
-            } else {
-              return null;
-            }
-          }
-        } else {
-          return null;
+        if (!$item) break;
+        var rect = $item.getBoundingClientRect();
+        // 最后一列
+        if ($item.offsetLeft == $list.lastElementChild.offsetLeft) break;
+        var $next = $item;
+        var rows = curListRows;
+        if (preciseLayout.N) {
+          var itemIndex = [...$list.childNodes].indexOf($item) + 1;
+          if (itemIndex >= preciseLayout.N) rows--;
         }
-      default:
-        return null;
+        while (rows-- && $next) {
+          $next = $next.nextElementSibling;
+        }
+        return $next || $list.lastElementChild;
     }
+    return null;
   }
 }
 
