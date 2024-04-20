@@ -34,10 +34,12 @@ var cachedFolderScrollTop = 0;
 // 点击的右键菜单ID，需要弹出dialog时动态改变
 var curContextMenuID;
 
-// 宽度只变大 不缩小
-var curMaxCols = 1;
-var curListCols, curListRows;
-var itemHeight;
+const layout = {
+  cols: 0,
+  rows: 0,
+  curMaxCols: 1, // 宽度只变大 不缩小
+  N: 0, // 正常布局列的尾元素序号
+}
 
 const isBookmarklet = url => url.trimStart().startsWith('javascript:')
 const decodeBookmarklet = url => {
@@ -64,8 +66,8 @@ const getCurrentTab = (callback) => {
 
 const dataSetting = {
   init() {
-    curListCols = settings.layoutCols;
-    curListRows = settings.minItemsPerCol;
+    layout.cols = settings.layoutCols;
+    layout.rows = settings.minItemsPerCol;
     this.layout();
     this.switchTheme();
     BM.openFolderEventType = settings.hoverEnter == 0 ? 'click' : 'mouseover';
@@ -73,9 +75,6 @@ const dataSetting = {
   layout() {
     if(settings.customCSS) {
       $('#customCSS').textContent = settings.customCSS;
-      itemHeight = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--height-item'));
-    } else {
-      itemHeight = '28'; // --height-item的默认值
     }
     if (settings.layoutCols == 1) {
       document.body.style.width = settings['bodyWidth_1'];
@@ -95,7 +94,6 @@ const dataSetting = {
 // 当 Math.ceil(length / cols) * (cols - 1) >= length 时
 const preciseLayout = {
   nthChild: '',
-  N: 0, // 正常布局列的尾元素序号
   ele: $('#preciseLayout'),
   update() {
     // console.log(id);
@@ -104,17 +102,17 @@ const preciseLayout = {
     var $list = isSearchView ? $searchList : $curFolderList;
     var expression,
       length = $list.childElementCount,
-      cols = curListCols;
+      cols = layout.cols;
 
     // 最后一列有元素
     if (Math.ceil(length / cols) * (cols - 1) < length) {
       expression = '';
-      this.N = 0;
+      layout.N = 0;
     } else {
       var a = parseInt(length / cols),
           b = (length % cols + 1) * (a + 1) - 1;
       expression = `${a}n+${b+1}`;
-      this.N = b + 1 - curListRows;
+      layout.N = b + 1 - layout.rows;
     }
 
     this.setStyle(expression);
@@ -647,8 +645,8 @@ function setListSize($list) {
 
   if ($list === $searchList) {
     // 搜索时 不改变布局列数 避免popup窗口跳动
-    // colsCount = curListCols;
-    rowsCount = Math.ceil(length / curListCols);
+    // colsCount = layout.cols;
+    rowsCount = Math.ceil(length / layout.cols);
   } else {
     colsCount = length > settings.layoutCols * settings.minItemsPerCol ? settings.layoutCols : Math.ceil(length / settings.minItemsPerCol);
     rowsCount = Math.ceil(length / colsCount);
@@ -657,18 +655,18 @@ function setListSize($list) {
       rowsCount = settings.minItemsPerCol;
     }
 
-    if (colsCount > curMaxCols || settings.keepMaxCols == 0) {
+    if (colsCount > layout.curMaxCols || settings.keepMaxCols == 0) {
       document.documentElement.style.setProperty('--list-cols', colsCount);
       document.body.style.width = settings[`bodyWidth_${colsCount > 5 ? 5 : colsCount}`];
     }
 
-    curListCols = colsCount;
-    if (colsCount > curMaxCols) {
-      curMaxCols = colsCount;
+    layout.cols = colsCount;
+    if (colsCount > layout.curMaxCols) {
+      layout.curMaxCols = colsCount;
     }
   }
 
-  curListRows = rowsCount;
+  layout.rows = rowsCount;
   document.documentElement.style.setProperty('--list-rows', rowsCount);
 
   preciseLayout.update();
@@ -1150,7 +1148,7 @@ function hotkeyEvents(event) {
       break;
     case "ArrowLeft":
     case "ArrowRight":
-      if (curListCols == 1) break;
+      if (layout.cols == 1) break;
     case "Home":
     case "End":
     case "ArrowUp":
@@ -1198,10 +1196,10 @@ function hotkeyEvents(event) {
       case "ArrowLeft":
         if (!$item) break;
         var $prev = $item;
-        var rows = curListRows;
-        if (preciseLayout.N) {
+        var rows = layout.rows;
+        if (layout.N) {
           var itemIndex = [...$list.childNodes].indexOf($item) + 1;
-          if (itemIndex > (preciseLayout.N + curListRows - 1)) rows--;
+          if (itemIndex > (layout.N + layout.rows - 1)) rows--;
         }
         while (rows-- && $prev) {
           $prev = $prev.previousElementSibling;
@@ -1213,10 +1211,10 @@ function hotkeyEvents(event) {
         // 最后一列
         if ($item.offsetLeft == $list.lastElementChild.offsetLeft) break;
         var $next = $item;
-        var rows = curListRows;
-        if (preciseLayout.N) {
+        var rows = layout.rows;
+        if (layout.N) {
           var itemIndex = [...$list.childNodes].indexOf($item) + 1;
-          if (itemIndex >= preciseLayout.N) rows--;
+          if (itemIndex >= layout.N) rows--;
         }
         while (rows-- && $next) {
           $next = $next.nextElementSibling;
@@ -1309,7 +1307,6 @@ Promise.all([
     dialog.init();
     document.addEventListener('keydown', hotkeyEvents);
     onBookmarkEvents();
-    document.documentElement.style.setProperty('--cols-change', 1);
     BM.settings.startup < 0 && window.addEventListener('unload', saveLastData);
     $searchList.addEventListener('mouseover', handleSearchResultsHover, false);
     $searchList.addEventListener('mouseenter', () => {

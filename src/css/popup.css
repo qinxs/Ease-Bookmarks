@@ -2,7 +2,6 @@
   --height-item: 28px;
   --list-cols: 1;
   --list-rows: 10;
-  --cols-change: 0;
   --base-font-size: 14px;
   --scrollbar-width: 3px;
   /* 浅色模式 */
@@ -58,7 +57,7 @@ body {
   background-color: var(--color-background);
   overflow: hidden;
   user-select: none;
-  transition: width calc(.05s * var(--cols-change));
+  transition: width .05s;
 }
 header,
 footer {
