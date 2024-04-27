@@ -79,6 +79,7 @@ footer {
   display: flex;
   justify-content: flex-end;
   align-items: center;
+  gap: 4px;
   height: 30px;
   color: var(--color-text);
   background-color: #eee;
@@ -138,7 +139,6 @@ nav {
   font-size: 15px;
   font-weight: bold;
   color: var(--color-theme);
-  margin-inline-end: auto;
 }
 .nav:empty,
 .nav:not(:empty) + #bookmark-manager {
@@ -233,18 +233,13 @@ i {
   text-overflow:ellipsis;
   white-space:nowrap;
 }
-#star-url {
-  margin: 0;
-  margin-inline-start: -3px;
-  margin-inline-end: 6px;
+#bookmark-manager + a {
+  margin-inline-start: auto;
 }
 .btn {
   display: flex;
   align-items: center;
   outline: none;
-}
-.gap {
-  margin-inline-start: 3px;
 }
 
 .btn svg {
