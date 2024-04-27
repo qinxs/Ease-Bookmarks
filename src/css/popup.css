@@ -126,10 +126,13 @@ a {
 
 nav {
   /* 8px 扩大点击区域 */
-  margin: 4px -8px;
+  margin: 5px -8px;
   padding: 0 8px;
   min-height: 24px;
-  line-height: 1.65em;
+  line-height: 1.5em;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
   font-size: 16px;
   color: #789;
   word-break: keep-all;
@@ -145,7 +148,7 @@ nav {
   display: none;
 }
 nav > a {
-  padding: 1px 4px;
+  padding: 0 4px;
   border-radius: 4px;
   color: var(--color-nav-text);
   background-color: var(--color-theme);

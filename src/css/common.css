@@ -28,9 +28,15 @@ body {
 .btns {
     position: fixed;
     top: 4px;
-    right: calc(50vw - var(--body-width) / 2 + 30px);
     display: flex;
     gap: 9px;
+}
+/* inset-inline-end不兼容chrome87以下版本 */
+html:not([dir="rtl"]) .btns {
+    right: calc(50vw - var(--body-width) / 2 + 30px);
+}
+html[dir="rtl"] .btns {
+    left: calc(50vw - var(--body-width) / 2 + 30px);
 }
 
 .btns img {

@@ -7,7 +7,6 @@ var $minItemsPerCol = $('#minItemsPerCol');
 
 var $iconPreview = $('.icon_preview');
 
-var lang = chrome.i18n.getUILanguage();
 if (lang.startsWith('zh')) {
   document.documentElement.lang = 'zh';
 }

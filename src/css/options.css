@@ -1,7 +1,10 @@
 #options {
     padding-bottom: 0;
 }
-
+hr {
+    width: 100%;
+    border-width: 0;
+}
 .ul_box {
     list-style: none;
 }
@@ -14,15 +17,16 @@
 .ul_box > li:last-child {
     border-bottom: none;
 }
-.ul_box > li > div {
-    float: left;
-}
 .ul_box > li > div:nth-child(1) {
     min-width: 160px;
     text-align: right;
     padding-inline-end: 5px;
 }
 
+.label_box {
+    display: flex;
+    flex-wrap: wrap;
+}
 .label_box > label {
     display: block;
     float: left;
@@ -50,9 +54,6 @@
     min-width: 40px;
 }
 
-.clear {
-    clear: both;
-}
 .disabled {
     background-color: #ccc;
 }

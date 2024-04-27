@@ -78,6 +78,11 @@ const $ = (css, d = document) => d.querySelector(css);
 const $$ = (css, d = document) => d.querySelectorAll(css);
 const L = chrome.i18n.getMessage;
 
+var lang = chrome.i18n.getUILanguage();
+if (['ar', 'he', 'fa', 'ur', 'ku', 'ba', 'dv', 'hy'].includes(lang)) {
+  document.dir = 'rtl';
+}
+
 function setStartupID(folderID) {
   folderID < 0 && localStorage.setItem('startupFromLast', folderID);
   folderID > 0 && localStorage.setItem('startupID', folderID);
