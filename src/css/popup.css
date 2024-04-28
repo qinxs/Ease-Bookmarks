@@ -31,6 +31,9 @@
   --color-footer-background-dark: #333;
   --color-input-background-dark: #171a1a;
 }
+body::-webkit-scrollbar {
+  width: 0;
+}
 ::-webkit-scrollbar {
   width: var(--scrollbar-width);
   height: var(--scrollbar-width);
@@ -55,7 +58,6 @@ body {
   width: 280px;
   color: var(--color-text);
   background-color: var(--color-background);
-  overflow: hidden;
   user-select: none;
   transition: width .05s;
 }
@@ -71,16 +73,16 @@ header {
 main {
   position: relative;
   padding: 0;
-  max-height: 504px;
+  max-height: 476px;
   min-height: 400px;
   overflow: auto;
 }
 footer {
+  width: inherit;
+  height: 30px;
   display: flex;
-  justify-content: flex-end;
   align-items: center;
   gap: 4px;
-  height: 30px;
   color: var(--color-text);
   background-color: #eee;
 }
