@@ -159,6 +159,15 @@
   "lastFolderAndScrollBar": {
       "message": "마지막 디렉토리 및 스크롤 막대"
   },
+  "scrollDirection": {
+      "message": "스크롤 방향:"
+  },
+  "scrollDirectionX": {
+      "message": "가로"
+  },
+  "scrollDirectionY": {
+      "message": "세로"
+  },
   "layoutCols": {
       "message": "레이아웃 열 수입니다:"
   },

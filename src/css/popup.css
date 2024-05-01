@@ -1,5 +1,6 @@
 :root {
   --height-item: 28px;
+  --body-width-cols: 1;
   --list-cols: 1;
   --list-rows: 10;
   --base-font-size: 14px;
@@ -170,7 +171,7 @@ i {
   display: grid;
   grid-auto-flow: column;
   grid-template-rows: repeat(var(--list-rows), 1fr);
-  grid-template-columns: repeat(var(--list-cols), calc(100% / var(--list-cols)));
+  grid-template-columns: repeat(var(--list-cols), calc(100% / var(--body-width-cols)));
   font-size: var(--base-font-size);
 }
 .folder-list[hidden],

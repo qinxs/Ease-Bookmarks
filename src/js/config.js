@@ -6,6 +6,7 @@ window.BM = {
     themeColor: 'light',
     openIn: 3, // 0b11, 0-3 详细说明参见 openUrl 方法
     hoverEnter: 500, // {0,300,500,800}
+    scrollDirection: 'y',
     layoutCols: 1,
     minItemsPerCol: 10, // 1-16；避免滚动条
     // 1 书签栏 2 其他书签（根目录为0）
@@ -87,5 +88,5 @@ function setStartupID(folderID) {
   folderID < 0 && localStorage.setItem('startupFromLast', folderID);
   folderID > 0 && localStorage.setItem('startupID', folderID);
   folderID > -1 && localStorage.removeItem('startupFromLast');
-  folderID > -2 && localStorage.removeItem('LastScrollTop');
+  folderID > -2 && localStorage.removeItem('LastScrollPos');
 }

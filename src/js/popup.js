@@ -29,14 +29,16 @@ var $curFolderList = $('#startup');
 var $fromTarget = null;
 var pathTitle = '';
 window.openFolderDelay = null;
-var mainScrollTop = 0;
-var cachedFolderScrollTop = 0;
+var isScrollDirectionX, scrollAttr;
+var mainScrollPos = 0;
+var cachedFolderScrollPos = 0;
 // 点击的右键菜单ID，需要弹出dialog时动态改变
 var curContextMenuID;
 
 const layout = {
   cols: 0,
   rows: 0,
+  bodyWidthCols: 1,
   curMaxCols: 1, // 宽度只变大 不缩小
   N: 0, // 正常布局列的尾元素序号
 }
@@ -68,6 +70,13 @@ const dataSetting = {
   init() {
     layout.cols = settings.layoutCols;
     layout.rows = settings.minItemsPerCol;
+    if (settings.scrollDirection === 'x') {
+      isScrollDirectionX = true;
+      scrollAttr = 'scrollLeft';
+    } else {
+      isScrollDirectionX = false;
+      scrollAttr = 'scrollTop';
+    }
     this.layout();
     this.switchTheme();
     BM.openFolderEventType = settings.hoverEnter == 0 ? 'click' : 'mouseover';
@@ -361,6 +370,10 @@ const contextMenu = {
           if (this.posX + menuWidth > mainWidth - 4) {
             this.posX = mainWidth - menuWidth - 4;
           }
+          if (isScrollDirectionX) {
+            this.posX += $main.scrollLeft;
+          }
+
           this.posY = event.clientY - $main.offsetTop;
           var overflow = this.posY + menuHeight - mainHeight;
           if (overflow > 0) {
@@ -635,39 +648,57 @@ function templateFragItem(item, isSearchTemplate = false) {
 function setListSize($list) {
   if ($list !== $searchList && $list.hidden) return;
 
+  var rowsCount, colsCount, bodyWidthCols;
   var length = $list.childElementCount;
-  if (settings.layoutCols == 1) {
-    document.documentElement.style.setProperty('--list-rows', length);
-    return;
-  }
 
-  var rowsCount, colsCount;
+  if (!length) return;
 
   if ($list === $searchList) {
-    // 搜索时 不改变布局列数 避免popup窗口跳动
-    // colsCount = layout.cols;
-    rowsCount = Math.ceil(length / layout.cols);
+    rowsCount = Math.ceil(length / (settings.keepMaxCols == 0 ? layout.cols : layout.curMaxCols));
+    if (isScrollDirectionX) {
+      if (rowsCount > 16) {
+        rowsCount = settings.minItemsPerCol;
+      } else {
+        rowsCount = Math.max(rowsCount, settings.minItemsPerCol);
+      }
+    }
+    colsCount = Math.ceil(length / rowsCount);
   } else {
-    colsCount = length > settings.layoutCols * settings.minItemsPerCol ? settings.layoutCols : Math.ceil(length / settings.minItemsPerCol);
-    rowsCount = Math.ceil(length / colsCount);
-
-    if (rowsCount < settings.minItemsPerCol && length > settings.minItemsPerCol) {
+    if (isScrollDirectionX) {
       rowsCount = settings.minItemsPerCol;
+      colsCount = Math.ceil(length / rowsCount);
+    } else {
+      if (settings.layoutCols == 1) {
+        document.documentElement.style.setProperty('--list-rows', length);
+        return;
+      }
+
+      colsCount = length > settings.layoutCols * settings.minItemsPerCol ? settings.layoutCols : Math.ceil(length / settings.minItemsPerCol);
+      rowsCount = Math.ceil(length / colsCount);
+
+      if (rowsCount < settings.minItemsPerCol && length > settings.minItemsPerCol) {
+        rowsCount = settings.minItemsPerCol;
+      }
     }
 
+    bodyWidthCols = Math.min(colsCount, settings.layoutCols);
+    if (settings.keepMaxCols == 1) {
+      bodyWidthCols = Math.max(bodyWidthCols, layout.curMaxCols);
+    }
     if (colsCount > layout.curMaxCols || settings.keepMaxCols == 0) {
-      document.documentElement.style.setProperty('--list-cols', colsCount);
-      document.body.style.width = settings[`bodyWidth_${colsCount > 5 ? 5 : colsCount}`];
+      document.documentElement.style.setProperty('--body-width-cols', bodyWidthCols);
+      document.body.style.width = settings[`bodyWidth_${Math.min(5, bodyWidthCols)}`];
     }
-
-    layout.cols = colsCount;
     if (colsCount > layout.curMaxCols) {
       layout.curMaxCols = colsCount;
     }
+    layout.bodyWidthCols = bodyWidthCols;
   }
 
-  layout.rows = rowsCount;
+  document.documentElement.style.setProperty('--list-cols', colsCount);
   document.documentElement.style.setProperty('--list-rows', rowsCount);
+  layout.cols = colsCount;
+  layout.rows = rowsCount;
 
   preciseLayout.update();
 }
@@ -675,11 +706,11 @@ function setListSize($list) {
 // 视图切换
 function toggleList(id, searchMode = false) {
   // console.log($curFolderList);
-  if (mainScrollTop || searchMode) {
+  if (mainScrollPos || searchMode) {
     if (searchMode) {
-      cachedFolderScrollTop = mainScrollTop;
+      cachedFolderScrollPos = mainScrollPos;
     }
-    $main.scrollTop = 0;
+    $main[scrollAttr] = 0;
   }
   $curFolderList.hidden = true;
   // SearchView 会多次调用 单独处理
@@ -693,9 +724,9 @@ function toggleList(id, searchMode = false) {
     isSearchView = false;
     $curFolderList = $list;
     setListSize($curFolderList);
-    if (cachedFolderScrollTop) {
-      $main.scrollTop = cachedFolderScrollTop;
-      cachedFolderScrollTop = 0;
+    if (cachedFolderScrollPos) {
+      $main.scrollTop = cachedFolderScrollPos;
+      cachedFolderScrollPos = 0;
     }
   }
 }
@@ -1148,7 +1179,7 @@ function hotkeyEvents(event) {
       break;
     case "ArrowLeft":
     case "ArrowRight":
-      if (layout.cols == 1) break;
+      if (layout.cols == 1 && layout.curMaxCols == 1) break;
     case "Home":
     case "End":
     case "ArrowUp":
@@ -1256,7 +1287,7 @@ function saveLastData(event) {
   if (curStartupFromLast < 0) {
     localStorage.setItem('startupID', nav.lastPathID);
     if (curStartupFromLast < -1) {
-      localStorage.setItem('LastScrollTop', $main.scrollTop);
+      localStorage.setItem('LastScrollPos', $main[scrollAttr]);
     }
   }
 }
@@ -1294,11 +1325,22 @@ Promise.all([
   
   nav.init(BM.startupReal);
   
-  var LastScrollTop = localStorage.getItem('LastScrollTop') || 0;
-  if (LastScrollTop) $main.scrollTop = LastScrollTop;
-  $main.addEventListener('scroll', function() {
-    mainScrollTop = this.scrollTop;
-  }, false);
+  var LastScrollPos = localStorage.getItem('LastScrollPos') || 0;
+  setTimeout(() => {
+    if (LastScrollPos) $main[scrollAttr] = LastScrollPos;
+
+    $main.addEventListener('scroll', function() {
+      mainScrollPos = this[scrollAttr];
+    }, false);
+
+    if (isScrollDirectionX) {
+      $main.addEventListener('wheel', function(event) {
+        event.preventDefault();
+        // 滚动页面的水平位置
+        $main.scrollLeft += event.deltaY;
+      });
+    }
+  }, LastScrollPos > 0 ? 50 : 0);
 
   // 优化 FCP
   setTimeout(() => {

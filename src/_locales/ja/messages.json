@@ -159,6 +159,15 @@
   "lastFolderAndScrollBar": {
       "message": "最後のディレクトリとスクロール バー"
   },
+  "scrollDirection": {
+      "message": "スクロール方向:"
+  },
+  "scrollDirectionX": {
+      "message": "横"
+  },
+  "scrollDirectionY": {
+      "message": "縦"
+  },
   "layoutCols": {
       "message": "レイアウト列の数:"
   },

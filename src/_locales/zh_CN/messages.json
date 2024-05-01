@@ -159,6 +159,15 @@
   "lastFolderAndScrollBar": {
       "message": "上次目录和滚动条"
   },
+  "scrollDirection": {
+      "message": "滚动方向:"
+  },
+  "scrollDirectionX": {
+      "message": "横向"
+  },
+  "scrollDirectionY": {
+      "message": "纵向"
+  },
   "layoutCols": {
       "message": "布局列数:"
   },

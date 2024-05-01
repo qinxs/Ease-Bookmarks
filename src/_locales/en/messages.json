@@ -159,6 +159,15 @@
   "lastFolderAndScrollBar": {
       "message": "Last folder and scrollbar"
   },
+  "scrollDirection": {
+      "message": "Scroll Direction:"
+  },
+  "scrollDirectionX": {
+      "message": "Horizontal"
+  },
+  "scrollDirectionY": {
+      "message": "Vertical"
+  },
   "layoutCols": {
       "message": "Layout column(s):"
   },
