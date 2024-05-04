@@ -1,0 +1,210 @@
+{
+  "pluginDesc":
+  {
+    "message": "Easy to use bookmark manager"
+  },
+
+  "bookmarksManager":
+  {
+    "message": "م&دير الإشارات"
+  },
+
+  "searchPlaceholder":
+  {
+    "message": "الإشارات المرجعية"
+  },
+  "noBookmarksTip":
+  {
+    "message": "لا توجد إشارات مرجعية هنا."
+  },
+  "searchNoResultTip":
+  {
+    "message": "لا توجد إشارات مرجعية مطابقة "
+  },
+
+  "openAll":
+  {
+    "message": "فتح الكل"
+  },
+  "openInNewTab":
+  {
+    "message": "الفتح في علامة تبويب جديدة"
+  },
+  "openInBackgroundTab":
+  {
+    "message": "فتح في علامة تبويب في الخلفية"
+  },
+  "openInIncognitoWindow":
+  {
+    "message": "فتح في نافذة للتصفُّح المتخفي"
+  },
+  "addBookmark":
+  {
+    "message": "إضافة إشارة مرجعية جديدة"
+  },
+  "addFolder":
+  {
+    "message": "إضافة مجلد جديد"
+  },
+  "location":
+  {
+    "message": "افتح الدليل"
+  },
+  "setAsStartupFolder":
+  {
+    "message": "تعيين كدليل بدء التشغيل"
+  },
+  "updateToCurrentURL":
+  {
+    "message": "تم التحديث إلى عنوان URL الحالي"
+  },
+  "edit":
+  {
+    "message": "تعديل"
+  },
+  "delete":
+  {
+    "message": "حذف"
+  },
+  "deleteFolderConfirm":
+  {
+    "message": "سيؤدي هذا أيضًا إلى حذف جميع الإشارات المرجعية في هذا الدليل، حسنًا؟"
+  },
+  "rename":
+  {
+    "message": "إعادة تسمية"
+  },
+  
+  "editBookmark":
+  {
+    "message": "تعديل الإشارة المرجعية"
+  },
+  "editFolderName":
+  {
+    "message": "إعادة تسمية المجلد"
+  },
+  "save":
+  {
+    "message": "حفظ"
+  },
+  "cancel":
+  {
+    "message": "إلغاء"
+  },
+  "name":
+  {
+    "message": "الاسم"
+  },
+  "URL":
+  {
+    "message": "‏عنوان URL"
+  },
+
+  "themeColor":
+  {
+    "message": "Theme color:"
+  },
+  "auto":
+  {
+    "message": "Auto"
+  },
+  "light":
+  {
+    "message": "Light"
+  },
+  "dark":
+  {
+    "message": "Dark"
+  },
+  "openIn":
+  {
+    "message": "Open bookmarks in:"
+  },
+  "currentTab":
+  {
+    "message": "Current tab"
+  },
+  "newTab":
+  {
+    "message": "New tab"
+  },
+  "backgroundTab":
+  {
+    "message": "Background tab"
+  },
+  "hoverEnter": {
+      "message": "Hover to open folder:"
+  },
+  "off": {
+      "message": "Off"
+  },
+  "slow": {
+      "message": "Slow"
+  },
+  "moderate": {
+      "message": "Moderate"
+  },
+  "fast": {
+      "message": "Fast"
+  },
+  "startupFolder": {
+      "message": "Startup folder:"
+  },
+  "folderXTitle": {
+      "message": "Please use the folder right-click menu to set or change startup from a subdirectory..."
+  },
+  "lastFolder": {
+      "message": "Last folder"
+  },
+  "lastFolderAndScrollBar": {
+      "message": "Last folder and scrollbar"
+  },
+  "scrollDirection": {
+      "message": "Scroll Direction:"
+  },
+  "scrollDirectionX": {
+      "message": "Horizontal"
+  },
+  "scrollDirectionY": {
+      "message": "Vertical"
+  },
+  "layoutCols": {
+      "message": "Layout column(s):"
+  },
+  "minItemsEachCol": {
+      "message": "Items each column:"
+  },
+  "minItemsEachColTips": {
+      "message": "Note: valid when the number of Layout columns is multiple. 1 or 10 is recommended"
+  },
+  "alias": {
+      "message": "Alias:"
+  },
+  "customIcon": {
+      "message": "Custom icon:"
+  },
+  "selectFile": {
+      "message": "Select file"
+  },
+  "reset": {
+      "message": "reset"
+  },
+  "customIconTip": {
+      "message": "Note: Please select square, transparent-background image (png format)"
+  },
+  "customCSS": {
+      "message": "Custom style:"
+  },
+  "example": {
+      "message": "For example:"
+  },
+  "setInvalidTips": {
+      "message": "Invalid option! Optional Settings:"
+  },
+  "Built_inVariables": {
+      "message": "Built-in variables"
+  },
+  "Built_inVariablesTip": {
+      "message": "Note: Used to switch/modify minor features within this plugin (or the default behavior of the browser itself)"
+  }
+}
