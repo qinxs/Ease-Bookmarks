@@ -366,9 +366,16 @@ const contextMenu = {
           var mainHeight = $main.clientHeight;
           var menuWidth = $contextMenu.offsetWidth;
           var menuHeight = $contextMenu.offsetHeight;
-          // 数值4: 右键菜单的边距
-          if (this.posX + menuWidth > mainWidth - 4) {
-            this.posX = mainWidth - menuWidth - 4;
+          if (document.dir == 'rtl') {
+            if (Math.abs(this.posX) < menuWidth) {
+              this.posX = menuWidth;
+            }
+            this.posX -= menuWidth;
+          } else {
+            // 数值4: 右键菜单的边距
+            if (this.posX + menuWidth > mainWidth - 4) {
+              this.posX = mainWidth - menuWidth - 4;
+            }
           }
           if (isScrollDirectionX) {
             this.posX += $main.scrollLeft;
