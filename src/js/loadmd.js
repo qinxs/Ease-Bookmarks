@@ -1,35 +1,34 @@
-var UsageLang = chrome.i18n.getUILanguage();
+var mdUrl,
+  mdEnUrl = `md/usage-en.md`;
 
-var mdUrl;
-
-if (UsageLang.startsWith('zh')) {
-  mdUrl = '../md/usage-zh.md';
+if (lang.startsWith('zh')) {
+  mdUrl = 'md/usage-zh.md';
   document.documentElement.lang = 'zh-CN';
 } else {
-  mdUrl = `../md/usage-en.md`;
+  mdUrl = `md/usage-${lang}.md`;
 }
 
-renderMd(mdUrl, document.querySelector('#usage'), () => {
-  $$('a.btn').forEach(function(a) { 
-    if (!a.href) return;
-    a.addEventListener('click', function(event) {
-      event.preventDefault();
-      
-      chrome.tabs.create({ url: a.href });
-    });
+// 不存在对应语言的文档 则加载英文文档
+chrome.runtime.getPackageDirectoryEntry(function(rootDir) {
+  rootDir.getFile(mdUrl, {}, function(fileEntry) {
+    renderMd(mdUrl, document.querySelector('#usage'));
+  }, function(error) {
+    renderMd(mdEnUrl, document.querySelector('#usage'));
   });
 });
 
-function renderMd(url, ele, callback) {
-  var xhr = new XMLHttpRequest();
-  xhr.open('GET', url);
-  xhr.send();
-  xhr.onreadystatechange = function() {
-    if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
-      ele.innerHTML = marked.parse(xhr.responseText);
-      if (typeof callback === 'function') {
-        setTimeout(callback);
-      }
-    }
-  }
+function renderMd(url, ele) {  
+  fetch(url)
+    .then((response) => response.text())
+    .then(data => {
+      ele.innerHTML = marked.parse(data);
+    })
+    .then(() => {
+      $$('a[href^="chrome://"]').forEach(function(a) { 
+        a.addEventListener('click', function(event) {
+          event.preventDefault();
+          chrome.tabs.create({ url: a.href });
+        });
+      });
+    });
 }
