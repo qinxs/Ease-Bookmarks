@@ -21,11 +21,9 @@
 ### 打开/关闭 本扩展
 
 默认快捷键是 `Ctrl + Q`，你可以在如下管理页面进行
-<a class="btn" href="chrome://extensions/shortcuts">修改</a>：
+[修改](chrome://extensions/shortcuts)：
 - **Chrome**：`chrome://extensions/shortcuts`
 - **Edge**：`edge://extensions/shortcuts`
-
-<!-- - Firefox：`about:addons` -> 扩展 -> 设置图标 -> 管理扩展快捷键 -->
 
 ### 功能键
 

@@ -21,12 +21,10 @@ In addition, this extension has special support for `JS bookmarklet`~
 ### Turn this extension on/off
 
 The default shortcut is `Ctrl + Q`, you can 
-<a class="btn" href="chrome://extensions/shortcuts">modify it</a>
+[modify it](chrome://extensions/shortcuts)
  in the following management page:
-- **`Chrome`**: `chrome://extensions/shortcuts`
-- **`Edge`**: `edge://extensions/shortcuts`
-
-<!-- - Firefox: `about:addons` -> Extensions -> Settings Icons -> Manage Extension Shortcuts -->
+- **Chrome**: `chrome://extensions/shortcuts`
+- **Edge**: `edge://extensions/shortcuts`
 
 ### Function keys
 
