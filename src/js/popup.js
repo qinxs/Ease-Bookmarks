@@ -276,10 +276,7 @@ const search = {
     if (keyword) {
       // console.log($searchInput.value);
       this._loadSearchView($searchInput.value);
-      // 防止抖动
-      requestIdleCallback(() => {
-        !isSearchView && toggleList(null, true);
-      });
+      !isSearchView && toggleList(null, true);
     } else {
       toggleList($curFolderList.id.slice(1));
     }
@@ -616,6 +613,11 @@ function renderListView($list, id, items) {
   } else {
     $list.classList.add('show-tip');
   }
+}
+
+function renderListViewStartup(...args) {
+  renderListView(...args);
+  resumeLastStatus();
 }
 
 function templateFrag(treeData, isSearchTemplate = false) {
@@ -1298,6 +1300,26 @@ function saveLastData(event) {
     }
   }
 }
+
+// 滚动事件需恢复上次滚动位置后再添加
+function resumeLastStatus() {
+  var LastScrollPos = localStorage.getItem('LastScrollPos') || 0;
+  setTimeout(() => {
+    if (LastScrollPos) $main[scrollAttr] = LastScrollPos;
+    $main.addEventListener('scroll', function() {
+      mainScrollPos = this[scrollAttr];
+    }, false);
+
+    if (isScrollDirectionX) {
+      $main.addEventListener('wheel', function(event) {
+        event.preventDefault();
+        // 滚动页面的水平位置
+        $main.scrollLeft += event.deltaY;
+      });
+    }
+  }, LastScrollPos > 0 ? 50 : 0);
+}
+
 /******************************************************/
 $main.addEventListener('click', handleMainClick, false);
 $nav.header.addEventListener('dblclick', () => {
@@ -1327,27 +1349,10 @@ Promise.all([
   $curFolderList.id = `_${BM.startupReal}`;
   cachedFolderInfo.lists[BM.startupReal] = $curFolderList;
   
-  renderListView($curFolderList, BM.startupReal, BM.preItems);
+  renderListViewStartup($curFolderList, BM.startupReal, BM.preItems);
   setListSize($curFolderList);
   
   nav.init(BM.startupReal);
-  
-  var LastScrollPos = localStorage.getItem('LastScrollPos') || 0;
-  setTimeout(() => {
-    if (LastScrollPos) $main[scrollAttr] = LastScrollPos;
-
-    $main.addEventListener('scroll', function() {
-      mainScrollPos = this[scrollAttr];
-    }, false);
-
-    if (isScrollDirectionX) {
-      $main.addEventListener('wheel', function(event) {
-        event.preventDefault();
-        // 滚动页面的水平位置
-        $main.scrollLeft += event.deltaY;
-      });
-    }
-  }, LastScrollPos > 0 ? 50 : 0);
 
   // 优化 FCP
   setTimeout(() => {
@@ -1356,7 +1361,7 @@ Promise.all([
     dialog.init();
     document.addEventListener('keydown', hotkeyEvents);
     onBookmarkEvents();
-    BM.settings.startup < 0 && window.addEventListener('unload', saveLastData);
+    settings.startup < 0 && window.addEventListener('unload', saveLastData);
     $searchList.addEventListener('mouseover', handleSearchResultsHover, false);
     $searchList.addEventListener('mouseenter', () => {
       var $activeItem = $('.item.active', $searchList);

@@ -37,7 +37,9 @@ function updataOldData() {
 }
 
 // 安装、更新
-chrome.runtime.onInstalled.addListener(() => {
+chrome.runtime.onInstalled.addListener((details) => {
+  if (details.reason !== "install" && details.reason !== "update") return;
+
   var manifest = chrome.runtime.getManifest();
   localStorage.setItem('version', manifest.version);
 
