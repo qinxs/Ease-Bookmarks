@@ -663,7 +663,7 @@ function setListSize($list) {
   if (!length) return;
 
   if ($list === $searchList) {
-    rowsCount = Math.ceil(length / (settings.keepMaxCols == 0 ? layout.cols : layout.curMaxCols));
+    rowsCount = Math.ceil(length / (settings.keepMaxCols == 0 ? layout.bodyWidthCols : layout.curMaxCols));
     if (isScrollDirectionX) {
       if (rowsCount > 16) {
         rowsCount = settings.minItemsPerCol;
