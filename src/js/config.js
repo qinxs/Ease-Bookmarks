@@ -23,6 +23,7 @@ window.BM = {
     fastCreate: 0, // 0-2
     hotkeyCancelSeleted: 'Space',
     hotkeyDelete: '-Delete',
+    keepLastSearchValue: 0,
     keepMaxCols: 0, // 0-1 保持最大宽度
     // 1-2
     // 1：仅url 

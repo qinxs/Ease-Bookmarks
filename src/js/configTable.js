@@ -131,6 +131,10 @@ class TableRenderer {
         let defaultValue = JSON.stringify2(this.defaultSys[name]);
         tdValue.textContent = defaultValue;
 
+        if (name == 'keepLastSearchValue' && defaultValue == 0) {
+          localStorage.removeItem('LastSearchValue');
+        }
+
         this.trigger('configCanged', { name, value: defaultValue });
       }
 

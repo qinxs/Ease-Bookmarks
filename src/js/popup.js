@@ -1291,6 +1291,11 @@ function saveLastData(event) {
   event.preventDefault();
   // Chrome requires returnValue to be set.
   event.returnValue = '';
+
+  if (settings.keepLastSearchValue) {
+    localStorage.setItem('LastSearchValue', $searchInput.value);
+  }
+
   // startupFromLast 取最新的设置
   var curStartupFromLast = localStorage.getItem('startupFromLast');
   if (curStartupFromLast < 0) {
@@ -1303,13 +1308,23 @@ function saveLastData(event) {
 
 // 滚动事件需恢复上次滚动位置后再添加
 function resumeLastStatus() {
+  if (settings.keepLastSearchValue == 1) {
+    var LastSearchValue = localStorage.getItem('LastSearchValue') || '';
+    if (LastSearchValue) {
+      $searchInput.value = LastSearchValue;
+      setTimeout(() => {
+        $searchInput.dispatchEvent(new Event('input'));
+      }, 30);
+    }
+  }
+
   var LastScrollPos = localStorage.getItem('LastScrollPos') || 0;
   setTimeout(() => {
     if (LastScrollPos) $main[scrollAttr] = LastScrollPos;
+
     $main.addEventListener('scroll', function() {
       mainScrollPos = this[scrollAttr];
     }, false);
-
     if (isScrollDirectionX) {
       $main.addEventListener('wheel', function(event) {
         event.preventDefault();
@@ -1361,7 +1376,10 @@ Promise.all([
     dialog.init();
     document.addEventListener('keydown', hotkeyEvents);
     onBookmarkEvents();
-    settings.startup < 0 && window.addEventListener('unload', saveLastData);
+
+    if (settings.startup < 0 || settings.keepLastSearchValue) {
+      window.addEventListener('unload', saveLastData);
+    }
     $searchList.addEventListener('mouseover', handleSearchResultsHover, false);
     $searchList.addEventListener('mouseenter', () => {
       var $activeItem = $('.item.active', $searchList);
