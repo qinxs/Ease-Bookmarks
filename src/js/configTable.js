@@ -91,7 +91,7 @@ class TableRenderer {
     }
   }
 
-  setEditStatus(trEle) {
+  setEditStatus(trEle, cellReset = false) {
     trEle = trEle.closest('tr');
     if (!trEle) return;
     let tdValue = trEle.querySelector('.cell-value');
@@ -100,9 +100,11 @@ class TableRenderer {
     this.editInput.value = tdValue.textContent;
 
     tdValue.insertAdjacentElement('beforeend', this.editInput);
-    this.editInput.hidden = false;
-    this.editInput.focus();
-    this.editing = true;
+    if (!cellReset) {
+      this.editInput.hidden = false;
+      this.editInput.focus();
+      this.editing = true;
+    }
   }
 
   cancelEditStatus() {
@@ -123,19 +125,14 @@ class TableRenderer {
       let target = event.target;
       
       if (target.classList.contains('cell-reset')) {
-        let tr = target.closest('tr');
-        tr.classList.remove('has-user-value');
+        let tdValue = target.closest('tr').querySelector('.cell-value');
 
-        let tdValue = tr.querySelector('.cell-value');
         let name = tdValue.getAttribute('name');
         let defaultValue = JSON.stringify2(this.defaultSys[name]);
-        tdValue.textContent = defaultValue;
 
-        if (name == 'keepLastSearchValue' && defaultValue == 0) {
-          localStorage.removeItem('LastSearchValue');
-        }
-
-        this.trigger('configCanged', { name, value: defaultValue });
+        this.setEditStatus(target, true);
+        this.editInput.value = defaultValue;
+        this.editInput.dispatchEvent(new UIEvent('change'));
       }
 
       if (this.editing && target !== this.editInput) {
@@ -146,13 +143,18 @@ class TableRenderer {
     this.editInput.addEventListener('change', event => {
       let { name, value } = event.target;
       let tr = this.editInput.closest('tr');
-      
+
+      // console.log(name, value);
       this.editInput.closest('td').textContent = JSON.stringify2(value);
 
       if ( value != this.defaultSys[name]) {
         tr.classList.add('has-user-value');
       } else {
         tr.classList.remove('has-user-value');
+      }
+
+      if (name == 'keepLastSearchValue' && value == 0) {
+        localStorage.removeItem('LastSearchValue');
       }
 
       this.trigger('configCanged', { name, value });
