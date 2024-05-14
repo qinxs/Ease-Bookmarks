@@ -12,6 +12,7 @@ window.BM = {
     // 1 书签栏 2 其他书签（根目录为0）
     // -1 目录，-2 目录和滚动条（从上次位置启动）
     startup: 1,
+    customCSS: '', // 自定义css
   },
   defaultSys: {
     bodyWidth_1: '280px',

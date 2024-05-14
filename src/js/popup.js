@@ -80,6 +80,7 @@ const dataSetting = {
     this.layout();
     this.switchTheme();
     BM.openFolderEventType = settings.hoverEnter == 0 ? 'click' : 'mouseover';
+    this.dataWatcher();
   },
   layout() {
     if(settings.customCSS) {
@@ -96,6 +97,16 @@ const dataSetting = {
       window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
       document.body.classList.add("dark");
     }
+  },
+  dataWatcher() {
+    chrome.storage.onChanged.addListener((changes, areaName) => {
+      var key = Object.keys(changes).shift();
+      var value = changes[key]['newValue'] || BM.default[key];
+      // console.log(key, value);
+      if (key == 'customCSS') {
+        $('#customCSS').textContent = value;
+      }
+    });
   }
 }
 
