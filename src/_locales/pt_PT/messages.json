@@ -1,0 +1,210 @@
+{
+  "pluginDesc":
+  {
+    "message": "Easy to use bookmark manager"
+  },
+
+  "bookmarksManager":
+  {
+    "message": "&Gestor de marcadores"
+  },
+
+  "searchPlaceholder":
+  {
+    "message": "Pesquisar marcadores..."
+  },
+  "noBookmarksTip":
+  {
+    "message": "Não há nenhum marcador aqui."
+  },
+  "searchNoResultTip":
+  {
+    "message": "Não foram encontrados resultados da pesquisa."
+  },
+
+  "openAll":
+  {
+    "message": "Abrir tudo"
+  },
+  "openInNewTab":
+  {
+    "message": "Abrir num novo separador"
+  },
+  "openInBackgroundTab":
+  {
+    "message": "Abrir no separador de fundo"
+  },
+  "openInIncognitoWindow":
+  {
+    "message": "Abra na janela de navegação anónima"
+  },
+  "addBookmark":
+  {
+    "message": "Adicionar novo marcador"
+  },
+  "addFolder":
+  {
+    "message": "Adicionar nova pasta"
+  },
+  "location":
+  {
+    "message": "Abrir o pasta"
+  },
+  "setAsStartupFolder":
+  {
+    "message": "Definir como pasta de inicialização"
+  },
+  "updateToCurrentURL":
+  {
+    "message": "Atualizar para o URL atual"
+  },
+  "edit":
+  {
+    "message": "Editar"
+  },
+  "delete":
+  {
+    "message": "Eliminar"
+  },
+  "deleteFolderConfirm":
+  {
+    "message": "Isso também excluirá todos os favoritos neste diretório, tem certeza?"
+  },
+  "rename":
+  {
+    "message": "Mudar nome"
+  },
+  
+  "editBookmark":
+  {
+    "message": "Editar marcador"
+  },
+  "editFolderName":
+  {
+    "message": "Mudar o nome da pasta"
+  },
+  "save":
+  {
+    "message": "Guardar"
+  },
+  "cancel":
+  {
+    "message": "Cancelar"
+  },
+  "name":
+  {
+    "message": "Nome"
+  },
+  "URL":
+  {
+    "message": "URL"
+  },
+
+  "themeColor":
+  {
+    "message": "Theme color:"
+  },
+  "auto":
+  {
+    "message": "Auto"
+  },
+  "light":
+  {
+    "message": "Light"
+  },
+  "dark":
+  {
+    "message": "Dark"
+  },
+  "openIn":
+  {
+    "message": "Open bookmarks in:"
+  },
+  "currentTab":
+  {
+    "message": "Current tab"
+  },
+  "newTab":
+  {
+    "message": "New tab"
+  },
+  "backgroundTab":
+  {
+    "message": "Background tab"
+  },
+  "hoverEnter": {
+      "message": "Hover to open folder:"
+  },
+  "off": {
+      "message": "Off"
+  },
+  "slow": {
+      "message": "Slow"
+  },
+  "moderate": {
+      "message": "Moderate"
+  },
+  "fast": {
+      "message": "Fast"
+  },
+  "startupFolder": {
+      "message": "Startup folder:"
+  },
+  "folderXTitle": {
+      "message": "Please use the folder right-click menu to set or change startup from a subdirectory..."
+  },
+  "lastFolder": {
+      "message": "Last folder"
+  },
+  "lastFolderAndScrollBar": {
+      "message": "Last folder and scrollbar"
+  },
+  "scrollDirection": {
+      "message": "Scroll Direction:"
+  },
+  "scrollDirectionX": {
+      "message": "Horizontal"
+  },
+  "scrollDirectionY": {
+      "message": "Vertical"
+  },
+  "layoutCols": {
+      "message": "Layout column(s):"
+  },
+  "minItemsEachCol": {
+      "message": "Items each column:"
+  },
+  "minItemsEachColTips": {
+      "message": "Note: valid when the number of Layout columns is multiple. 1 or 10 is recommended"
+  },
+  "alias": {
+      "message": "Alias:"
+  },
+  "customIcon": {
+      "message": "Custom icon:"
+  },
+  "selectFile": {
+      "message": "Select file"
+  },
+  "reset": {
+      "message": "reset"
+  },
+  "customIconTip": {
+      "message": "Note: Please select square, transparent-background image (png format)"
+  },
+  "customCSS": {
+      "message": "Custom style:"
+  },
+  "example": {
+      "message": "For example:"
+  },
+  "setInvalidTips": {
+      "message": "Invalid option! Optional Settings:"
+  },
+  "Built_inVariables": {
+      "message": "Built-in variables"
+  },
+  "Built_inVariablesTip": {
+      "message": "Note: Used to switch/modify minor features within this plugin (or the default behavior of the browser itself)"
+  }
+}
