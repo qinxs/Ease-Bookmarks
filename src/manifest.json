@@ -2,7 +2,7 @@
   "manifest_version": 2,
   "name": "Ease Bookmarks",
   "description": "__MSG_pluginDesc__",
-  "version": "1.7.1",
+  "version": "1.7.2",
   "offline_enabled": true,
   "default_locale": "en",
   "icons": {
@@ -28,12 +28,10 @@
   "commands": {
     "_execute_browser_action": {
       "suggested_key": {
-        "windows": "Ctrl+Q",
-        "mac": "Command+Q",
-        "linux": "Ctrl+Q",
-        "chromeos": "Ctrl+Q"
+        "default": "Ctrl+Q",
+        "mac": "Command+Q"
       },
-      "description": "打开/关闭扩展"
+      "description": "Activate the extension"
     }
   },
 

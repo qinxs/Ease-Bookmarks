@@ -111,6 +111,13 @@ Ease Bookmarks 是一款为了替代浏览器原有书签栏的扩展
 
 - `-Delete`：默认值，关闭
 
+### `keepLastSearchValue`
+
+> 功能：恢复上次搜索关键字
+
+- `0`：默认值
+- `1`：打开 popup 窗口时，恢复上次的搜索关键字和搜索结果
+
 ### `keepMaxCols`
 
 > 功能：页面保持最大宽度
