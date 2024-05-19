@@ -4,7 +4,7 @@ title 打包为zip
 rem 指定WINRAR路径
 @set "path=%path%;D:\Program Files\WinRAR"
 
-rem 检查是git状态
+rem 检查git状态 clean退出时则直接checkout
 for /f "delims=" %%i in ('git status -s') do set "status=%%i"
 
 cd src
