@@ -1,13 +1,14 @@
-<img width="64" src="docs/bookmarks.svg" align="left" />
-
-# Ease Bookmarks
-
-[![Source Code](https://img.shields.io/badge/Source_Code-GitHub-blue)](https://github.com/qinxs/Ease-Bookmarks)
-[![Chrome Web Store](https://img.shields.io/chrome-web-store/v/poefceffmekhjoadknillcbdifahongk.svg)](https://chrome.google.com/webstore/detail/ease-bookmarks/poefceffmekhjoadknillcbdifahongk)
-[![Microsoft Edge Add-on](https://img.shields.io/badge/dynamic/json?label=microsoft%20edge%20add-on&prefix=v&query=%24.version&url=https%3A%2F%2Fmicrosoftedge.microsoft.com%2Faddons%2Fgetproductdetailsbycrxid%2Faddbgeibeffkokpabpbpmdpehfbegchl)](https://microsoftedge.microsoft.com/addons/detail/ease-bookmarks/addbgeibeffkokpabpbpmdpehfbegchl)
-[![Donate](https://img.shields.io/badge/Donate-blueviolet)](https://7bxing.com/donate/ "欢迎捐赠~")
-
-> 简单易用的书签管理器
+[//]: #
+<div align="center">
+<img width="64" src="docs/bookmarks.svg" />
+<br>
+<i>简 单 易 用 的 书 签 管 理 器</i>
+<h1>Ease Bookmarks</h1>
+<a href="https://github.com/qinxs/Ease-Bookmarks"><img src="https://img.shields.io/badge/Source_Code-GitHub-blue" alt="Source Code"></a>
+<a href="https://chrome.google.com/webstore/detail/ease-bookmarks/poefceffmekhjoadknillcbdifahongk"><img src="https://img.shields.io/chrome-web-store/v/poefceffmekhjoadknillcbdifahongk.svg" alt="Chrome Web Store"></a>
+<a href="https://microsoftedge.microsoft.com/addons/detail/ease-bookmarks/addbgeibeffkokpabpbpmdpehfbegchl"><img src="https://img.shields.io/badge/dynamic/json?label=microsoft%20edge%20add-on&amp;prefix=v&amp;query=%24.version&amp;url=https%3A%2F%2Fmicrosoftedge.microsoft.com%2Faddons%2Fgetproductdetailsbycrxid%2Faddbgeibeffkokpabpbpmdpehfbegchl" alt="Microsoft Edge Add-on"></a>
+<a href="https://7bxing.com/donate/" title="欢迎捐赠~"><img src="https://img.shields.io/badge/Donate-blueviolet" alt="Donate"></a>
+</div>
 
 Ease Bookmarks 是一款为了替代浏览器原有书签栏的扩展
 
@@ -25,8 +26,6 @@ Ease Bookmarks 是一款为了替代浏览器原有书签栏的扩展
 
 快捷键支持
 
-~~在未使用本扩展时，不占用后台~~
-
 另外，本扩展对 `JS 小书签` 进行了特别支持~
 
 > 更新日志：[ChangeLog.md](ChangeLog.md)
@@ -42,8 +41,6 @@ Ease Bookmarks 是一款为了替代浏览器原有书签栏的扩展
 默认快捷键是 `Ctrl + Q`，你可以在如下管理页面进行修改：
 - **Chrome**：`chrome://extensions/shortcuts`
 - **Edge**：`edge://extensions/shortcuts`
-
-<!-- - Firefox：`about:addons` -> 扩展 -> 设置图标 -> 管理扩展快捷键 -->
 
 ### 功能键
 
