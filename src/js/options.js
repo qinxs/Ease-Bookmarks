@@ -76,6 +76,9 @@ loadSettings.then(() => {
   // 读数据
   // console.log(BM.settings);
   for (var key in BM.default) {
+    // [value=]会报错 单独处理
+    if (key === 'customCSS') continue;
+
     var value = BM.settings[key];
     // console.log(`${key}: ${value}`);
     var ele = $(`input[name=${key}][value="${value}"]`);
