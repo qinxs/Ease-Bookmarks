@@ -194,7 +194,7 @@ i {
   content: "__MSG_noBookmarksTip__";
 }
 #search-list:empty::after {
-  content: "__MSG_searchNoResultTip__";
+  content: "__MSG_noSearchResultsTip__";
 }
 
 #search-input {

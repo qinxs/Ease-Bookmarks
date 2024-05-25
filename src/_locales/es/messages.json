@@ -15,11 +15,11 @@
   },
   "noBookmarksTip":
   {
-    "message": "No hay marcadores aquí."
+    "message": "Esta carpeta está vacía"
   },
-  "searchNoResultTip":
+  "noSearchResultsTip":
   {
-    "message": "No hay marcadores coincidentes."
+    "message": "No se han encontrado resultados de búsqueda"
   },
 
   "openAll":
@@ -46,9 +46,9 @@
   {
     "message": "Añadir nueva carpeta"
   },
-  "location":
+  "showInFolder":
   {
-    "message": "Abra el directorio donde se encuentra"
+    "message": "Mostrar en carpeta"
   },
   "setAsStartupFolder":
   {
@@ -77,11 +77,11 @@
   
   "editBookmark":
   {
-    "message": "Editar un marcador"
+    "message": "Editar marcador"
   },
   "editFolderName":
   {
-    "message": "Modificar el nombre del directorio"
+    "message": "Cambia el nombre de la carpeta"
   },
   "save":
   {

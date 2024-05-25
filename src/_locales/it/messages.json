@@ -15,11 +15,11 @@
   },
   "noBookmarksTip":
   {
-    "message": "Non c'è alcun preferiti qui."
+    "message": "Questa cartella è vuota"
   },
-  "searchNoResultTip":
+  "noSearchResultsTip":
   {
-    "message": "Nessun risultato di ricerca trovato."
+    "message": "Nessun risultato di ricerca trovato"
   },
 
   "openAll":
@@ -46,9 +46,9 @@
   {
     "message": "Aggiungi nuova cartella"
   },
-  "location":
+  "showInFolder":
   {
-    "message": "Apri cartella"
+    "message": "Mostra nella cartella"
   },
   "setAsStartupFolder":
   {

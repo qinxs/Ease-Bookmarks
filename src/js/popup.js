@@ -330,7 +330,7 @@ const contextMenu = {
     <hr>
     <li id="bookmark-add-bookmark">${L("addBookmark")}</li>
     <li id="bookmark-add-folder">${L("addFolder")}</li>
-    <li id="bookmark-location">${L("location")}</li>
+    <li id="bookmark-location">${L("showInFolder")}</li>
     <hr>
     <li id="bookmark-set-as-startup">${L("setAsStartupFolder")}</li>
     <li id="bookmark-update-url">${L("updateToCurrentURL")}</li>

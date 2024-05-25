@@ -15,11 +15,11 @@
   },
   "noBookmarksTip":
   {
-    "message": "Aqui não favorito."
+    "message": "Esta pasta está vazia"
   },
-  "searchNoResultTip":
+  "noSearchResultsTip":
   {
-    "message": "Nenhum resultado de pesquisa encontrado."
+    "message": "Nenhum resultado de pesquisa encontrado"
   },
 
   "openAll":
@@ -46,9 +46,9 @@
   {
     "message": "Adicionar nova pasta"
   },
-  "location":
+  "showInFolder":
   {
-    "message": "Abrir o pasta"
+    "message": "Mostrar na pasta"
   },
   "setAsStartupFolder":
   {

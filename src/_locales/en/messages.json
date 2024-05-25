@@ -15,11 +15,11 @@
   },
   "noBookmarksTip":
   {
-    "message": "There is no bookmark here."
+    "message": "This folder is empty"
   },
-  "searchNoResultTip":
+  "noSearchResultsTip":
   {
-    "message": "No matching bookmark."
+    "message": "No search results found"
   },
 
   "openAll":
@@ -40,15 +40,15 @@
   },
   "addBookmark":
   {
-    "message": "Add bookmark"
+    "message": "Add new bookmark"
   },
   "addFolder":
   {
-    "message": "Add folder"
+    "message": "Add new folder"
   },
-  "location":
+  "showInFolder":
   {
-    "message": "Open the directory"
+    "message": "Show in folder"
   },
   "setAsStartupFolder":
   {
@@ -81,7 +81,7 @@
   },
   "editFolderName":
   {
-    "message": "Edit folder name"
+    "message": "Rename folder"
   },
   "save":
   {

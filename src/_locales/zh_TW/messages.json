@@ -15,11 +15,11 @@
   },
   "noBookmarksTip":
   {
-    "message": "這裏沒有書籤呢~"
+    "message": "此文件夾中沒有內容"
   },
-  "searchNoResultTip":
+  "noSearchResultsTip":
   {
-    "message": "沒有匹配的書籤~"
+    "message": "未找到任何搜索結果"
   },
 
   "openAll":
@@ -46,9 +46,9 @@
   {
     "message": "新建文件夾"
   },
-  "location":
+  "showInFolder":
   {
-    "message": "打開所在目錄"
+    "message": "在文件夾中顯示"
   },
   "setAsStartupFolder":
   {
@@ -81,7 +81,7 @@
   },
   "editFolderName":
   {
-    "message": "修改文件夾名"
+    "message": "重命名文件夾"
   },
   "save":
   {
