@@ -73,7 +73,7 @@ td:first-child {
     position: relative;
 }
 
-.cTable-input {
+#cTable-input {
     position: absolute;
     top: 0;
     left: 0;

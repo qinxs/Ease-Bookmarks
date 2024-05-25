@@ -21,7 +21,7 @@ class TableRenderer {
 
   init() {
     this.table = this.render();
-    this.editInput = this.table.querySelector('.cTable-input');
+    this.editInput = this.table.querySelector('#cTable-input');
     this._events();
 
     return this;
@@ -38,7 +38,7 @@ class TableRenderer {
         <a href="https://github.com/qinxs/Ease-Bookmarks#内置参数">
           <img src="icons/i.svg">
         </a>
-        <input class="cTable-input" hidden/>
+        <input id="cTable-input" hidden/>
       </th>
       <th class="cell-operation"></th>`;
     thead.appendChild(headTr);
