@@ -2,10 +2,14 @@
 // console.log('eventPage');
 
 // default_icon 设为透明图标，但效果不好
-var iconBase64 = localStorage.customIcon;
-if (iconBase64) {
-  chrome.browserAction.setIcon({path: iconBase64});
-}
+chrome.runtime.onStartup.addListener(() => {
+  chrome.storage.local.get('customIcon', items => {
+    var iconBase64 = items.customIcon;
+    if (iconBase64) {
+      chrome.action.setIcon({path: iconBase64});
+    }
+  });
+});
 
 function checkRootInfo(argument) {
   chrome.storage.sync.get(['rootInfo'], function(result) {
@@ -23,28 +27,23 @@ function checkRootInfo(argument) {
 }
 
 function updataOldData() {
-  // v1.2.6 ↑
+  // v1.7.2 ↑
   // 从上次位置启动 改为 从任意目录启动
-  chrome.storage.sync.get(null, results => {
-    var startup = results.startupFromLast;
-    if (startup) {
-      chrome.storage.sync.set({'startup': startup});
-      chrome.storage.sync.remove('startupFromLast');
-      localStorage.setItem('startupID', localStorage.LastFolderID);
-      localStorage.removeItem('LastFolderID');
-    }
-  });
+  localStorage.removeItem('version');
+  var iconBase64 = localStorage.customIcon;
+  if (iconBase64) {
+    // console.log(iconBase64);
+    // chrome.browserAction.setIcon({path: iconBase64});
+    chrome.storage.local.set({customIcon: iconBase64});
+    localStorage.removeItem('customIcon');
+  }
 }
 
 // 安装、更新
 chrome.runtime.onInstalled.addListener((details) => {
   if (details.reason !== "install" && details.reason !== "update") return;
 
-  var manifest = chrome.runtime.getManifest();
-  localStorage.setItem('version', manifest.version);
-
   checkRootInfo();
-
   try {
     updataOldData();
   } catch {}
