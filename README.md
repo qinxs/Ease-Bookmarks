@@ -140,6 +140,7 @@ Ease Bookmarks 是一款为了替代浏览器原有书签栏的扩展
 > 通过以下方式翻译，如有不当，请提 issue 指明，感谢~
 
 - `chrome://bookmarks/` -> `F12`，[参考](docs/chrome_bookmarks.png)
+  > `chrome://bookmarks/strings.m.js` 获得翻译字符串
 - Chrome 的 pak 文件，路径`Chromium\94.0.4606.81\Locales`
   
   > 使用 `ChromePAK解包打包工具.exe` 解包搜索对比
