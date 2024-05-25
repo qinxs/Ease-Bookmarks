@@ -15,11 +15,11 @@
   },
   "noBookmarksTip":
   {
-    "message": "Здесь нет закладки."
+    "message": "Папка пуста"
   },
-  "searchNoResultTip":
+  "noSearchResultsTip":
   {
-    "message": "Нет соответствующей закладки."
+    "message": "Ничего не найдено"
   },
 
   "openAll":
@@ -46,9 +46,9 @@
   {
     "message": "Новая папка"
   },
-  "location":
+  "showInFolder":
   {
-    "message": "Откройте каталог, к которому он принадлежит"
+    "message": "Показать в папке"
   },
   "setAsStartupFolder":
   {
@@ -77,11 +77,11 @@
   
   "editBookmark":
   {
-    "message": "Редактировать закладку"
+    "message": "Изменить закладку"
   },
   "editFolderName":
   {
-    "message": "Изменение имени папки"
+    "message": "Переименование папки"
   },
   "save":
   {

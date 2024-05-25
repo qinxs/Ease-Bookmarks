@@ -15,11 +15,11 @@
   },
   "noBookmarksTip":
   {
-    "message": "Il n’y a pas de signet ici."
+    "message": "Ce dossier est vide"
   },
-  "searchNoResultTip":
+  "noSearchResultsTip":
   {
-    "message": "Aucun signet correspondant."
+    "message": "Aucun résultat de recherche n'a été trouvé"
   },
 
   "openAll":
@@ -46,9 +46,9 @@
   {
     "message": "Ajouter un dossier"
   },
-  "location":
+  "showInFolder":
   {
-    "message": "Ouvrez le répertoire auquel il appartient"
+    "message": "Afficher le dossier"
   },
   "setAsStartupFolder":
   {
@@ -77,11 +77,11 @@
   
   "editBookmark":
   {
-    "message": "Modifier le signet"
+    "message": "Modifier le favori"
   },
   "editFolderName":
   {
-    "message": "Modifier le nom du dossier"
+    "message": "Renommer le dossier"
   },
   "save":
   {

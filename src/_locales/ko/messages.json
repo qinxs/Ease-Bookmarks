@@ -15,11 +15,11 @@
   },
   "noBookmarksTip":
   {
-    "message": "여기에는 책갈피가 없습니다."
+    "message": "폴더가 비어 있습니다."
   },
-  "searchNoResultTip":
+  "noSearchResultsTip":
   {
-    "message": "일치하는 책갈피가 없습니다."
+    "message": "검색결과 없음"
   },
 
   "openAll":
@@ -46,9 +46,9 @@
   {
     "message": "새 폴더 추가"
   },
-  "location":
+  "showInFolder":
   {
-    "message": "소유 디렉터리를 엽니다"
+    "message": "폴더 열기"
   },
   "setAsStartupFolder":
   {
@@ -77,11 +77,11 @@
   
   "editBookmark":
   {
-    "message": "책갈피 편집"
+    "message": "북마크 수정"
   },
   "editFolderName":
   {
-    "message": "폴더 이름 편집"
+    "message": "폴더 이름 바꾸기"
   },
   "save":
   {

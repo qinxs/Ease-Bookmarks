@@ -15,11 +15,11 @@
   },
   "noBookmarksTip":
   {
-    "message": "Hier gibt es kein Lesezeichen."
+    "message": "Dieser Ordner ist leer"
   },
-  "searchNoResultTip":
+  "noSearchResultsTip":
   {
-    "message": "Kein passendes Lesezeichen."
+    "message": "Keine Suchergebnisse gefunden"
   },
 
   "openAll":
@@ -46,9 +46,9 @@
   {
     "message": "Neuen Ordner hinzufügen"
   },
-  "location":
+  "showInFolder":
   {
-    "message": "Verzeichnis öffnen"
+    "message": "In Ordner zeigen"
   },
   "setAsStartupFolder":
   {
@@ -81,7 +81,7 @@
   },
   "editFolderName":
   {
-    "message": "Ordnernamen bearbeiten"
+    "message": "Ordner umbenennen"
   },
   "save":
   {

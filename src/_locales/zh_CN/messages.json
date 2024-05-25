@@ -15,11 +15,11 @@
   },
   "noBookmarksTip":
   {
-    "message": "这里没有书签呢~"
+    "message": "此文件夹中没有内容"
   },
-  "searchNoResultTip":
+  "noSearchResultsTip":
   {
-    "message": "没有匹配的书签~"
+    "message": "未找到任何搜索结果"
   },
 
   "openAll":
@@ -46,9 +46,9 @@
   {
     "message": "新建文件夹"
   },
-  "location":
+  "showInFolder":
   {
-    "message": "打开所在目录"
+    "message": "在文件夹中显示"
   },
   "setAsStartupFolder":
   {
@@ -81,7 +81,7 @@
   },
   "editFolderName":
   {
-    "message": "修改文件夹名"
+    "message": "重命名文件夹"
   },
   "save":
   {

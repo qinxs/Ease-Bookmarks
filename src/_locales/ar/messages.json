@@ -15,11 +15,11 @@
   },
   "noBookmarksTip":
   {
-    "message": "لا توجد إشارات مرجعية هنا."
+    "message": "هذا المجلد فارغ"
   },
-  "searchNoResultTip":
+  "noSearchResultsTip":
   {
-    "message": "لا توجد إشارات مرجعية مطابقة "
+    "message": "لم يتم العثور على أي نتائج بحث"
   },
 
   "openAll":
@@ -46,9 +46,9 @@
   {
     "message": "إضافة مجلد جديد"
   },
-  "location":
+  "showInFolder":
   {
-    "message": "افتح الدليل"
+    "message": "العرض في المجلد"
   },
   "setAsStartupFolder":
   {

@@ -15,11 +15,11 @@
   },
   "noBookmarksTip":
   {
-    "message": "ブックマークはありません"
+    "message": "このフォルダは空です"
   },
-  "searchNoResultTip":
+  "noSearchResultsTip":
   {
-    "message": "一致するブックマークはありません〜。"
+    "message": "一致する結果は見つかりませんでした"
   },
 
   "openAll":
@@ -46,9 +46,9 @@
   {
     "message": "新しいフォルダを追加"
   },
-  "location":
+  "showInFolder":
   {
-    "message": "ディレクトリを開く"
+    "message": "フォルダを開く"
   },
   "setAsStartupFolder":
   {
@@ -77,11 +77,11 @@
 
   "editBookmark":
   {
-    "message": "編集"
+    "message": "ブックマークを編集"
   },
   "editFolderName":
   {
-    "message": "名前を変更"
+    "message": "フォルダ名の変更"
   },
   "save":
   {
