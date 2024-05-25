@@ -558,7 +558,7 @@ const dialog = {
     event.preventDefault();
     var id = $fromTarget ? $fromTarget.getAttribute('data-id') : undefined;
     var title = this.$name.textContent;
-    var url = this.$url.hidden ? null : this.$url.textContent;
+    var url = this.$url.hidden ? null : this.$url.textContent || ' ';
     // console.log(this.$name.textContent);
     switch(curContextMenuID) {
       case "bookmark-add-bookmark":
