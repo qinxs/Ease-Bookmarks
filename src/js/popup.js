@@ -359,45 +359,45 @@ const contextMenu = {
         event.preventDefault();
         // console.log(event.target);
         var target = event.target;
-        if(target.tagName === 'A' || target.classList.contains('folder-list')) {
-          if (target.tagName === 'A') {
-            $fromTarget = target;
-            $contextMenu.className = $fromTarget.type;
-          } else {
-            $fromTarget = null;
-            $contextMenu.className = 'nodata';
-          }
-          
-          $contextMenu.type = isSearchView ? 'search' : '';
-          this.posX = event.clientX;
-          var mainWidth = $main.clientWidth;
-          var mainHeight = $main.clientHeight;
-          var menuWidth = $contextMenu.offsetWidth;
-          var menuHeight = $contextMenu.offsetHeight;
-          if (document.dir == 'rtl') {
-            if (Math.abs(this.posX) < menuWidth) {
-              this.posX = menuWidth;
-            }
-            this.posX -= menuWidth;
-          } else {
-            // 数值4: 右键菜单的边距
-            if (this.posX + menuWidth > mainWidth - 4) {
-              this.posX = mainWidth - menuWidth - 4;
-            }
-          }
-          if (isScrollDirectionX) {
-            this.posX += $main.scrollLeft;
-          }
-
-          this.posY = event.clientY - $main.offsetTop;
-          var overflow = this.posY + menuHeight - mainHeight;
-          if (overflow > 0) {
-            this.posY -= (this.posY > menuHeight) ? menuHeight : overflow;
-          }
-          this.posY += $main.scrollTop;
-
-          this.show();
+        if (target.tagName === 'A') {
+          $fromTarget = target;
+          $contextMenu.className = $fromTarget.type;
+        } else if ((target.classList.contains('folder-list') || target.tagName == 'MAIN') && !isSearchView) {
+          $fromTarget = null;
+          $contextMenu.className = 'nodata';
+        } else {
+          break;
         }
+
+        $contextMenu.type = isSearchView ? 'search' : '';
+        this.posX = event.clientX;
+        var mainWidth = $main.clientWidth;
+        var mainHeight = $main.clientHeight;
+        var menuWidth = $contextMenu.offsetWidth;
+        var menuHeight = $contextMenu.offsetHeight;
+        if (document.dir == 'rtl') {
+          if (Math.abs(this.posX) < menuWidth) {
+            this.posX = menuWidth;
+          }
+          this.posX -= menuWidth;
+        } else {
+          // 数值4: 右键菜单的边距
+          if (this.posX + menuWidth > mainWidth - 4) {
+            this.posX = mainWidth - menuWidth - 4;
+          }
+        }
+        if (isScrollDirectionX) {
+          this.posX += $main.scrollLeft;
+        }
+
+        this.posY = event.clientY - $main.offsetTop;
+        var overflow = this.posY + menuHeight - mainHeight;
+        if (overflow > 0) {
+          this.posY -= (this.posY > menuHeight) ? menuHeight : overflow;
+        }
+        this.posY += $main.scrollTop;
+
+        this.show();
         break;
       case "click":
         event.preventDefault();
