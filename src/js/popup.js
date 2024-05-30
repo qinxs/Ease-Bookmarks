@@ -844,8 +844,21 @@ function openUrl(url, event) {
         // 官方页面 不能直接执行js
         chrome.tabs.create({ url: url, active: true });
       } else {
-        chrome.tabs.executeScript({ code: url });
-        isPopupWindow && window.close();
+        var clipboardFlag = false;
+        var regex = /javascript:\s*navigator\.clipboard\.writeText(.+?);?$/i;
+
+        var match = url.match(regex);
+        if (match) {
+          url = match[1];
+          clipboardFlag = true;
+        }
+
+        chrome.tabs.executeScript({ code: url }, result => {
+          clipboardFlag && copyToClipboard(result[0]);
+          setTimeout(() => {
+            isPopupWindow && window.close();
+          });
+        });
       }
     } else if(flag >> 1 == 0) {
       chrome.tabs.update({ url: url });
@@ -860,6 +873,33 @@ function openUrl(url, event) {
       isPopupWindow && active && window.close();
     }
   });
+}
+
+// chromeAPI中 不能执行navigator.clipboard.writeText
+function copyToClipboard(textToCopy) {
+  if (navigator.clipboard && window.isSecureContext) {
+    return navigator.clipboard.writeText(textToCopy);
+  } else {
+    return new Promise((resolve, reject) => {
+      let textArea = document.createElement("textarea");
+      textArea.value = textToCopy;
+      textArea.style.position = "fixed";
+      textArea.style.opacity = 0;
+      textArea.style.pointerEvents = "none";
+      document.body.appendChild(textArea);
+      textArea.focus();
+      textArea.select();
+
+      try {
+        document.execCommand('copy');
+        resolve();
+      } catch (err) {
+        reject(err);
+      } finally {
+        document.body.removeChild(textArea);
+      }
+    });
+  }
 }
 
 function handleFolderEvent(node) {
