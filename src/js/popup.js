@@ -340,6 +340,7 @@ const contextMenu = {
   `,
   show() {
     $contextMenu.style.transform = `translate(${this.posX}px, ${this.posY}px)`;
+    // 不能用html的hidden属性 会出现滚动条（占用文档流）
     $contextMenu.classList.remove('hidden');
     this.showing = true;
     $('.item.active') && $('.item.active').classList.remove('active');
@@ -361,10 +362,10 @@ const contextMenu = {
         var target = event.target;
         if (target.tagName === 'A') {
           $fromTarget = target;
-          $contextMenu.className = $fromTarget.type;
+          $contextMenu.className = 'box ' + $fromTarget.type;
         } else if ((target.classList.contains('folder-list') || target.tagName == 'MAIN') && !isSearchView) {
           $fromTarget = null;
-          $contextMenu.className = 'nodata';
+          $contextMenu.className = 'box nodata';
         } else {
           break;
         }
