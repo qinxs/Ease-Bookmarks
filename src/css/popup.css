@@ -258,25 +258,35 @@ i {
   opacity: 1;
 }
 
-#context-menu,
-#dialog {
+.box {
   position: absolute;
-  padding: 5px;
   margin: 0;
-  min-width: 120px;
-  max-width: 100%;
+  padding: 5px;
   font-size: calc(var(--base-font-size) - 1px);
   border-radius: 5px;
   background-color: var(--color-background);
   box-shadow: 0 2px 6px rgba(0, 0, 0, .2);
-  list-style: none;
   outline: none;
 }
+
 #context-menu {
-  left:0;
   top:0;
+  left:0;
+  min-width: 120px;
+  max-width: 100%;
+  list-style: none;
   border: 1px solid #bbb;
 }
+#dialog {
+  left: 50%;
+  width: 96%;
+  max-width: 360px;
+  line-height: 2em;
+  border: 1px solid var(--color-border);
+  transform: translateX(-50%);
+  z-index: 9999;
+}
+
 #context-menu > li {
   display: none;
   padding: 0 8px;
@@ -338,16 +348,6 @@ hr {
   display: none;
 }
 
-#dialog {
-  position: absolute;
-  left: 50%;
-  width: 96%;
-  max-width: 360px;
-  line-height: 2em;
-  border: 1px solid var(--color-border);
-  transform: translateX(-50%);
-  z-index: 9999;
-}
 
 .textbox {
   outline: none;

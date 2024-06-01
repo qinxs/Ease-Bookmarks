@@ -64,7 +64,7 @@ if (location.pathname === '/popup.html') {
   loadPreItems = new Promise(function(resolve, reject) {
     chrome.bookmarks.getChildren(BM.startupReal.toString(), (results) => {
       // console.log(results);
-      // 启动文件件被删除了
+      // 启动文件夹被删除了
       if (typeof results === 'undefined') {
         localStorage.setItem('startupID', BM.default.startup);
         chrome.storage.sync.set({startup: BM.default.startup}, () => {
