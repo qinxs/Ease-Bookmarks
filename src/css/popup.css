@@ -122,6 +122,11 @@ button {
   letter-spacing: 1px;
   text-indent: 1px;
 }
+button:active,
+button:focus {
+  color: #f0e9f6;
+  background-color: #1a73e8;
+}
 a {
   text-decoration: none;
   cursor: pointer;
@@ -277,7 +282,8 @@ i {
   list-style: none;
   border: 1px solid #bbb;
 }
-#dialog {
+#dialog,
+#confirm {
   left: 50%;
   width: 96%;
   max-width: 360px;
@@ -285,6 +291,9 @@ i {
   border: 1px solid var(--color-border);
   transform: translateX(-50%);
   z-index: 9999;
+}
+#confirm {
+  top: 25vh;
 }
 
 #context-menu > li {
@@ -372,11 +381,13 @@ hr {
 }
 #dialog input:focus,
 #dialog .textbox:focus,
-#dialog button:hover {
+#dialog button:hover,
+#confirm button:hover {
   border-bottom-color: var(--textbox-focus-border-color);
 }
 
-#edit-dialog-text {
+#edit-dialog-text,
+#confirm-title {
   text-align: center;
   font-size: 1.4em;
 }
@@ -392,6 +403,9 @@ hr {
   padding: 1px 10px;
   border-radius: 5px;
   background-color: var(--color-hover);
+}
+#confirm-content {
+  margin: 10px 3px;
 }
 
 /* 深色模式 */

@@ -473,11 +473,20 @@ const contextMenu = {
           // 防止hover其他元素
           $main.style.pointerEvents = 'none';
           chrome.bookmarks.getChildren(id, results => {
-            if (!results.length || confirm(`[ ${$fromTarget.textContent} - ${results.length} ]:\n${L("deleteFolderConfirm")}`)) {
+            if (results.length) {
+              confirm.show({
+                title: `[ ${$fromTarget.textContent} - ${results.length} ]`,
+                content: L("deleteFolderConfirm"),
+              }, () => {
+                activeNextItem(isDeleteByHotkey);
+                chrome.bookmarks.removeTree(id);
+                $fromTarget.closest('.item').classList.remove('selected');
+              }, () => {
+                $fromTarget.closest('.item').classList.remove('selected');
+              });
+            } else {
               activeNextItem(isDeleteByHotkey);
               chrome.bookmarks.removeTree(id);
-            } else {
-              $fromTarget.closest('.item').classList.remove('selected');
             }
             $main.style.pointerEvents = 'auto';
           });
@@ -603,6 +612,56 @@ const dialog = {
     $fromTarget && $fromTarget.closest('.item').classList.remove('selected');
     $searchInput.focus();
   },
+}
+
+const confirm = {
+  showing: false,
+  ele: $('#confirm'),
+  onOK: null,
+  onCancel: null,
+  init() {
+    this.ele.insertAdjacentHTML('beforeend', this.html);
+    $('#confirm-ok').addEventListener('click', this.doOK.bind(this), false);
+    $('#confirm-cancel').addEventListener('click', this.close.bind(this), false);
+  },
+  html: `
+    <div id="confirm-title"><span class="title"></span></div>
+    <div id="confirm-content"></div>
+    <div class="dialog-btns">
+      <button id="confirm-ok">${L("delete")}</button>
+      <button id="confirm-cancel">${L("cancel")}</button>
+    </div>
+  `,
+  show(options, onOK, onCancel) {
+    this.showing = true;
+    $('#confirm-title > .title').textContent = options.title;
+    $('#confirm-content').textContent = options.content;
+    this.ele.hidden = false;
+    $mask.classList.add('mask');
+    $('#confirm-ok').focus();
+    this.onOK = onOK;
+    this.onCancel = onCancel;
+  },
+  doOK() {
+    if (typeof this.onOK == 'function') {
+      this.onOK();
+      this.onOK = null;
+    }
+    this.close();
+  },
+  close() {
+    event.preventDefault();
+    if (this.showing) {
+      $mask.classList.remove('mask');
+      if (typeof this.onCancel == 'function') {
+        this.onCancel();
+        this.onCancel = null;
+      }
+      this.ele.hidden = true;
+      $searchInput.focus();
+      this.showing = false;
+    }
+  }
 }
 
 function loadChildrenView(id, callback) {
@@ -1162,6 +1221,13 @@ function hotkeyEvents(event) {
   var keyCode = event.code;
   // console.log(keyCode);
 
+  if (document.activeElement.tagName === 'BUTTON' && keyCode == 'Enter') {
+    event.preventDefault();
+    event.stopPropagation();
+    document.activeElement.dispatchEvent(new MouseEvent('click'));
+    return;
+  }
+
   // 优先处理dialog
   if (dialog.showing) {
     switch (keyCode) {
@@ -1173,6 +1239,15 @@ function hotkeyEvents(event) {
         event.preventDefault();
         event.stopPropagation();
         dialog.save(event);
+        break;
+    }
+    return;
+  }
+
+  if (confirm.showing) {
+    switch (keyCode) {
+      case "Escape":
+        confirm.close();
         break;
     }
     return;
@@ -1434,6 +1509,7 @@ Promise.all([
     search.init();
     contextMenu.init();
     dialog.init();
+    confirm.init();
     document.addEventListener('keydown', hotkeyEvents);
     onBookmarkEvents();
 
