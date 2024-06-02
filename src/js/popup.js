@@ -466,13 +466,15 @@ const contextMenu = {
         chrome.storage.sync.set({startup: id});
         break;
       case "bookmark-delete":
-        var listId = $curFolderList.id.slice(1);
+        // 快捷键选中删除 自动激活下一个元素
+        var isDeleteByHotkey = !event.isTrusted;
         if ($fromTarget.type === 'folder') {
           $fromTarget.closest('.item').classList.add('selected');
           // 防止hover其他元素
           $main.style.pointerEvents = 'none';
           chrome.bookmarks.getChildren(id, results => {
             if (!results.length || confirm(`[ ${$fromTarget.textContent} - ${results.length} ]:\n${L("deleteFolderConfirm")}`)) {
+              activeNextItem(isDeleteByHotkey);
               chrome.bookmarks.removeTree(id);
             } else {
               $fromTarget.closest('.item').classList.remove('selected');
@@ -480,6 +482,7 @@ const contextMenu = {
             $main.style.pointerEvents = 'auto';
           });
         } else {
+          activeNextItem(isDeleteByHotkey);
           chrome.bookmarks.remove(id);
         }
         break;
@@ -1226,11 +1229,7 @@ function hotkeyEvents(event) {
       event.preventDefault();
       $fromTarget = $('.item.active > a', $list);
       if (!$fromTarget) return;
-      var $nextActiveItem = $fromTarget.closest('.item').nextElementSibling || $fromTarget.closest('.item').previousElementSibling;
       $('#bookmark-delete').dispatchEvent(new MouseEvent('click', {"bubbles": true}));
-      if ($nextActiveItem) {
-         $nextActiveItem.classList.add('active');
-      }
       break;
     case "KeyZ":
       if (!(event.ctrlKey || event.metaKey) || dialog.showing) return;
@@ -1314,6 +1313,15 @@ function hotkeyEvents(event) {
         return $next || $list.lastElementChild;
     }
     return null;
+  }
+}
+
+function activeNextItem(isDeleteByHotkey) {
+  if (!isDeleteByHotkey) return;
+
+  var $nextActiveItem = $fromTarget.closest('.item').nextElementSibling || $fromTarget.closest('.item').previousElementSibling;
+  if ($nextActiveItem) {
+     $nextActiveItem.classList.add('active');
   }
 }
 
