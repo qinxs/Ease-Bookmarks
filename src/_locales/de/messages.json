@@ -68,7 +68,12 @@
   },
   "deleteFolderConfirm":
   {
-    "message": "Dadurch werden auch alle Lesezeichen in diesem Verzeichnis gelöscht, OK?"
+    "message": "Dadurch werden auch alle Lesezeichen ($1) in diesem Ordner gelöscht, OK?",
+    "placeholders": {
+      "bookmarksNum": {
+        "content": "$1"
+      }
+    }
   },
   "rename":
   {

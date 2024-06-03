@@ -68,7 +68,12 @@
   },
   "deleteFolderConfirm":
   {
-    "message": "Isso também excluirá todos os favoritos neste diretório, tem certeza?"
+    "message": "Isso também excluirá todos os favoritos ($1) neste pasta, tem certeza?",
+    "placeholders": {
+      "bookmarksNum": {
+        "content": "$1"
+      }
+    }
   },
   "rename":
   {

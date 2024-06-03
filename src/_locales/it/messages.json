@@ -68,7 +68,12 @@
   },
   "deleteFolderConfirm":
   {
-    "message": "Questo eliminerà anche tutti i segnalibri in questa directory, è sicuro?"
+    "message": "Questo eliminerà anche tutti i segnalibri ($1) in questa cartella, è sicuro?",
+    "placeholders": {
+      "bookmarksNum": {
+        "content": "$1"
+      }
+    }
   },
   "rename":
   {

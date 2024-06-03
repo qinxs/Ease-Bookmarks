@@ -475,8 +475,8 @@ const contextMenu = {
           chrome.bookmarks.getChildren(id, results => {
             if (results.length) {
               confirm.show({
-                title: `[ ${$fromTarget.textContent} - ${results.length} ]`,
-                content: L("deleteFolderConfirm"),
+                title: $fromTarget.textContent,
+                content: L("deleteFolderConfirm", '' + results.length),
               }, () => {
                 activeNextItem(isDeleteByHotkey);
                 chrome.bookmarks.removeTree(id);

@@ -68,7 +68,12 @@
   },
   "deleteFolderConfirm":
   {
-    "message": "这还将删除此目录下的所有书签, 确定吗?"
+    "message": "这还将删除此文件夹下的所有书签($bookmarksNum$个)\n确定吗?",
+    "placeholders": {
+      "bookmarksNum": {
+        "content": "$1"
+      }
+    }
   },
   "rename":
   {

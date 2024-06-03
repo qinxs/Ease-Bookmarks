@@ -68,7 +68,12 @@
   },
   "deleteFolderConfirm":
   {
-    "message": "Это также удалит все закладки в этом каталоге, это точно?"
+    "message": "Это также удалит все закладки ($1) в этом папка, это точно?",
+    "placeholders": {
+      "bookmarksNum": {
+        "content": "$1"
+      }
+    }
   },
   "rename":
   {
