@@ -507,7 +507,6 @@ const dialog = {
     this.$title = $('#edit-dialog-text > .title');
     this.$name = $('#edit-dialog-name');
     this.$url = $('#edit-dialog-url');
-    $mask.addEventListener('click', event => this.close(event), false);
     // 光标移到末尾
     this.$name.addEventListener('focus', () => {
       var range = window.getSelection();
