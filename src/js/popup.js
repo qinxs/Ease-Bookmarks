@@ -1224,7 +1224,7 @@ function hotkeyEvents(event) {
   if (document.activeElement.tagName === 'BUTTON' && keyCode == 'Enter') {
     event.preventDefault();
     event.stopPropagation();
-    document.activeElement.dispatchEvent(new MouseEvent('click'));
+    document.activeElement.click();
     return;
   }
 
