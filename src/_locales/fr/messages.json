@@ -68,7 +68,12 @@
   },
   "deleteFolderConfirm":
   {
-    "message": "Cela supprimera également tous les signets de ce répertoire, OK?"
+    "message": "Cela supprimera également tous les signets ($1) de ce dossier, OK?",
+    "placeholders": {
+      "bookmarksNum": {
+        "content": "$1"
+      }
+    }
   },
   "rename":
   {

@@ -68,7 +68,12 @@
   },
   "deleteFolderConfirm":
   {
-    "message": "This will also delete all bookmarks in this directory, is it sure?"
+    "message": "This will also delete all bookmarks ($bookmarksNum$) in this folder, is it sure?",
+    "placeholders": {
+      "bookmarksNum": {
+        "content": "$1"
+      }
+    }
   },
   "rename":
   {

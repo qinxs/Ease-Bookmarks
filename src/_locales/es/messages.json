@@ -68,7 +68,12 @@
   },
   "deleteFolderConfirm":
   {
-    "message": "Esto también eliminará todos los marcadores en este directorio, ¿de acuerdo?"
+    "message": "Esto también eliminará todos los marcadores ($1) en este carpeta, ¿de acuerdo?",
+    "placeholders": {
+      "bookmarksNum": {
+        "content": "$1"
+      }
+    }
   },
   "rename":
   {

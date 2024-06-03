@@ -68,7 +68,12 @@
   },
   "deleteFolderConfirm":
   {
-    "message": "이것은 또한이 디렉토리의 모든 책갈피를 삭제합니다."
+    "message": "그러면 해당 폴더의 모든 북마크($1)도 삭제되겠죠?",
+    "placeholders": {
+      "bookmarksNum": {
+        "content": "$1"
+      }
+    }
   },
   "rename":
   {

@@ -68,7 +68,12 @@
   },
   "deleteFolderConfirm":
   {
-    "message": "この場合、このディレクトリ内のブックマークもすべて削除されますが、よろしいですか？"
+    "message": "これで、そのフォルダ内のブックマーク（$1）もすべて削除されますよね？",
+    "placeholders": {
+      "bookmarksNum": {
+        "content": "$1"
+      }
+    }
   },
   "rename":
   {
