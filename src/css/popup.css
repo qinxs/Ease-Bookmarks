@@ -46,6 +46,9 @@ body::-webkit-scrollbar {
   border-radius: 4px;
   background-color: var(--color-scrollbar-thumb);
 }
+::selection {
+  background: var(--color-hover);
+}
 * {
   box-sizing: border-box;
 }
@@ -122,11 +125,15 @@ button {
   letter-spacing: 1px;
   text-indent: 1px;
 }
-button:active,
+button:hover,
 button:focus {
   color: #f0e9f6;
   background-color: #1a73e8;
 }
+button:active {
+  outline: 1px solid var(--textbox-focus-border-color);
+}
+
 a {
   text-decoration: none;
   cursor: pointer;
@@ -267,7 +274,7 @@ i {
   position: absolute;
   margin: 0;
   padding: 5px;
-  font-size: calc(var(--base-font-size) - 1px);
+  font-size: var(--base-font-size);
   border-radius: 5px;
   background-color: var(--color-background);
   box-shadow: 0 2px 6px rgba(0, 0, 0, .2);
@@ -279,6 +286,7 @@ i {
   left:0;
   min-width: 120px;
   max-width: 100%;
+  font-size: calc(var(--base-font-size) - 1px);
   list-style: none;
   border: 1px solid #bbb;
 }
@@ -365,7 +373,6 @@ hr {
   border: 1px solid var(--color-border);
   border-radius: 3px;
   color: var(--color-text);
-  font-size: 14px;
   word-break: break-all;
   overflow-x: hidden;
   overflow-y: auto;
@@ -380,16 +387,14 @@ hr {
   justify-content: space-evenly;
 }
 #dialog input:focus,
-#dialog .textbox:focus,
-#dialog button:hover,
-#confirm button:hover {
+#dialog .textbox:focus {
   border-bottom-color: var(--textbox-focus-border-color);
 }
 
 #edit-dialog-text,
 #confirm-title {
   text-align: center;
-  font-size: 1.4em;
+  font-size: 1.3em;
 }
 #edit-dialog-name {
   padding: 1px 3px;
@@ -406,6 +411,8 @@ hr {
 }
 #confirm-content {
   margin: 10px 3px;
+  text-align: center;
+  white-space: pre-line;
 }
 
 /* 深色模式 */
