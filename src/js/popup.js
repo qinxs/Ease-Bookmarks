@@ -1215,7 +1215,7 @@ function dragToMove() {
 }
 
 function hotkeyEvents(event) {
-  if (event.isComposing || contextMenu.showing) return;
+  if (event.isComposing || event.keyCode === 229 || contextMenu.showing) return;
   
   var keyCode = event.code;
   // console.log(keyCode);
