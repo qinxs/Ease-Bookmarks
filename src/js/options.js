@@ -135,11 +135,13 @@ loadSettings.then(() => {
   });
 
   // 预览自定义头像
-  var iconBase64 = localStorage.customIcon;
-  if (iconBase64) {
-    $iconPreview.style.backgroundImage = `url(${iconBase64})`;
-    $iconPreview.style.backgroundSize = `19px`;
-  }
+  chrome.storage.local.get('customIcon', items => {
+    var iconBase64 = items.customIcon;
+    if (iconBase64) {
+      $iconPreview.style.backgroundImage = `url(${iconBase64})`;
+      $iconPreview.style.backgroundSize = `19px`;
+    }
+  });
 
   // 压缩图片需要的一些元素和对象
   var reader = new FileReader(), img = new Image(), file = null;
@@ -164,10 +166,11 @@ loadSettings.then(() => {
     var imgBase64 = image2Base64(img);
     $iconPreview.style.backgroundImage = `url(${imgBase64})`;
     $iconPreview.style.backgroundSize = `19px`;
-    localStorage.customIcon = imgBase64;
-
-    var imageData = context.getImageData(0, 0, 19, 19);
-    chrome.browserAction.setIcon({imageData: imageData});
+    // localStorage.customIcon = imgBase64;
+    chrome.storage.local.set({customIcon: imgBase64}, () => {
+      var imageData = context.getImageData(0, 0, 19, 19);
+      chrome.browserAction.setIcon({imageData: imageData});
+    });
 
     function image2Base64(img, width = 19, height = 19) {
       canvas.width = width;
@@ -183,11 +186,10 @@ loadSettings.then(() => {
   };
 
   $('#resetIcon').addEventListener('click', function(){
-    if (localStorage.customIcon) {
-      delete localStorage.customIcon;
+    chrome.storage.local.remove('customIcon', () =>{
       chrome.browserAction.setIcon({path: '../icons/icon32.png'});
       $iconPreview.removeAttribute('style');
-    }
+    });
   });
 
 });
