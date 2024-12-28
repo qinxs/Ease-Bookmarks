@@ -33,7 +33,6 @@ function updataOldData() {
   var iconBase64 = localStorage.customIcon;
   if (iconBase64) {
     // console.log(iconBase64);
-    // chrome.browserAction.setIcon({path: iconBase64});
     chrome.storage.local.set({customIcon: iconBase64});
     localStorage.removeItem('customIcon');
   }
@@ -49,16 +48,19 @@ chrome.runtime.onInstalled.addListener((details) => {
   } catch {}
 });
 
-// chrome.runtime.onStartup.addListener(function() {
-//   localStorage.setItem('time', new Date().toLocaleString());
-// });
+chrome.runtime.onInstalled.addListener(() => {
+  chrome.contextMenus.create({
+    id: 'open-bookmarks-manager',
+    title: chrome.i18n.getMessage('bookmarksManager'), 
+    contexts: ['action'],
+  });
+});
 
-chrome.contextMenus.create({
-  title: chrome.i18n.getMessage('bookmarksManager'), 
-  contexts: ['browser_action'],
-  onclick: () => {
-    chrome.tabs.create({
-      url: 'chrome://bookmarks/',
-    });
+chrome.contextMenus.onClicked.addListener((data) => {
+  switch(data.menuItemId) {
+    case 'open-bookmarks-manager':
+      chrome.tabs.create({
+        url: 'chrome://bookmarks/',
+      });
   }
 });

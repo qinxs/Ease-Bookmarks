@@ -169,7 +169,7 @@ loadSettings.then(() => {
     // localStorage.customIcon = imgBase64;
     chrome.storage.local.set({customIcon: imgBase64}, () => {
       var imageData = context.getImageData(0, 0, 19, 19);
-      chrome.browserAction.setIcon({imageData: imageData});
+      chrome.action.setIcon({imageData: imageData});
     });
 
     function image2Base64(img, width = 19, height = 19) {
@@ -187,7 +187,7 @@ loadSettings.then(() => {
 
   $('#resetIcon').addEventListener('click', function(){
     chrome.storage.local.remove('customIcon', () =>{
-      chrome.browserAction.setIcon({path: '../icons/icon32.png'});
+      chrome.action.setIcon({path: '../icons/icon32.png'});
       $iconPreview.removeAttribute('style');
     });
   });
