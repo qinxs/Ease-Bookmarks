@@ -1,8 +1,6 @@
 "use strict";
 
 var settings;
-const ratio = window.devicePixelRatio || 1;
-const faviconPrefix = 'chrome://favicon/' + (ratio == 1 ? '' : `size/16@${ratio}x/`);
 const $nav = {
   header: $('nav'),
   footer: $('a.nav')
@@ -711,7 +709,7 @@ function templateFragItem(item, isSearchTemplate = false) {
       favicon = 'icons/favicon/js.png';
       url = decodeBookmarklet(url);
     } else {
-      favicon = faviconPrefix + url;
+      favicon = `_favicon/?pageUrl=${url}&size=32`;
     }
     cachedFolderInfo.links[id] = url;
     itemA.title = `${title}\n${url}`;
@@ -906,21 +904,22 @@ function openUrl(url, event) {
         // 官方页面 不能直接执行js
         chrome.tabs.create({ url: url, active: true });
       } else {
-        var clipboardFlag = false;
-        var regex = /javascript:\s*navigator\.clipboard\.writeText(.+?);?$/i;
+        // @TODO
+        // var clipboardFlag = false;
+        // var regex = /javascript:\s*navigator\.clipboard\.writeText(.+?);?$/i;
 
-        var match = url.match(regex);
-        if (match) {
-          url = match[1];
-          clipboardFlag = true;
-        }
+        // var match = url.match(regex);
+        // if (match) {
+        //   url = match[1];
+        //   clipboardFlag = true;
+        // }
 
-        chrome.tabs.executeScript({ code: url }, result => {
-          clipboardFlag && copyToClipboard(result[0]);
-          setTimeout(() => {
-            isPopupWindow && window.close();
-          });
-        });
+        // chrome.tabs.executeScript({ code: url }, result => {
+        //   clipboardFlag && copyToClipboard(result[0]);
+        //   setTimeout(() => {
+        //     isPopupWindow && window.close();
+        //   });
+        // });
       }
     } else if(flag >> 1 == 0) {
       chrome.tabs.update({ url: url });
@@ -1103,7 +1102,7 @@ function onBookmarkEvents() {
       itemA.textContent = title;
     }
     if (url) {
-      var favicon = faviconPrefix + url;
+      var favicon = `_favicon/?pageUrl=${url}&size=32`;
       if (isBookmarklet(url)) {
         favicon = 'icons/favicon/js.png';
         url = decodeBookmarklet(url);

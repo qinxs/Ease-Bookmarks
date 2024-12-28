@@ -1,8 +1,9 @@
 {
-  "manifest_version": 2,
+  "manifest_version": 3,
   "name": "Ease Bookmarks",
   "description": "__MSG_pluginDesc__",
-  "version": "1.7.7",
+  "version": "2.0.0",
+  "minimum_chrome_version": "123",
   "offline_enabled": true,
   "default_locale": "en",
   "icons": {
@@ -15,18 +16,17 @@
   "author": "qinxs",
   "homepage_url": "https://github.com/qinxs/Ease-Bookmarks",
 
-  "browser_action": {
+  "action": {
     "default_title": "Ease Bookmarks",
     "default_popup": "popup.html",
     "default_icon": "icons/icon32.png"
   },
   "background": {
-    "scripts": ["eventPage.js"],
-    "persistent": true
+    "service_worker": "eventPage.js"
   },
   "options_page": "options.html",
   "commands": {
-    "_execute_browser_action": {
+    "_execute_action": {
       "suggested_key": {
         "default": "Ctrl+Q",
         "mac": "Command+Q"
@@ -40,6 +40,12 @@
     "activeTab",
     "bookmarks",
     "contextMenus",
-    "chrome://favicon/"
-  ]
+    "favicon"
+  ],
+
+  "web_accessible_resources": [{
+    "resources": [ "_favicon/*" ],
+    "matches": ["<all_urls>"],
+    "extension_ids": [ "*" ]
+  }]
 }
