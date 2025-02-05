@@ -1420,12 +1420,7 @@ function simulateKeyboardEvent(ele, type, options = {}, keyCodeStr) {
   ele.dispatchEvent(event);
 }
 
-function saveLastData(event) {
-  // Cancel the event as stated by the standard.
-  event.preventDefault();
-  // Chrome requires returnValue to be set.
-  event.returnValue = '';
-
+function saveLastData() {
   if (settings.keepLastSearchValue) {
     localStorage.setItem('LastSearchValue', $searchInput.value);
   }
@@ -1513,7 +1508,11 @@ Promise.all([
     onBookmarkEvents();
 
     if (settings.startup < 0 || settings.keepLastSearchValue) {
-      window.addEventListener('unload', saveLastData);
+      document.addEventListener('visibilitychange', (event) => {
+        if (document.visibilityState === 'hidden') {
+          saveLastData();
+        }
+      });
     }
     $searchList.addEventListener('mouseover', handleSearchResultsHover, false);
     $searchList.addEventListener('mouseenter', () => {
