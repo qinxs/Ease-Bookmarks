@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
-  "name": "Ease Bookmarks",
+  "name": "Ease Bookmarks mv3",
   "description": "__MSG_pluginDesc__",
-  "version": "2.0.0",
+  "version": "3.0.1",
   "minimum_chrome_version": "123",
   "offline_enabled": true,
   "default_locale": "en",
