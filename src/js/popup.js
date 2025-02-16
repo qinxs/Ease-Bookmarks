@@ -255,14 +255,13 @@ const nav = {
 }
 
 const search = {
+  reg: /^[A-Za-z0-9]/,
   init() {
     $searchInput.placeholder = L("searchPlaceholder");
     this.handleEvent();
   },
   handleEvent() {
-    var UILang = chrome.i18n.getUILanguage();
-
-    if (UILang.startsWith('zh') || settings.compositionEvent == 1) {
+    if (lang.startsWith('zh') || settings.compositionEvent == 1) {
       // 实时搜索 兼容中文
       $searchInput.addEventListener('compositionstart', () => {
         inputFlag = false;
@@ -295,6 +294,15 @@ const search = {
   _loadSearchView(keyword) {
     chrome.bookmarks.search(keyword, (results) => {
       if (results.length) {
+        if (settings.searchResultSort != '0') {
+          results.sort((a, b) => {
+            // 数字字母保持在最前面
+            if (this.reg.test(a.title) ^ this.reg.test(b.title)) {
+              return (a.title > b.title) ? settings.searchResultSort : -1 * settings.searchResultSort;
+            }
+            return a.title.localeCompare(b.title, undefined, { numeric: true }) * settings.searchResultSort;
+          });
+        }
         var frag = templateFrag(results, true);
         $searchList.innerHTML = '';
         $searchList.append(frag);
