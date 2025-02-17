@@ -203,6 +203,18 @@
   "example": {
       "message": "例如:"
   },
+  "BackupAndRecovery": {
+      "message": "备份与恢复:"
+  },
+  "import": {
+      "message": "导入"
+  },
+  "export": {
+      "message": "导出"
+  },
+  "resetConfigTip": {
+      "message": "这将清空所有配置，确定吗？"
+  },
   "setInvalidTips": {
       "message": "无效选项！可选设置:"
   },

@@ -203,7 +203,7 @@ document.addEventListener('DOMContentLoaded', function() {
     $('#fileInput').addEventListener('change', importConfig);
 
     $('#resetBtn').addEventListener('click', () => {
-      if (confirm('这将清空所有配置，确定吗？')) {
+      if (confirm(L('resetConfigTip'))) {
         resetConfig();
       }
     });
