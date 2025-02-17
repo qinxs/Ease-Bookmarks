@@ -164,3 +164,12 @@ html[lang=en] .button {
 #customCSS {
     resize: vertical;
 }
+
+#resetBtn {
+    position: absolute;
+    right: 1.25em;
+}
+html[dir="rtl"] #resetBtn {
+    right: unset;
+    left: 1.25em;
+}

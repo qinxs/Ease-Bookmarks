@@ -191,3 +191,105 @@ loadSettings.then(() => {
   });
 
 });
+
+// 备份与恢复
+document.addEventListener('DOMContentLoaded', function() {
+    $('#exportBtn').addEventListener('click', exportConfig);
+    
+    $('#importBtn').addEventListener('click', () => {
+      // 触发隐藏的文件输入控件点击事件，让用户选择文件
+      $('#fileInput').click();
+    });
+    $('#fileInput').addEventListener('change', importConfig);
+
+    $('#resetBtn').addEventListener('click', () => {
+      if (confirm('这将清空所有配置，确定吗？')) {
+        resetConfig();
+      }
+    });
+});
+
+function exportConfig() {
+  // 使用回调 兼容mv2
+  chrome.storage.local.get(null, function(localItems) {
+    chrome.storage.sync.get(null, function(syncItems) {
+      const localStorageData = {};
+      for (let i = 0; i < localStorage.length; i++) {
+        const key = localStorage.key(i);
+        localStorageData[key] = localStorage.getItem(key);
+      }
+
+      const config = {
+        version: chrome.runtime.getManifest().version,
+        sync: syncItems,
+        local: localItems,
+        localStorage: localStorageData,
+      };
+
+      const blob = new Blob([JSON.stringify(config, null, 2)], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+
+      const options = { 
+        year: 'numeric', month: '2-digit', day: '2-digit', 
+        hour: '2-digit', minute: '2-digit', second: '2-digit',
+      };
+      let timestamp = new Date().toLocaleString('zh-CN', options);
+      timestamp = timestamp.replace(/\//g, '-').replace(/ /, '_').replace(/:/g, '.');
+
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `EaseBookmarks_${timestamp}.json`;
+      a.click();
+      URL.revokeObjectURL(url); // 清除临时URL
+    });
+  });
+}
+
+function importConfig(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    try {
+      const config = JSON.parse(e.target.result);
+
+      resetConfig(false).then(function() {
+        chrome.storage.sync.set(config.sync, function() {
+          chrome.storage.local.set(config.local, function() {
+            for (const key in config.localStorage) {
+              localStorage.setItem(key, config.localStorage[key]);
+            }
+            location.reload();
+          });
+        });
+      });
+    } catch (err) {
+      console.error('Failed to parse JSON:', err);
+    }
+  };
+  reader.readAsText(file);
+}
+
+function resetConfig(doReload = true) {
+  return new Promise((resolve, reject) => {
+    chrome.storage.sync.clear(function() {
+      chrome.storage.local.clear(function() {
+        localStorage.clear();
+
+        localStorage.version = chrome.runtime.getManifest().version;
+        // eventPage.js中 checkRootInfo
+        chrome.bookmarks.getChildren('0', (results) => {
+          var rootInfo = {
+            1: results[0].title,
+            2: results[1].title,
+          }
+          chrome.storage.sync.set({rootInfo: rootInfo}, () => {
+            resolve();
+            doReload && location.reload();
+          });
+        });
+      });
+    });
+  });
+}
