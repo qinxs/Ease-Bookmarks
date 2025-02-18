@@ -4,6 +4,8 @@ title 打包为zip
 rem 指定WINRAR路径
 @set "path=%path%;D:\Program Files\WinRAR"
 
+for /f "delims=" %%i in ('git branch --show-current') do set "branchName=%%i"
+
 rem 检查git状态 clean退出时则直接checkout
 for /f "delims=" %%i in ('git status -s') do set "status=%%i"
 
@@ -21,7 +23,7 @@ popd
 
 cd..
 WinRAR a -r -ibck -inul -ep1 ^
-src.zip ^
+src_%branchName%.zip ^
 src\*
 
 :: -r :连同子文件夹

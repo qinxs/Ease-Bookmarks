@@ -1,4 +1,4 @@
 /release/
 /build/
-src.zip
+*.zip
 TODO.md
