@@ -203,6 +203,18 @@
   "example": {
       "message": "For example:"
   },
+  "BackupAndRecovery": {
+      "message": "Backup and Recovery:"
+  },
+  "import": {
+      "message": "Import"
+  },
+  "export": {
+      "message": "Export"
+  },
+  "resetConfigTip": {
+      "message": "This will clear all configurations, are you sure?"
+  },
   "setInvalidTips": {
       "message": "Invalid option! Optional Settings:"
   },
