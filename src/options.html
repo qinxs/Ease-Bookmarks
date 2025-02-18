@@ -186,6 +186,15 @@
                 <textarea id="customCSS" name="customCSS" rows="8" spellcheck="false" placeholder="&#10;footer { display: none; }" data-i18n="example"></textarea>
             </div>
         </li>
+        <li style="position: relative;">
+            <div>备份与恢复: </div>
+            <div class="input_box">
+                <span id="importBtn" class="button">导入</span>
+                <input type="file" id="fileInput" accept=".json" style="display:none;">
+                <span id="exportBtn" class="button">导出</span>
+                <span id="resetBtn" class="button">重置</span>
+            </div>
+        </li>
     </ul>
     <div id="configTable" class="hash-tab">
         <p class="page-title" data-i18n="Built_inVariables"></p>
