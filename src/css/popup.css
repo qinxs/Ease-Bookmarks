@@ -5,6 +5,8 @@
   --list-rows: 10;
   --base-font-size: 14px;
   --scrollbar-width: 3px;
+  --direction-ratio: 1;
+
   /* 浅色模式 */
   --color-theme: #4db6ac;
   --color-text: #232529;
@@ -16,6 +18,9 @@
   --textbox-border-color: #a0b3d6;
   --textbox-focus-border-color: #34538b;
   --mask-background-color: rgba(9, 9, 9, .3);
+}
+:root[dir="rtl"] {
+  --direction-ratio: -1;
 }
 .dark {
   --color-theme: #369;
@@ -268,6 +273,9 @@ i {
 }
 .btn:hover svg {
   opacity: 1;
+}
+#star-url {
+  transform: translateX(calc(-2px * var(--direction-ratio)));
 }
 
 .box {
