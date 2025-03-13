@@ -133,6 +133,7 @@ html[lang=en] .button {
 .note {
     font-size: 13px;
     color: #555;
+    white-space: pre;
 }
 
 .tooltip ~ .tooltiptext {

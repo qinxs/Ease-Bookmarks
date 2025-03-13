@@ -192,7 +192,7 @@
       "message": "Select file"
   },
   "reset": {
-      "message": "reset"
+      "message": "Reset"
   },
   "customIconTip": {
       "message": "참고: 정사각형 투명 배경 이미지(png 형식)를 선택합니다."

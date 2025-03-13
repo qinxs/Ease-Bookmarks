@@ -180,7 +180,7 @@
       "message": "Items each column:"
   },
   "minItemsEachColTips": {
-      "message": "Note: valid when the number of Layout columns is multiple. 1 or 10 is recommended"
+      "message": "Note: valid when the number of Layout columns is multiple.\n1 or 10 is recommended"
   },
   "alias": {
       "message": "Alias:"
@@ -192,7 +192,7 @@
       "message": "Select file"
   },
   "reset": {
-      "message": "reset"
+      "message": "Reset"
   },
   "customIconTip": {
       "message": "Note: Please select square, transparent-background image (png format)"

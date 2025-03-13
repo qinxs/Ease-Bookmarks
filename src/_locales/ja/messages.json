@@ -192,7 +192,7 @@
       "message": "Select file"
   },
   "reset": {
-      "message": "reset"
+      "message": "Reset"
   },
   "customIconTip": {
       "message": "注：正方形で透過性のある背景画像（png形式）を選択してください。"
