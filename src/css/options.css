@@ -144,7 +144,7 @@ html[lang=en] .button {
     border-radius: 6px;
     font-size: 13px;
     color: #fff;
-    background-color: #666666e0;
+    background-color: #444;
     z-index: 9999;
     transition: visibility .2s ease-in .3s;
 }
@@ -155,7 +155,7 @@ html[lang=en] .button {
     left: 40px;
     border-width: 5px;
     border-style: solid;
-    border-color: #666666e0 transparent transparent transparent;
+    border-color: #444 transparent transparent transparent;
 }
 .tooltip:hover ~ .tooltiptext {
     visibility: visible;
