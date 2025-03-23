@@ -71,82 +71,22 @@ Ease Bookmarks 是一款为了替代浏览器原有书签栏的扩展
 在该页面（`/options.html#configTable`）修改
 
 
+| 字段 / 功能                                                          | 说明                                                                                                                   |
+| ------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------- |
+| `bodyWidth_*`         <br>修改多列布局时的popup窗口宽度                | 由于Chrome对扩展的限制，最大有效值为800px                                                                                 |
+| `compositionEvent`    <br>是否开启搜索输入合成事件                     | - `0`：不启用（默认）         <br>- `1`：启用   <br>注：中文输入法强制开启                                                   |
+| `fastCreate`          <br>中键点击书签favicon图标快速添加书签          | - `0`：禁用（默认）           <br>- `2`：启用且仅对文件夹有效（将书签添加到该文件夹）  <br>（详见 [#15][issues-15]）            |
+| `hotkeyCancelSeleted` <br>取消选择快捷键                              | - `Space`：空格键，开启（默认）   <br>- `-Space`：关闭   <br>其他`hotkey*`快捷键同理（键值前加`-`表示关闭）  <br>[快捷键键值查询][keycode]（使用event.code值） |
+| `hotkeyDelete`        <br>删除书签快捷键                              | - `-Delete`：删除键，关闭（默认）                                                                                         |
+| `keepLastSearchValue` <br>恢复上次搜索关键字                          | - `0`：不恢复（默认）          <br>- `1`：打开 popup 窗口时，恢复上次的搜索关键字和搜索结果                                    |
+| `keepMaxCols`         <br>页面保持最大宽度                            | - `0`：页面宽度随内容变化      <br>- `1`：保持最大打开宽度（默认，避免切换文件夹时页面跳动）                                    |
+| `openBookmarkAfterCurrentTab`<br>在当前标签页右侧打开书签              | - `0`：禁用（默认）           <br>- `1`：启用（仅通过本扩展打开时有效）                                                       |
+| `searchResultSort`    <br>搜索结果排序                                | - `1`：按名称升序（默认）      <br>- `0`：不改变，与 `chrome://bookmarks/` 页面搜索一致  <br>- `-1`：按名称降序                  |
+| `updateBookmarkOpt`   <br>菜单「更新为当前网址」的更新选项              | - `1`：仅更新URL（默认）      <br>- `2`：同时更新URL和标题                                                                  |
 
-### `bodyWidth_*`
-
-> 功能：修改多列布局时的popup窗口宽度
-
-由于chrome对扩展的限制，最大有效值为800px
-
-### `compositionEvent`
-
-> 功能：是否开启搜索输入合成事件（中文强制开启）
-
-- `0`：默认值，不启用
-- `1`：启用
-
-### `fastCreate`
-
-> 功能：中键点击**书签favicon图标**，快速把当前网址添加到书签（详见 [#15](https://github.com/qinxs/Ease-Bookmarks/issues/15)）
-
-- `0`：默认值，不启用
-- `2`：启用，只对文件夹有效，书签添加到该文件夹中
-
-### `hotkeyCancelSeleted`
-
-> 功能：取消选择快捷键
-
-- `Space`：默认值，开启（空格键）
-- `-Space`：关闭
-
-其他`hotkey*`快捷键同理（键值前添加`-`表示关闭）
-
-[快捷键获取](https://www.toptal.com/developers/keycode)，使用event.code的值
-
-### `hotkeyDelete`
-
-> 功能：删除书签快捷键
-
-- `-Delete`：默认值，关闭
-
-### `keepLastSearchValue`
-
-> 功能：恢复上次搜索关键字
-
-- `0`：默认值
-- `1`：打开 popup 窗口时，恢复上次的搜索关键字和搜索结果
-
-### `keepMaxCols`
-
-> 功能：页面保持最大宽度
-
-- `0`：页面宽度始终与当前内容一致
-- `1`：默认值，页面宽度与（打开过的）页面的最大宽度一致（能避免切换文件夹时的页面跳动）
-
-### `openBookmarkAfterCurrentTab`
-
-> 功能：当前标签页右边打开书签（仅通过本扩展打开书签时有效）
-
-- `0`：默认值
-- `1`：当前标签页右边打开书签
-
-### `searchResultSort`
-
-> 功能：搜索结果排序
-
-- `1`：默认值，按书签名称升序
-- `0`：不改变，与 `chrome://bookmarks/` 页面搜索一致
-- `-1`：按书签名称降序
-
-### `updateBookmarkOpt`
-
-> 功能：菜单 `更新为当前网址` 的更新选项
-
-- `1`：默认值，仅更新 url
-- `2`：同时更新 url 和 title
 
 ## 翻译
-> 通过以下方式翻译，如有不当，请提 issue 指明，感谢~
+*通过以下方式翻译，如有不当，请提 [issue][issues-page] 指明，感谢~*
 
 - `chrome://bookmarks/` -> `F12`，[参考](docs/chrome_bookmarks.png)
   > `chrome://bookmarks/strings.m.js` 获得翻译字符串
@@ -164,3 +104,7 @@ Ease Bookmarks 是一款为了替代浏览器原有书签栏的扩展
 ## License
 
 [MIT](LICENSE)
+
+[issues-page]: https://github.com/qinxs/Ease-Bookmarks/issues
+[issues-15]: https://github.com/qinxs/Ease-Bookmarks/issues/15
+[keycode]: https://www.toptal.com/developers/keycode
