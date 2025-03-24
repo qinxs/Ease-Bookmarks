@@ -24,6 +24,7 @@
 [修改](chrome://extensions/shortcuts)：
 - **Chrome**：`chrome://extensions/shortcuts`
 - **Edge**：`edge://extensions/shortcuts`
+- **Firefox**：`about:addons` `设置图标` `管理扩展快捷键`
 
 ### 功能键
 
