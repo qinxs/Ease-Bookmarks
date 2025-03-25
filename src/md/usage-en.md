@@ -25,6 +25,7 @@ The default shortcut is `Ctrl + Q`, you can
  in the following management page:
 - **Chrome**: `chrome://extensions/shortcuts`
 - **Edge**: `edge://extensions/shortcuts`
+- **Firefox**：`about:addons` `Settings Icon` `Manage Extension Shortcuts`
 
 ### Function keys
 
