@@ -1240,6 +1240,7 @@ function hotkeyEvents(event) {
     switch (keyCode) {
       case "Escape":
       case "F2":
+        event.preventDefault();
         dialog.close(event);
         break;
       case "Enter":
@@ -1254,6 +1255,7 @@ function hotkeyEvents(event) {
   if (confirm.showing) {
     switch (keyCode) {
       case "Escape":
+        event.preventDefault();
         confirm.close();
         break;
     }
