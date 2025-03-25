@@ -262,7 +262,7 @@ const nav = {
   },
   setFooterNav(_id) {
     chrome.bookmarks.getChildren(_id.toString(), (results) => {
-      if (results.length) {
+      if (true || results.length) {
         $nav.footer.setAttribute('data-id', _id);
         $nav.footer.textContent = settings.rootInfo[_id];
       } else if ($nav.footer.getAttribute('data-id')) {
@@ -1171,7 +1171,7 @@ function openStarUrl(event) {
   event.stopPropagation();
   var starUrl = localStorage.getItem('starUrl');
   if (!starUrl) {
-    starUrl = 'chrome://bookmarks/';
+    starUrl = 'popup.html';
   }
   openUrl(starUrl, event);
 }
