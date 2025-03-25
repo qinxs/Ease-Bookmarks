@@ -99,8 +99,13 @@ if (['ar', 'he', 'fa', 'ur', 'ku', 'ba', 'dv', 'hy'].includes(lang)) {
 }
 
 function setStartupID(folderID) {
-  folderID < 0 && localStorage.setItem('startupFromLast', folderID);
-  folderID > 0 && localStorage.setItem('startupID', folderID);
+  const isFFBookmark = isNaN(folderID);
+  !isFFBookmark && localStorage.setItem('startupFromLast', folderID);
+  isFFBookmark && localStorage.setItem('startupID', folderID);
+  
+  // firefox的书签ID是字母
+  if (isFFBookmark) folderID = 0;
+  
   folderID > -1 && localStorage.removeItem('startupFromLast');
   folderID > -2 && localStorage.removeItem('LastScrollPos');
 }
