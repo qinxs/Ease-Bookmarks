@@ -32,6 +32,7 @@ window.BM = {
     bodyWidth_5: '800px',
     compositionEvent: 0,
     fastCreate: 0, // 0-2
+    faviconAPI: 'https://api.xinac.net/icon/?url={hostname}',
     hotkeyCancelSeleted: 'Space',
     hotkeyDelete: '-Delete',
     keepLastSearchValue: 0,

@@ -1,8 +1,27 @@
 "use strict";
 
 var settings;
-const ratio = window.devicePixelRatio || 1;
-const faviconPrefix = 'chrome://favicon/' + (ratio == 1 ? '' : `size/16@${ratio}x/`);
+var getFavicon = url => {
+  const faviconAPI = settings.faviconAPI;
+  const isHttp = /^https?:\/\//i.test(faviconAPI);
+  const placeholderReg = /\{(hostname|origin)\}/;
+
+  if (!isHttp || !placeholderReg.test(faviconAPI)) {
+    getFavicon = url => faviconAPI;
+  } else {
+    try {
+      new URL(faviconAPI);
+      const match = faviconAPI.match(placeholderReg)[0];
+      const property = match.slice(1, -1);
+      getFavicon = url => faviconAPI.replace(match, new URL(url)[property]);
+    } catch (err) {
+      getFavicon = url => '#InvalidFaviconAPI';
+    }
+  }
+
+  return getFavicon(url);
+}
+
 const $nav = {
   header: $('nav'),
   footer: $('a.nav')
@@ -719,7 +738,7 @@ function templateFragItem(item, isSearchTemplate = false) {
       favicon = 'icons/favicon/js.png';
       url = decodeBookmarklet(url);
     } else {
-      favicon = faviconPrefix + url;
+      favicon = getFavicon(url);
     }
     cachedFolderInfo.links[id] = url;
     itemA.title = `${title}\n${url}`;
@@ -1111,7 +1130,7 @@ function onBookmarkEvents() {
       itemA.textContent = title;
     }
     if (url) {
-      var favicon = faviconPrefix + url;
+      var favicon = getFavicon(url);
       if (isBookmarklet(url)) {
         favicon = 'icons/favicon/js.png';
         url = decodeBookmarklet(url);
