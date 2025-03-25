@@ -3,7 +3,6 @@
   "name": "Ease Bookmarks",
   "description": "__MSG_pluginDesc__",
   "version": "2.0.6",
-  "offline_enabled": true,
   "default_locale": "en",
   "icons": {
     "16": "icons/icon16.png",
@@ -24,7 +23,11 @@
     "scripts": ["eventPage.js"],
     "persistent": true
   },
-  "options_page": "options.html",
+  "options_ui": {
+    "page": "options.html",
+    "browser_style": true,
+    "open_in_tab": true
+  },
   "commands": {
     "_execute_browser_action": {
       "suggested_key": {
@@ -35,11 +38,16 @@
     }
   },
 
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "EaseBookmarks@github.qinxs",
+      "strict_min_version": "60.0"
+    }
+  },
   "permissions": [
     "storage",
     "activeTab",
     "bookmarks",
-    "contextMenus",
-    "chrome://favicon/"
+    "contextMenus"
   ]
 }
