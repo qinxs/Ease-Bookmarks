@@ -133,6 +133,8 @@ html[lang=en] .button {
 .note {
     font-size: 13px;
     color: #555;
+}
+.whitespace-pre {
     white-space: pre;
 }
 
