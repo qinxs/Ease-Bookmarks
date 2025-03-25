@@ -1362,10 +1362,10 @@ function hotkeyEvents(event) {
     if ($goalItem) {
       $item && $item.classList.remove('active');
       $goalItem.classList.add('active');
-      $goalItem.scrollIntoViewIfNeeded();
+      // $goalItem.scrollIntoViewIfNeeded();
       // firefox polyfill
       // https://stackoverflow.com/questions/11039885/scrollintoview-causing-the-whole-page-to-move
-      // $goalItem.scrollIntoView({block: 'nearest', inline: 'start' });
+      $goalItem.scrollIntoView({block: 'nearest', inline: 'start' });
     }
   }
 
