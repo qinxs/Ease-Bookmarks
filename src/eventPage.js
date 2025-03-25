@@ -11,19 +11,19 @@ chrome.runtime.onStartup.addListener(() => {
   });
 });
 
-function checkRootInfo(argument) {
-  chrome.storage.sync.get(['rootInfo'], function(result) {
-    if (!Object.keys(result).length) {
-      chrome.bookmarks.getChildren('0', (results) => {
-        // console.log(results);
-        var rootInfo = {
-          1: results[0].title,
-          2: results[1].title,
-        }
-        chrome.storage.sync.set({rootInfo: rootInfo});
-      });
+function setRootInfo() {
+  return new Promise(resolve => {
+    chrome.bookmarks.getChildren('0', resolve)
+  }).then(results => {
+    const rootInfo = { 
+      1: results[0].title,
+      2: results[1].title,
     }
-  });
+
+    return new Promise(resolve => 
+      chrome.storage.sync.set({ rootInfo }, resolve)
+    );
+  })
 }
 
 function updataOldData() {
@@ -40,12 +40,15 @@ function updataOldData() {
 
 // 安装、更新
 chrome.runtime.onInstalled.addListener((details) => {
-  if (details.reason !== "install" && details.reason !== "update") return;
+  if (!['install', 'update'].includes(details.reason)) return;
 
-  checkRootInfo();
-  try {
-    updataOldData();
-  } catch {}
+  if (details.reason === 'install') {
+    setRootInfo();
+  } else {
+    try {
+      updataOldData();
+    } catch {}
+  }
 });
 
 chrome.runtime.onInstalled.addListener(() => {
@@ -55,6 +58,22 @@ chrome.runtime.onInstalled.addListener(() => {
     contexts: ['action'],
   });
 });
+
+chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+  // console.log(message, sender);
+  let task = message.task;
+  if (task === 'reset') {
+    setRootInfo().then(() => {
+      sendResponse(); // chrome 必须显式发送响应？
+    });
+    return true; // 异步返回true
+  } else {
+    console.log('[invalid task: ]', message);
+  }
+
+  return false;
+});
+
 
 chrome.contextMenus.onClicked.addListener((data) => {
   switch(data.menuItemId) {

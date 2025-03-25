@@ -29,21 +29,6 @@ function bookmarksAlias() {
   chrome.storage.sync.set({rootInfo: rootInfo});
 }
 
-function setRootInfo() {
-  return new Promise(resolve => {
-    chrome.bookmarks.getChildren('0', resolve)
-  }).then(results => {
-    // eventPage.js中 checkRootInfo
-    const rootInfo = { 
-      1: results[0].title,
-      2: results[1].title,
-    }
-
-    return new Promise(resolve => 
-      chrome.storage.sync.set({ rootInfo }, resolve)
-    );
-  })
-}
 
 loadSettings.then(() => {
 
@@ -199,12 +184,13 @@ loadSettings.then(() => {
   $('#resetBtn').addEventListener('click', () => {
     if (confirm(L('resetConfigTip'))) {
       resetConfig()
-      .then(setRootInfo)
       .then(() => {
-        localStorage.version = chrome.runtime.getManifest().version;
-        
-        location.reload();
-      });
+        chrome.runtime.sendMessage({ task: 'reset' }, () => {
+            localStorage.version = chrome.runtime.getManifest().version;
+            
+            location.reload();
+          });
+      })
     }
   });
 });
