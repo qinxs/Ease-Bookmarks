@@ -9,16 +9,13 @@ if (lang.startsWith('zh')) {
 }
 
 // 不存在对应语言的文档 则加载英文文档
-chrome.runtime.getPackageDirectoryEntry(function(rootDir) {
-  rootDir.getFile(mdUrl, {}, function(fileEntry) {
-    renderMd(mdUrl, document.querySelector('#usage'));
-  }, function(error) {
+renderMd(mdUrl, document.querySelector('#usage'))
+  .catch(() => {
     renderMd(mdEnUrl, document.querySelector('#usage'));
   });
-});
 
 function renderMd(url, ele) {  
-  fetch(url)
+  return fetch(url)
     .then((response) => response.text())
     .then(data => {
       ele.innerHTML = marked.parse(data);
