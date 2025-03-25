@@ -166,12 +166,12 @@ const nav = {
   toggledHtml: '',
   init(id) {
     // console.log(settings.rootInfo);
-    if (id < 3) {
+    if (bookmarkNode.isTop(id)) {
       $nav.header.innerHTML = `<a type="folder" data-id="${id}" data-role="path">${settings.rootInfo[id]}</a>`;
       this.rootID = id;
       this.lastPathID = id;
       // 底部其他书签（与书签栏切换使用）
-      this.setFooterNav(3 - id);
+      this.setFooterNav(id === bookmarkNode.main ? bookmarkNode.other : bookmarkNode.main);
     } else {
       nav.resetNavPath(id);
     }
@@ -221,7 +221,7 @@ const nav = {
     this.lastPathID = id;
   },
   _resetNavPath(id, callback) {
-    if (id < 3) {
+    if (bookmarkNode.isTop(id)) {
       this.pathHtml = `<a type="folder" data-id="${id}" data-role="path">${settings.rootInfo[id]}</a>` + this.pathHtml;
       $nav.header.innerHTML = this.pathHtml;
       this.rootID = id;
@@ -872,7 +872,7 @@ function handleSearchResultsHover(event) {
 
 function addPathTitle(id, target) {
   if (typeof id === 'undefined') return;
-  if (id < 3) {
+  if (bookmarkNode.isTop(id)) {
     pathTitle = settings.rootInfo[id] + pathTitle;
     target.title += '\n\n' + '[ ' + pathTitle + ' ]';
     target.setAttribute('data-path', 'done');

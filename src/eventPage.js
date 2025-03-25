@@ -1,6 +1,13 @@
 'use strict';
 // console.log('eventPage');
 
+const chrome = browser;
+const bookmarkNode = {
+  root: 'root________',
+  main: 'toolbar_____',
+  other: 'unfiled_____',
+}
+
 // default_icon 设为透明图标，但效果不好
 var iconBase64 = localStorage.customIcon;
 if (iconBase64) {
@@ -9,11 +16,11 @@ if (iconBase64) {
 
 function setRootInfo() {
   return new Promise(resolve => {
-    chrome.bookmarks.getChildren('0', resolve)
+    chrome.bookmarks.getChildren(bookmarkNode.root, resolve)
   }).then(results => {
     const rootInfo = { 
-      1: results[0].title,
-      2: results[1].title,
+      [bookmarkNode.main]: results[1].title,
+      [bookmarkNode.other]: results[2].title,
     }
 
     return new Promise(resolve => 

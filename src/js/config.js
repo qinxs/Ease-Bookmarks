@@ -1,5 +1,15 @@
 "use strict";
 
+const chrome = browser;
+const bookmarkNode = {
+  root: 'root________',
+  main: 'toolbar_____',
+  other: 'unfiled_____',
+  isTop(id) {
+    return id.endsWith('_____');
+  },
+}
+
 window.BM = {
   // 选项必须与input的name和value一致
   default: {
@@ -11,7 +21,7 @@ window.BM = {
     minItemsPerCol: 10, // 1-16；避免滚动条
     // 1 书签栏 2 其他书签（根目录为0）
     // -1 目录，-2 目录和滚动条（从上次位置启动）
-    startup: 1,
+    startup: bookmarkNode.main,
     customCSS: '', // 自定义css
   },
   defaultSys: {
