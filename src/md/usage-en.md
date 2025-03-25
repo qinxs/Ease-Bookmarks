@@ -20,8 +20,7 @@ In addition, this extension has special support for `JS bookmarklet`~
 
 ### Turn this extension on/off
 
-The default shortcut is `Ctrl + Q`, you can 
-[modify it](chrome://extensions/shortcuts)
+The default shortcut is `Ctrl + Q`, you can modify it
  in the following management page:
 - **Chrome**: `chrome://extensions/shortcuts`
 - **Edge**: `edge://extensions/shortcuts`

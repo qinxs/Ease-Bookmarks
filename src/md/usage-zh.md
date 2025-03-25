@@ -20,8 +20,7 @@
 
 ### 打开/关闭 本扩展
 
-默认快捷键是 `Ctrl + Q`，你可以在如下管理页面进行
-[修改](chrome://extensions/shortcuts)：
+默认快捷键是 `Ctrl + Q`，你可以在如下管理页面进行修改：
 - **Chrome**：`chrome://extensions/shortcuts`
 - **Edge**：`edge://extensions/shortcuts`
 - **Firefox**：`about:addons` `设置图标` `管理扩展快捷键`
