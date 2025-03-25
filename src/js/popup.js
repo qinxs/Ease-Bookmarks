@@ -551,8 +551,8 @@ const dialog = {
   },
   html: `
     <div id="edit-dialog-text"><span class="title"></span></div>
-    <div id="edit-dialog-name" class="textbox" contenteditable="true" spellcheck="false" placeholder="${L("name")}"></div>
-    <div type="url" id="edit-dialog-url" class="textbox" contenteditable="true" spellcheck="false" placeholder="${L("URL")}"></div>
+    <div id="edit-dialog-name" class="textbox" contenteditable="true" tabindex="0" spellcheck="false" placeholder="${L("name")}"></div>
+    <div type="url" id="edit-dialog-url" class="textbox" contenteditable="true" tabindex="0" spellcheck="false" placeholder="${L("URL")}"></div>
     <div class="dialog-btns">
       <button id="edit-save">${L("save")}</button>
       <button id="edit-cancel">${L("cancel")}</button>
