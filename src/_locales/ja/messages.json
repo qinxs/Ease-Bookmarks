@@ -8,6 +8,10 @@
   {
     "message": "ブックマーク マネージャ"
   },
+  "options":
+  {
+    "message": "オプション"
+  },
 
   "searchPlaceholder":
   {

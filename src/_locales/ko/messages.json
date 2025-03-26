@@ -8,6 +8,10 @@
   {
     "message": "북마크 관리자"
   },
+  "options":
+  {
+    "message": "옵션"
+  },
 
   "searchPlaceholder":
   {

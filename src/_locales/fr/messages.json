@@ -8,6 +8,10 @@
   {
     "message": "Gestionnaire de favoris"
   },
+  "options":
+  {
+    "message": "Options"
+  },
 
   "searchPlaceholder":
   {

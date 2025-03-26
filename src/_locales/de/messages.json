@@ -8,6 +8,10 @@
   {
     "message": "Lesezeichen-Manager"
   },
+  "options":
+  {
+    "message": "Optionen"
+  },
 
   "searchPlaceholder":
   {

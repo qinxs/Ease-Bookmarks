@@ -79,11 +79,11 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
 // });
 
 chrome.contextMenus.create({
-  title: chrome.i18n.getMessage('bookmarksManager'), 
+  title: chrome.i18n.getMessage('options'), 
   contexts: ['browser_action'],
   onclick: () => {
     chrome.tabs.create({
-      url: 'chrome://bookmarks/',
+      url: 'options.html',
     });
   }
 });

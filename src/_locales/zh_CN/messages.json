@@ -8,6 +8,10 @@
   {
     "message": "书签管理器"
   },
+  "options":
+  {
+    "message": "选项"
+  },
 
   "searchPlaceholder":
   {

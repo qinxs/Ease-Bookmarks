@@ -8,6 +8,10 @@
   {
     "message": "&Gestor de marcadores"
   },
+  "options":
+  {
+    "message": "Opções"
+  },
 
   "searchPlaceholder":
   {

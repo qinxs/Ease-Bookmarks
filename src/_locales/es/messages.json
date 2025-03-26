@@ -8,6 +8,10 @@
   {
     "message": "Administrador de &marcadores"
   },
+  "options":
+  {
+    "message": "Opciones"
+  },
 
   "searchPlaceholder":
   {

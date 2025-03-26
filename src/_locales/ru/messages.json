@@ -8,6 +8,10 @@
   {
     "message": "Диспетчер закладок"
   },
+  "options":
+  {
+    "message": "Настройки"
+  },
 
   "searchPlaceholder":
   {
