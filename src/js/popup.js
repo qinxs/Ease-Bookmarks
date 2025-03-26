@@ -1500,7 +1500,7 @@ $nav.header.addEventListener('dblclick', () => {
   $searchInput.focus();
 }, false);
 $main.addEventListener('mousedown', handleMainMiddleClick, false);
-$('#star-url').addEventListener('click', openStarUrl, false);
+// $('#star-url').addEventListener('click', openStarUrl, false);
 $$('a.btn').forEach(function(a) { 
   if (!a.href) return;
   a.addEventListener('click', function(event) {
