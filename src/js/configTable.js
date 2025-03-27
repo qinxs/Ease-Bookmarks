@@ -33,9 +33,13 @@ class TableRenderer {
     // 添加表头
     let thead = document.createElement('thead');
     let headTr = document.createElement('tr');
+
+    let parametersUrl = lang.startsWith('zh')
+        ? 'https://github.com/qinxs/Ease-Bookmarks#内置参数'
+        : 'https://github.com/qinxs/Ease-Bookmarks/blob/main/README_en.md#built-in-parameters';
     headTr.innerHTML = `<th>Key</th>
       <th class="cell-info">Value
-        <a href="https://github.com/qinxs/Ease-Bookmarks#内置参数">
+        <a href="${parametersUrl}">
           <img src="icons/i.svg">
         </a>
         <input id="cTable-input" hidden/>
