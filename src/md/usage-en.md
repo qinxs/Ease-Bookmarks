@@ -1,22 +1,22 @@
 # Instructions for use
 
-**Ease Bookmarks** is an extension to replace the browser's original bookmarks bar
+**Ease Bookmarks** is a browser extension designed to replace the native bookmarks bar
 
-On this basis, as far as possible to meet the needs of users of various bookmark usage habits
+It aims to accommodate the bookmark usage habits of various users while maintaining simplicity
 
-## The main function
+## Key Features
 
-Modify the default opening method of bookmarks
+Modify the default opening behavior of bookmarks
 
-Various basic operations on bookmarks (edit, delete, move, search, etc.)
+Perform basic operations on bookmarks (edit, delete, move, search, etc.)
 
-Bookmarks in multiple columns
+Multi-column display for bookmarks
 
-Shortcut Key Support
+Keyboard shortcut support
 
-In addition, this extension has special support for `JS bookmarklet`~
+Special support for `JS bookmarklets`
 
-## Use shortcut keys
+## Keyboard Shortcuts
 
 ### Turn this extension on/off
 
@@ -25,16 +25,16 @@ The default shortcut is `Ctrl + Q`, you can
  in the following management page:
 - **Chrome**: `chrome://extensions/shortcuts`
 - **Edge**: `edge://extensions/shortcuts`
-- **Firefox**：`about:addons` `Settings Icon` `Manage Extension Shortcuts`
+- **Firefox**: `about:addons` `Settings Icon` `Manage Extension Shortcuts`
 
 ### Function keys
 
 - `↑`, `↓`, `←`, `→`, `Home`, `End`: select/toggle bookmarks
 - `Enter`: open the selected bookmark/folder
 - `Space`: cancel selection
-- `F2`：edit bookmark/folder（`Enter` Save; `Esc`、`F2` Cancel）
+- `F2`: edit bookmark/folder（`Enter` Save; `Esc`、`F2` Cancel）
 - `Tab`: go back to the previous folder
-- `Ctrl + Z`: switch to bookmarks\_bar/other\_bookmarks
+- `Ctrl + Z`: switch between "Bookmarks bar" and "Other bookmarks"
 - `Ctrl + F`: activate the search box
 - `Esc`: clear the search box content; close the page
 
