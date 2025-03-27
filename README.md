@@ -4,16 +4,20 @@
 <br>
 <i>简 单 易 用 的 书 签 管 理 器</i>
 <h1>Ease Bookmarks</h1>
+<a href="./README.md"><img src="https://img.shields.io/badge/🇨🇳中文简体-0b8cf5"></a>
+<a href="./README_en.md"><img src="https://img.shields.io/badge/🇬🇧English-e9e9e9"></a>
+<br>
 <a href="https://github.com/qinxs/Ease-Bookmarks"><img src="https://img.shields.io/badge/Source_Code-GitHub-blue" alt="Source Code"></a>
 <a href="https://chrome.google.com/webstore/detail/ease-bookmarks/poefceffmekhjoadknillcbdifahongk"><img src="https://img.shields.io/chrome-web-store/v/poefceffmekhjoadknillcbdifahongk.svg" alt="Chrome Web Store"></a>
 <a href="https://microsoftedge.microsoft.com/addons/detail/ease-bookmarks/addbgeibeffkokpabpbpmdpehfbegchl"><img src="https://img.shields.io/badge/dynamic/json?label=microsoft%20edge%20add-on&amp;prefix=v&amp;query=%24.version&amp;url=https%3A%2F%2Fmicrosoftedge.microsoft.com%2Faddons%2Fgetproductdetailsbycrxid%2Faddbgeibeffkokpabpbpmdpehfbegchl" alt="Microsoft Edge Add-on"></a>
 <a href="https://addons.mozilla.org/firefox/addon/ease-bookmarks/"><img src="https://img.shields.io/amo/v/ease-bookmarks" alt="Firefox Add-on"></a>
 <a href="https://7bxing.com/donate/" title="欢迎捐赠~"><img src="https://img.shields.io/badge/Donate-blueviolet" alt="Donate"></a>
+<br><br>
 </div>
 
 Ease Bookmarks 是一款为了替代浏览器原有书签栏的扩展
 
-在此基础上，尽可能满足各类 书签使用习惯 用户的需求
+在此基础上，尽可能适应不同用户的书签使用习惯，同时保持简单性
 
 ![1-popup.png](./screenshots/1-popup.png)
 
@@ -35,7 +39,7 @@ Ease Bookmarks 是一款为了替代浏览器原有书签栏的扩展
 >
 > 常见问题：[FAQ](https://github.com/qinxs/Ease-Bookmarks/wiki/常见问题（FAQ）)
 
-## 使用快捷键
+## 快捷键
 
 ### 打开/关闭 本扩展
 
