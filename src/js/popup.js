@@ -874,7 +874,11 @@ function addPathTitle(id, target) {
   if (typeof id === 'undefined') return;
   if (id < 3) {
     pathTitle = settings.rootInfo[id] + pathTitle;
-    target.title += '\n\n' + '[ ' + pathTitle + ' ]';
+    let title = target.title;
+    if (title.length > 500) {
+      title = title.slice(0, 497) + '...';
+    }
+    target.title = title + '\n\n' + '[ ' + pathTitle + ' ]';
     target.setAttribute('data-path', 'done');
     pathTitle = '';
   } else {
