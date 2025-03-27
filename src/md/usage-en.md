@@ -8,7 +8,7 @@ On this basis, as far as possible to meet the needs of users of various bookmark
 
 Modify the default opening method of bookmarks
 
-Various basic operations on bookmarks (edit, delete, move, etc.)
+Various basic operations on bookmarks (edit, delete, move, search, etc.)
 
 Bookmarks in multiple columns
 
@@ -29,7 +29,7 @@ The default shortcut is `Ctrl + Q`, you can
 
 ### Function keys
 
-- `Up`, `Down`, `Left`, `Right`, `Home`, `End`: select/toggle bookmarks
+- `↑`, `↓`, `←`, `→`, `Home`, `End`: select/toggle bookmarks
 - `Enter`: open the selected bookmark/folder
 - `Space`: cancel selection
 - `F2`：edit bookmark/folder（`Enter` Save; `Esc`、`F2` Cancel）

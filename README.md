@@ -7,6 +7,7 @@
 <a href="https://github.com/qinxs/Ease-Bookmarks"><img src="https://img.shields.io/badge/Source_Code-GitHub-blue" alt="Source Code"></a>
 <a href="https://chrome.google.com/webstore/detail/ease-bookmarks/poefceffmekhjoadknillcbdifahongk"><img src="https://img.shields.io/chrome-web-store/v/poefceffmekhjoadknillcbdifahongk.svg" alt="Chrome Web Store"></a>
 <a href="https://microsoftedge.microsoft.com/addons/detail/ease-bookmarks/addbgeibeffkokpabpbpmdpehfbegchl"><img src="https://img.shields.io/badge/dynamic/json?label=microsoft%20edge%20add-on&amp;prefix=v&amp;query=%24.version&amp;url=https%3A%2F%2Fmicrosoftedge.microsoft.com%2Faddons%2Fgetproductdetailsbycrxid%2Faddbgeibeffkokpabpbpmdpehfbegchl" alt="Microsoft Edge Add-on"></a>
+<a href="https://addons.mozilla.org/firefox/addon/ease-bookmarks/"><img src="https://img.shields.io/amo/v/ease-bookmarks" alt="Firefox Add-on"></a>
 <a href="https://7bxing.com/donate/" title="欢迎捐赠~"><img src="https://img.shields.io/badge/Donate-blueviolet" alt="Donate"></a>
 </div>
 
@@ -20,7 +21,7 @@ Ease Bookmarks 是一款为了替代浏览器原有书签栏的扩展
 
 修改书签的默认打开方式
 
-对书签的各种基本操作（编辑、删除、移动等）
+对书签的各种基本操作（编辑、删除、移动、搜索等）
 
 书签多列显示
 
@@ -41,10 +42,11 @@ Ease Bookmarks 是一款为了替代浏览器原有书签栏的扩展
 默认快捷键是 `Ctrl + Q`，你可以在如下管理页面进行修改：
 - **Chrome**：`chrome://extensions/shortcuts`
 - **Edge**：`edge://extensions/shortcuts`
+- **Firefox**：`about:addons` `设置图标` `管理扩展快捷键`
 
 ### 功能键
 
-- `上`、`下`、`左`、`右`、`Home`、`End`：选择/切换 书签
+- `↑`、`↓`、`←`、`→`、`Home`、`End`：选择/切换 书签
 - `Enter`：打开选中的 书签/目录
 - `Space`：取消选中
 - `F2`：编辑 书签/目录（`Enter` 保存；`Esc`、`F2` 取消）
@@ -75,6 +77,7 @@ Ease Bookmarks 是一款为了替代浏览器原有书签栏的扩展
 | `bodyWidth_*`         <br>修改多列布局时的popup窗口宽度                | 由于Chrome对扩展的限制，最大有效值为800px                                                                                 |
 | `compositionEvent`    <br>是否开启搜索输入合成事件                     | - `0`：不启用（默认）         <br>- `1`：启用   <br>注：中文输入法强制开启                                                   |
 | `fastCreate`          <br>中键点击书签favicon图标快速添加书签          | - `0`：禁用（默认）           <br>- `2`：启用且仅对文件夹有效（将书签添加到该文件夹）  <br>（详见 [#15][issues-15]）            |
+| `faviconAPI`          <br>[ firefox only ] 获取 favicon 图标 API      | 支持的占位符 {hostname} {origin}  <br>（[ 详细用法 ][issues-firefox]）                                                        |
 | `hotkeyCancelSeleted` <br>取消选择快捷键                              | - `Space`：空格键，开启（默认）   <br>- `-Space`：关闭   <br>其他`hotkey*`快捷键同理（键值前加`-`表示关闭）  <br>[快捷键键值查询][keycode]（使用event.code值） |
 | `hotkeyDelete`        <br>删除书签快捷键                              | - `-Delete`：删除键，关闭（默认）                                                                                         |
 | `keepLastSearchValue` <br>恢复上次搜索关键字                          | - `0`：不恢复（默认）          <br>- `1`：打开 popup 窗口时，恢复上次的搜索关键字和搜索结果                                    |
@@ -106,4 +109,5 @@ Ease Bookmarks 是一款为了替代浏览器原有书签栏的扩展
 
 [issues-page]: https://github.com/qinxs/Ease-Bookmarks/issues
 [issues-15]: https://github.com/qinxs/Ease-Bookmarks/issues/15
+[issues-firefox]: https://github.com/qinxs/Ease-Bookmarks/issues/42
 [keycode]: https://www.toptal.com/developers/keycode
