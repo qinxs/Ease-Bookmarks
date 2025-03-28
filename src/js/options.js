@@ -11,8 +11,6 @@ if (lang.startsWith('zh')) {
   document.documentElement.lang = 'zh';
 }
 
-i18nLocalize();
-
 function setSyncItem(name, value) {
   if (value == BM.default[name] || !value) {
     chrome.storage.sync.remove(name);
@@ -29,9 +27,36 @@ function bookmarksAlias() {
   chrome.storage.sync.set({rootInfo: rootInfo});
 }
 
+// 备份与恢复
+$('#exportBtn').addEventListener('click', exportConfig);
 
+$('#importBtn').addEventListener('click', () => {
+  handleFileSelect({
+    accept: '.json', // 限制 json 文件
+    onFileSelected: (files) => {
+      const [file] = files;
+      return importConfig(file).then(() => {
+        location.reload();
+      });
+    }
+  });
+});
+
+$('#resetBtn').addEventListener('click', () => {
+  if (confirm(L('resetConfigTip'))) {
+    resetConfig()
+    .then(() => {
+      chrome.runtime.sendMessage({ task: 'reset' }, () => {
+          localStorage.version = chrome.runtime.getManifest().version;
+          
+          location.reload();
+        });
+    })
+  }
+});
+
+i18nLocalize();
 loadSettings.then(() => {
-
   // 必须在最前面 #folderX的数据通过后面for写入
   $('#_1').textContent = BM.settings.rootInfo[bookmarkNode.main];
   $('#_2').textContent = BM.settings.rootInfo[bookmarkNode.other];
@@ -161,34 +186,6 @@ loadSettings.then(() => {
       delete localStorage.customIcon;
       chrome.browserAction.setIcon({path: '../icons/icon32.png'});
       $iconPreview.removeAttribute('style');
-    }
-  });
-
-  // 备份与恢复
-  $('#exportBtn').addEventListener('click', exportConfig);
-  
-  $('#importBtn').addEventListener('click', () => {
-    handleFileSelect({
-      accept: '.json', // 限制 json 文件
-      onFileSelected: (files) => {
-        const [file] = files;
-        return importConfig(file).then(() => {
-          location.reload();
-        });
-      }
-    });
-  });
-
-  $('#resetBtn').addEventListener('click', () => {
-    if (confirm(L('resetConfigTip'))) {
-      resetConfig()
-      .then(() => {
-        chrome.runtime.sendMessage({ task: 'reset' }, () => {
-            localStorage.version = chrome.runtime.getManifest().version;
-            
-            location.reload();
-          });
-      })
     }
   });
 });
