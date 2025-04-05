@@ -146,14 +146,19 @@ loadSettings.then(() => {
   var reader = new FileReader(), img = new Image(), file = null;
 
   var canvas = document.createElement("canvas");
-  var context = canvas.getContext("2d");
+  var context = canvas.getContext("2d", { willReadFrequently: true });
 
-  $('#uploadIcon').addEventListener('change', function() {
-    file = event.target.files[0];
-    // 选择的文件是图片
-    if (file.type.indexOf("image") == 0) {
-      reader.readAsDataURL(file);    
-    }
+  $('#uploadIcon').addEventListener('click', () => {
+    handleFileSelect({
+      accept: 'image/png, image/jpg, image/jpeg',
+      onFileSelected: (files) => {
+        const [file] = files;
+        // 选择的文件是图片
+        if (file.type.indexOf("image") == 0) {
+          reader.readAsDataURL(file);    
+        }
+      }
+    });
   });
 
   reader.onload = function (event) {
