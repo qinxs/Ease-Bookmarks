@@ -270,6 +270,8 @@ i {
 
 .btn svg {
   opacity: .51;
+  width: 20px;
+  height: 20px;
 }
 .btn:hover svg {
   opacity: 1;
