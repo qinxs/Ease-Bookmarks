@@ -15,9 +15,10 @@
   --color-border: #ddd;
   --color-hover: #cbede9;
   --color-scrollbar-thumb: #b8c8c6;
-  --textbox-border-color: #a0b3d6;
-  --textbox-focus-border-color: #34538b;
-  --mask-background-color: rgba(9, 9, 9, .3);
+  --color-textbox-border: #a0b3d6;
+  --color-textbox-focus-border: #34538b;
+  --color-footer-background: #eee;
+  --color-mask-background: rgba(9, 9, 9, .3);
 }
 :root[dir="rtl"] {
   --direction-ratio: -1;
@@ -30,11 +31,11 @@
   --color-border: #666;
   --color-hover: #455769;
   --color-scrollbar-thumb: #8ac;
-  --textbox-border-color: #666;
-  --textbox-focus-border-color: #e29c45;
-  --mask-background-color: rgba(0, 0, 0, .48);
+  --color-textbox-border: #666;
+  --color-textbox-focus-border: #e29c45;
+  --color-footer-background: #333;
+  --color-mask-background: rgba(0, 0, 0, .48);
   /* 深色模式独有 */
-  --color-footer-background-dark: #333;
   --color-input-background-dark: #171a1a;
 }
 body::-webkit-scrollbar {
@@ -95,7 +96,7 @@ footer {
   align-items: center;
   gap: 4px;
   color: var(--color-text);
-  background-color: #eee;
+  background-color: var(--color-footer-background);
 }
 
 .mask {
@@ -104,7 +105,7 @@ footer {
   right: 0;
   bottom: 0;
   left: 0;
-  background-color: var(--mask-background-color);
+  background-color: var(--color-mask-background);
   transition: all .3s ease-out;
   z-index: 1;
 }
@@ -124,7 +125,7 @@ button {
   outline: none;
   cursor: pointer;
   padding: .15em .5em;
-  border: 1px solid var(--textbox-border-color);
+  border: 1px solid var(--color-textbox-border);
   border-bottom-width: 2px;
   border-radius: 3px;
   background-color: transparent;
@@ -138,7 +139,7 @@ button:focus {
   background-color: #1a73e8;
 }
 button:active {
-  outline: 1px solid var(--textbox-focus-border-color);
+  outline: 1px solid var(--color-textbox-focus-border);
 }
 
 a {
@@ -400,7 +401,7 @@ hr {
 }
 #dialog input:focus,
 #dialog .textbox:focus {
-  border-bottom-color: var(--textbox-focus-border-color);
+  border-bottom-color: var(--color-textbox-focus-border);
 }
 
 #edit-dialog-text,
@@ -430,9 +431,6 @@ hr {
 /* 深色模式 */
 .dark main {
   filter: brightness(0.8) contrast(1.2);
-}
-.dark footer {
-  background-color: var(--color-footer-background-dark);
 }
 .dark input,
 .dark .textbox {
