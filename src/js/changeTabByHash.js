@@ -14,7 +14,7 @@ window.addEventListener('hashchange', function() {
   var newPage = $(`${page}`);
   newPage.classList.add('active');
   
-  window.scrollTo(0, 0);
+  lastPage && window.scrollTo(0, 0);
   
   lastNavA = newNavA;
   lastPage = newPage;
