@@ -160,8 +160,31 @@ loadSettings.then(() => {
   });
 
   reader.onload = function (event) {
+    let dataURL = event.target.result;
+
+    if (dataURL.startsWith('data:image/svg+xml;base64,')) {
+      dataURL = fixSvg(dataURL);
+    }
+
     // base64码
-    img.src = event.target.result;
+    img.src = dataURL;
+
+    // svg没有宽高时 firefox会渲染为空白
+    function fixSvg(svgDataUrl) {
+      const svgText = atob(svgDataUrl.split(',')[1]);
+      const parser = new DOMParser();
+      const svg = parser.parseFromString(svgText, 'image/svg+xml').documentElement;
+
+      // 自动添加宽高（优先用 viewBox，否则默认 24x24）
+      if (!svg.hasAttribute('width')) {
+        svg.setAttribute('width', svg.getAttribute('viewBox')?.split(' ')[2] || 24);
+      }
+      if (!svg.hasAttribute('height')) {
+        svg.setAttribute('height', svg.getAttribute('viewBox')?.split(' ')[3] || 24);
+      }
+
+      return `data:image/svg+xml;base64,${btoa(svg.outerHTML)}`;
+    }
   }
 
   img.onload = function() {
