@@ -3,16 +3,13 @@
     --base-height: 42px;
     --primary-color: #1abc9c;
 }
-html::-webkit-scrollbar {
-    display: none;
+html {
+    scrollbar-width: none;
 }
+
 /* 页面内的输入框滚动条需要显示 */
-textarea::-webkit-scrollbar {
-  width: 6px;
-}
-#customCSS::-webkit-scrollbar-thumb {
-  border-radius: 6px;
-  background-color: rgba(50, 50, 50, .4);
+textarea {
+  scrollbar-width: thin;
 }
 * {
     margin: 0;
