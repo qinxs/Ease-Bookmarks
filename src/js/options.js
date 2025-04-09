@@ -148,7 +148,7 @@ loadSettings.then(() => {
 
   $('#uploadIcon').addEventListener('click', () => {
     handleFileSelect({
-      accept: 'image/png, image/jpg, image/jpeg',
+      accept: 'image/*',
       onFileSelected: (files) => {
         const [file] = files;
         // 选择的文件是图片
