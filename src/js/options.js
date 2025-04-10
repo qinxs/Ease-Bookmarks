@@ -27,6 +27,13 @@ function bookmarksAlias() {
   chrome.storage.sync.set({rootInfo: rootInfo});
 }
 
+function resetIcon() {
+  chrome.storage.local.remove('customIcon', () =>{
+    chrome.action.setIcon({path: 'icons/icon32.png'});
+    $iconPreview.removeAttribute('style');
+  });
+}
+
 // 备份与恢复
 $('#exportBtn').addEventListener('click', exportConfig);
 
@@ -44,6 +51,7 @@ $('#importBtn').addEventListener('click', () => {
 
 $('#resetBtn').addEventListener('click', () => {
   if (confirm(L('resetConfigTip'))) {
+    resetIcon();
     resetConfig()
     .then(() => {
       chrome.runtime.sendMessage({ task: 'reset' }, () => {
@@ -189,10 +197,5 @@ loadSettings.then(() => {
     }
   };
 
-  $('#resetIcon').addEventListener('click', function(){
-    chrome.storage.local.remove('customIcon', () =>{
-      chrome.action.setIcon({path: '../icons/icon32.png'});
-      $iconPreview.removeAttribute('style');
-    });
-  });
+  $('#resetIcon').addEventListener('click', resetIcon);
 });
