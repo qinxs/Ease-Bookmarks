@@ -8,7 +8,8 @@
 <a href="./README_en.md"><img src="https://img.shields.io/badge/🇬🇧English-e9e9e9"></a>
 <br>
 <a href="https://github.com/qinxs/Ease-Bookmarks"><img src="https://img.shields.io/badge/Source_Code-GitHub-blue" alt="Source Code"></a>
-<a href="https://chrome.google.com/webstore/detail/ease-bookmarks/poefceffmekhjoadknillcbdifahongk"><img src="https://img.shields.io/chrome-web-store/v/poefceffmekhjoadknillcbdifahongk.svg" alt="Chrome Web Store"></a>
+<a href="https://chrome.google.com/webstore/detail/ease-bookmarks/jekbcacdnnlaajcagcmcpdjckjpjgfll"><img src="https://img.shields.io/chrome-web-store/v/jekbcacdnnlaajcagcmcpdjckjpjgfll.svg" alt="Chrome Web Store"></a>
+<a href="https://chrome.google.com/webstore/detail/ease-bookmarks/poefceffmekhjoadknillcbdifahongk"><img src="https://img.shields.io/chrome-web-store/v/poefceffmekhjoadknillcbdifahongk?label=mv2" alt="mv2"></a>
 <a href="https://microsoftedge.microsoft.com/addons/detail/ease-bookmarks/addbgeibeffkokpabpbpmdpehfbegchl"><img src="https://img.shields.io/badge/dynamic/json?label=microsoft%20edge%20add-on&amp;prefix=v&amp;query=%24.version&amp;url=https%3A%2F%2Fmicrosoftedge.microsoft.com%2Faddons%2Fgetproductdetailsbycrxid%2Faddbgeibeffkokpabpbpmdpehfbegchl" alt="Microsoft Edge Add-on"></a>
 <a href="https://addons.mozilla.org/firefox/addon/ease-bookmarks/"><img src="https://img.shields.io/amo/v/ease-bookmarks" alt="Firefox Add-on"></a>
 <a href="https://7bxing.com/donate/" title="欢迎捐赠~"><img src="https://img.shields.io/badge/Donate-blueviolet" alt="Donate"></a>
