@@ -1327,14 +1327,16 @@ function hotkeyEvents(event) {
     case "ArrowLeft":
     case "ArrowRight":
       if (layout.cols == 1 && layout.curMaxCols == 1) break;
+      if ($item) {
+        event.preventDefault();
+      }
+      setActiveItem(keyCode);
+      break;
     case "Home":
     case "End":
     case "ArrowUp":
     case "ArrowDown":
-      // 不阻止#search-input中的左右键
-      if ($item) {
-        event.preventDefault();
-      }
+      event.preventDefault();
       setActiveItem(keyCode);
       break;
     default:
