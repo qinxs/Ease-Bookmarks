@@ -1303,10 +1303,10 @@ function hotkeyEvents(event) {
       $back && $back.dispatchEvent(new Event(BM.openFolderEventType, {"bubbles": true}));
       break;
     case settings.hotkeyCancelSeleted: // 原Space
-      if ($item) {
-        event.preventDefault();
-        $item.classList.remove('active');
-      }
+      if (!$item) break;
+      if (isSearchView && $item === $searchList.firstChild) break;
+      event.preventDefault();
+      $item.classList.remove('active');
       break;
     case "Enter":
       var $itemA = $('.item.active > a', $list);
