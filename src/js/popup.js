@@ -835,7 +835,7 @@ function handleMainClick(event) {
   }
 }
 
-function handleMainMiddleClick(event) {
+function handleMiddleClick(event) {
   if (event.button !== 1) return;
   event.preventDefault();
   event.stopPropagation();
@@ -847,18 +847,35 @@ function handleMainMiddleClick(event) {
       url: cachedFolderInfo.links[id],
       active: false
     });
-  } else if (settings.fastCreate == 2 && $fromTarget.classList.contains('favicon')) {
-    var a = $fromTarget.nextElementSibling;
-    if (a.type === 'folder') {
-      // console.log(target);
-      getCurrentTab((tab) => {
-        chrome.bookmarks.create({
-          'parentId': a.getAttribute('data-id'),
-          'title': tab.title,
-          'url': tab.url
-        });
+  } else if (!isSearchView && $fromTarget.closest('nav')) {
+    getCurrentTab((tab) => {
+      if (!tab.url) return;
+      chrome.bookmarks.create({
+        'parentId': nav.lastPathID.toString(),
+        'title': tab.title,
+        'url': tab.url,
       });
-    }
+    });
+  } else if (settings.fastCreate > 0 && $fromTarget.classList.contains('favicon')) {
+    getCurrentTab((tab) => {
+      if (!tab.url) return;
+      var bookmark = {
+        'parentId': nav.lastPathID.toString(),
+        'title': tab.title,
+        'url': tab.url,
+      }
+
+      var a = $fromTarget.nextElementSibling;
+      if (a.type === 'folder' && settings.fastCreate == 2) {
+        bookmark.parentId = a.getAttribute('data-id');
+        chrome.bookmarks.create(bookmark);
+      } else if (!isSearchView) {
+        var $item = $fromTarget.closest('.item');
+        var index = Array.from($curFolderList.childNodes).indexOf($item);
+        bookmark.index = index + 1;
+        chrome.bookmarks.create(bookmark);
+      }
+    });
   }
 }
 
@@ -1486,7 +1503,7 @@ $nav.header.addEventListener('dblclick', () => {
   simulateKeyboardEvent(document, 'keydown', {}, 'Tab');
   $searchInput.focus();
 }, false);
-$main.addEventListener('mousedown', handleMainMiddleClick, false);
+document.addEventListener('mousedown', handleMiddleClick, false);
 $('#star-url').addEventListener('click', openStarUrl, false);
 $$('a.btn').forEach(function(a) { 
   if (!a.href) return;
