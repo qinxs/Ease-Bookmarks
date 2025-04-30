@@ -46,6 +46,7 @@
   },
   "permissions": [
     "storage",
+    "tabs",
     "activeTab",
     "bookmarks",
     "contextMenus"
