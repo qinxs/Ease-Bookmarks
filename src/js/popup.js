@@ -1307,6 +1307,7 @@ function hotkeyEvents(event) {
       $item.classList.remove('active');
       break;
     case "Enter":
+    case settings.hotkeyEnterSecond:
       var $itemA = $('.item.active > a', $list);
       if (!$itemA) return;
       var id = $itemA.getAttribute('data-id');
