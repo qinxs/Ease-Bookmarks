@@ -255,6 +255,7 @@ i {
   padding-inline-start: 24px;
   /* 防止空名称文件夹不能打开 */
   height: 100%;
+  margin-top: -0.5px;
   overflow:hidden;
   text-overflow:ellipsis;
   white-space:nowrap;

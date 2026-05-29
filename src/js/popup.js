@@ -2,7 +2,7 @@
 
 var settings;
 const ratio = window.devicePixelRatio || 1;
-const faviconPrefix = 'chrome://favicon/' + (ratio == 1 ? '' : `size/16@${ratio}x/`);
+const faviconPrefix = 'chrome://favicon/' + (ratio == 1 ? '' : `size/16@2x/`);
 const $nav = {
   header: $('nav'),
   footer: $('a.nav')
