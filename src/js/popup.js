@@ -883,24 +883,27 @@ function handleSearchResultsHover(event) {
   var target = event.target;
   if (target.tagName === 'A' && target.getAttribute('data-path') !== 'done') {
     // console.log(target);
+    pathTitle = '';
     addPathTitle(target.getAttribute('data-parent-id'), target);
   }
 }
 
 function addPathTitle(id, target) {
   if (typeof id === 'undefined') return;
-  if (id < 3) {
-    pathTitle = settings.rootInfo[id] + pathTitle;
+  if (id === '0') {
     let title = target.title;
     if (title.length > 500) {
       title = title.slice(0, 497) + '...';
     }
     target.title = title + '\n\n' + '[ ' + pathTitle + ' ]';
     target.setAttribute('data-path', 'done');
-    pathTitle = '';
   } else {
     chrome.bookmarks.get(id.toString(), (item) => {
-      pathTitle = ' > '+ item[0].title + pathTitle;
+      if (item[0].parentId === '0') {
+        pathTitle = (settings.rootInfo[item[0].id] || item[0].title) + pathTitle;
+      } else {
+        pathTitle = ' > '+ item[0].title + pathTitle;
+      }
       addPathTitle(item[0].parentId, target);
     });
   }
