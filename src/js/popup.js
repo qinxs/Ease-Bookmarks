@@ -221,28 +221,30 @@ const nav = {
     this.lastPathID = id;
   },
   _resetNavPath(id, callback) {
-    if (id < 3) {
-      this.pathHtml = `<a type="folder" data-id="${id}" data-role="path">${settings.rootInfo[id]}</a>` + this.pathHtml;
-      $nav.header.innerHTML = this.pathHtml;
-      this.rootID = id;
-      this.pathHtml = '';
-      if (typeof callback === 'function') {
-        callback(3 - id);
-      }
-    } else {
-      chrome.bookmarks.get(id.toString(), (item) => {
+    if (id === '0') return;
+    chrome.bookmarks.get(id.toString(), (item) => {
+      if (item[0].parentId === '0') {
+        this.pathHtml = `<a type="folder" data-id="${id}" data-role="path">${settings.rootInfo[id] || item[0].title}</a>` + this.pathHtml;
+        $nav.header.innerHTML = this.pathHtml;
+        this.rootID = id;
+        this.pathHtml = '';
+        if (typeof callback === 'function') {
+          callback(3 - id);
+        }
+      } else {
         var folderName = this.replaceEmptyString(item[0].title);
         this.pathHtml = `
         <i>></i> <a type="folder" data-id="${id}" data-role="path">${folderName}</a>` + this.pathHtml;
         this._resetNavPath(item[0].parentId, callback);
-      })
-    }
+      }
+    });
   },
   replaceEmptyString(folderName) {
     return folderName || '&emsp;';
   },
   setFooterNav(_id) {
     chrome.bookmarks.getChildren(_id.toString(), (results) => {
+      if (!results) return;
       if (results.length) {
         $nav.footer.setAttribute('data-id', _id);
         $nav.footer.textContent = settings.rootInfo[_id];
