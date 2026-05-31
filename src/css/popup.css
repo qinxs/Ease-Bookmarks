@@ -24,10 +24,10 @@
   --color-theme: #369;
   --color-text: #cbc8c4;
   --color-nav-text: #e3e3e3;
-  --color-background: #1c1b22;
+  --color-background: #0d1117;
   --color-border: #666;
-  --color-hover: #263f59;
-  --color-scrollbar-thumb: #8ac;
+  --color-hover: #2d3748;
+  --color-scrollbar-thumb: #5a616c;
   --color-textbox-border: #666;
   --color-textbox-focus-border: #8cb4ff;
   --color-input-background: #000;
@@ -434,10 +434,6 @@ hr {
   filter: brightness(0.8) contrast(1.25);
 }
 
-.dark .item:hover,
-.dark .item.active {
-  color: #eee;
-}
 .dark svg {
   fill: var(--color-text);
 }
