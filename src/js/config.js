@@ -35,6 +35,7 @@ window.BM = {
     faviconAPI: 'https://api.xinac.net/icon/?url={hostname}',
     hotkeyCancelSeleted: 'Space',
     hotkeyDelete: '-Delete',
+    hotkeyEnterSecond: 'F9',
     keepLastSearchValue: 0,
     keepMaxCols: 0, // 0-1 保持最大宽度
     // 1-2
