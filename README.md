@@ -85,6 +85,7 @@ Ease Bookmarks 是一款为了替代浏览器原有书签栏的扩展
 | `faviconAPI`          <br>[ firefox only ] 获取 favicon 图标 API      | 支持的占位符 {hostname} {origin}  <br>（[ 详细用法 ][issues-firefox]）                                                        |
 | `hotkeyCancelSeleted` <br>取消选择快捷键                              | - `Space`：空格键，开启（默认）   <br>- `-Space`：关闭   <br>其他`hotkey*`快捷键同理（键值前加`-`表示关闭）  <br>[快捷键键值查询][keycode]（使用event.code值） |
 | `hotkeyDelete`        <br>删除书签快捷键                              | - `-Delete`：删除键，关闭（默认）                                                                                         |
+| `hotkeyEnterSecond`   <br>打开书签                                    | - `F9`：（与回车键一样，#49）                                                                                             |
 | `keepLastSearchValue` <br>恢复上次搜索关键字                          | - `0`：不恢复（默认）          <br>- `1`：打开 popup 窗口时，恢复上次的搜索关键字和搜索结果                                    |
 | `keepMaxCols`         <br>页面保持最大宽度                            | - `0`：页面宽度随内容变化      <br>- `1`：保持最大打开宽度（默认，避免切换文件夹时页面跳动）                                    |
 | `openBookmarkAfterCurrentTab`<br>在当前标签页右侧打开书签              | - `0`：禁用（默认）           <br>- `1`：启用（仅通过本扩展打开时有效）                                                       |
