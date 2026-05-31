@@ -21,8 +21,8 @@ function setSyncItem(name, value) {
 
 function bookmarksAlias() {
   var rootInfo = {
-    1: $bookmarksBar.value,
-    2: $otherBookmarks.value,
+    [bookmarkNode.main]: $bookmarksBar.value,
+    [bookmarkNode.other]: $otherBookmarks.value,
   }
   chrome.storage.sync.set({rootInfo: rootInfo});
 }
@@ -65,13 +65,17 @@ $('#resetBtn').addEventListener('click', () => {
 });
 
 i18nLocalize();
-loadSettings.then(() => {
+Promise.all([
+  loadSettings,
+  loadRootNode,
+]).then(() => {
   // 必须在最前面 #folderX的数据通过后面for写入
-  $('#_1').textContent = BM.settings.rootInfo[1];
-  $('#_2').textContent = BM.settings.rootInfo[2];
+  $('#_2').previousElementSibling.value = bookmarkNode.other;
+  $('#_1').textContent = BM.settings.rootInfo[bookmarkNode.main];
+  $('#_2').textContent = BM.settings.rootInfo[bookmarkNode.other];
   var folderX = $('#folderX');
   // folderX.title = L('folderXTitle');
-  if (BM.settings.startup > 2) {
+  if (!bookmarkNode.isTop(BM.settings.startup)) {
     folderX.previousElementSibling.value = BM.settings.startup;
     chrome.bookmarks.get(BM.settings.startup, (results) => {
       folderX.textContent = results[0].title;
@@ -99,12 +103,15 @@ loadSettings.then(() => {
 
   $minItemsPerCol.value = BM.settings.minItemsPerCol;
 
-  $bookmarksBar.value = BM.settings.rootInfo[1];
-  $otherBookmarks.value = BM.settings.rootInfo[2];
-  chrome.bookmarks.getChildren('0', (results) => {
+  $bookmarksBar.value = BM.settings.rootInfo[bookmarkNode.main];
+  $otherBookmarks.value = BM.settings.rootInfo[bookmarkNode.other];
+  chrome.bookmarks.getChildren(bookmarkNode.root, (results) => {
     // console.log(results);
-    $bookmarksBar.placeholder = results[0].title;
-    $otherBookmarks.placeholder = results[1].title;
+    const titles = {};
+    results.forEach(item => titles[item.id] = item.title);
+    
+    $bookmarksBar.placeholder = titles[bookmarkNode.main] || '';
+    $otherBookmarks.placeholder = titles[bookmarkNode.other] || '';
   });
 
   $customCSS.value = BM.settings.customCSS || '';

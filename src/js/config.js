@@ -1,5 +1,22 @@
 "use strict";
 
+const bookmarkNode = {
+  root: '0',
+  main: '1',
+  other: '2', // updateTopIDs 中获取真实ID
+  isTop(id) {
+    return Object.values(this).includes(String(id));
+  },
+  updateTopIDs(rootTree) {
+    if (!rootTree) return;
+
+    const otherNode = rootTree.find(n => n.folderType === "other") || rootTree[1];
+    if (otherNode) {
+      this.other = otherNode.id;
+    }
+  },
+}
+
 window.BM = {
   // 选项必须与input的name和value一致
   default: {
@@ -11,7 +28,7 @@ window.BM = {
     minItemsPerCol: 10, // 1-16；避免滚动条
     // 1 书签栏 2 其他书签（根目录为0）
     // -1 目录，-2 目录和滚动条（从上次位置启动）
-    startup: 1,
+    startup: bookmarkNode.main,
     customCSS: '', // 自定义css
   },
   defaultSys: {
@@ -59,7 +76,13 @@ var loadSettings = new Promise(function(resolve, reject) {
 
 BM.startupReal = localStorage.getItem('startupID') || BM.default.startup;
 
-var loadPreItems;
+var loadRootNode, loadPreItems;
+loadRootNode = new Promise(function(resolve, reject) {
+  chrome.bookmarks.getChildren(bookmarkNode.root, (results) => {
+    bookmarkNode.updateTopIDs(results);
+    resolve();
+  });
+});
 
 // 提前读取bookmarks数据，优化启动速度
 if (location.pathname === '/popup.html') {
