@@ -164,12 +164,12 @@ const nav = {
   toggledHtml: '',
   init(id) {
     // console.log(settings.rootInfo);
-    if (id < 3) {
+    if (bookmarkNode.isTop(id)) {
       $nav.header.innerHTML = `<a type="folder" data-id="${id}" data-role="path">${settings.rootInfo[id]}</a>`;
       this.rootID = id;
       this.lastPathID = id;
       // 底部其他书签（与书签栏切换使用）
-      this.setFooterNav(3 - id);
+      this.setFooterNav(id === bookmarkNode.main ? bookmarkNode.other : bookmarkNode.main);
     } else {
       nav.resetNavPath(id);
     }
@@ -219,15 +219,15 @@ const nav = {
     this.lastPathID = id;
   },
   _resetNavPath(id, callback) {
-    if (id === '0') return;
+    if (id === bookmarkNode.root) return;
     chrome.bookmarks.get(id.toString(), (item) => {
-      if (item[0].parentId === '0') {
+      if (item[0].parentId === bookmarkNode.root) {
         this.pathHtml = `<a type="folder" data-id="${id}" data-role="path">${settings.rootInfo[id] || item[0].title}</a>` + this.pathHtml;
         $nav.header.innerHTML = this.pathHtml;
         this.rootID = id;
         this.pathHtml = '';
         if (typeof callback === 'function') {
-          callback(3 - id);
+          callback(id === bookmarkNode.main ? bookmarkNode.other : bookmarkNode.main);
         }
       } else {
         var folderName = this.replaceEmptyString(item[0].title);
@@ -890,7 +890,7 @@ function handleSearchResultsHover(event) {
 
 function addPathTitle(id, target) {
   if (typeof id === 'undefined') return;
-  if (id === '0') {
+  if (id === bookmarkNode.root) {
     let title = target.title;
     if (title.length > 500) {
       title = title.slice(0, 497) + '...';
@@ -1522,6 +1522,7 @@ $$('a.btn').forEach(function(a) {
 
 Promise.all([
     loadSettings,
+    loadRootNode,
     loadPreItems,
   ]).then(() => {
   // console.log(BM.settings);
