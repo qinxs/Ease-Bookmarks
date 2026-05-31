@@ -18,7 +18,6 @@
   --color-textbox-border: #a0b3d6;
   --color-textbox-focus-border: #34538b;
   --color-input-background: #fff;
-  --color-footer-background: #eee;
   --color-mask-background: rgba(0, 0, 0, .5);
 }
 .dark {
@@ -32,7 +31,6 @@
   --color-textbox-border: #666;
   --color-textbox-focus-border: #8cb4ff;
   --color-input-background: #000;
-  --color-footer-background: #333;
   --color-mask-background: rgba(0, 0, 0, .66);
 }
 :root[dir="rtl"] {
@@ -95,8 +93,8 @@ footer {
   display: flex;
   align-items: center;
   gap: 4px;
+  border-top: 1px solid var(--color-border);
   color: var(--color-text);
-  background-color: var(--color-footer-background);
 }
 
 .mask {
@@ -165,7 +163,6 @@ nav {
 #bookmark-manager,
 .nav {
   font-size: 15px;
-  font-weight: bold;
   color: var(--color-theme);
 }
 .nav:empty,
