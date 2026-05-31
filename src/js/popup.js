@@ -280,6 +280,7 @@ const search = {
   init() {
     $searchInput.placeholder = L("searchPlaceholder");
     this.handleEvent();
+    $searchInput.focus();
   },
   handleEvent() {
     if (lang.startsWith('zh') || settings.compositionEvent == 1) {
