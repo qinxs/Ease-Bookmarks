@@ -74,7 +74,7 @@ Promise.all([
   $('#_2').textContent = BM.settings.rootInfo[bookmarkNode.other];
   var folderX = $('#folderX');
   // folderX.title = L('folderXTitle');
-  if (!bookmarkNode.isTop(BM.settings.startup)) {
+  if (!bookmarkNode.isTop(BM.settings.startup) && !['-1', '-2'].includes(BM.settings.startup)) {
     folderX.previousElementSibling.value = BM.settings.startup;
     chrome.bookmarks.get(BM.settings.startup, (results) => {
       folderX.textContent = results[0].title;
