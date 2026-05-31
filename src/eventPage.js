@@ -77,6 +77,12 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
       sendResponse(); // chrome 必须显式发送响应？
     });
     return true; // 异步返回true
+  } else if (typeof globalThis[task] === 'function') {
+    console.log('[function task: ]', task);
+    new Promise(resolve => {
+      globalThis[task]().then(() => sendResponse());
+    });
+    return true;
   } else {
     console.log('[invalid task: ]', message);
   }
