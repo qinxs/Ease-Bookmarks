@@ -1527,6 +1527,12 @@ Promise.all([
   ]).then(() => {
   // console.log(BM.settings);
   settings = BM.settings;
+  // 其他书签ID变了
+  if (!settings.rootInfo[bookmarkNode.other]) {
+    chrome.runtime.sendMessage({ task: 'setRootInfo' }, () => {
+      location.reload();
+    });
+  }
   dataSetting.init();
 
   $curFolderList.id = `_${BM.startupReal}`;
