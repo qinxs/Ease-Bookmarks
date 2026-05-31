@@ -248,7 +248,7 @@ const nav = {
         this.rootID = id;
         this.pathHtml = '';
         if (typeof callback === 'function') {
-          callback(3 - id);
+          callback(id === bookmarkNode.main ? bookmarkNode.other : bookmarkNode.main);
         }
       } else {
         var folderName = this.replaceEmptyString(item[0].title);
