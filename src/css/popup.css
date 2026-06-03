@@ -229,7 +229,9 @@ i {
 }
 
 .item {
-  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 8px;
   padding: 0 8px;
   height: var(--height-item);
   line-height: var(--height-item);
@@ -242,23 +244,20 @@ i {
 }
 
 .favicon {
-  position: absolute;
+  width: 16px;
   height: 16px;
-  top: 50%;
-  transform: translateY(-50%);
 }
 .folder-list .favicon {
   cursor: move;
 }
 .item > a {
-  display: block;
-  padding-inline-start: 24px;
   /* 防止空名称文件夹不能打开 */
   height: 100%;
   margin-top: -0.5px;
   overflow:hidden;
   text-overflow:ellipsis;
   white-space:nowrap;
+  flex: 1;
 }
 #bookmark-manager + a {
   margin-inline-start: auto;
