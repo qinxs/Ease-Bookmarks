@@ -47,15 +47,15 @@
         <input id="search-input" type="search" results="0" autofocus tabindex="-1">
     </header>
 
-    <main>
+    <main tabindex="-1">
         <div id="template" hidden>
             <div class="item">
                 <img class="favicon">
                 <a data-id="" type="link"></a>
             </div>
         </div>
-        <div class="folder-list" id="startup"></div>
-        <div id="search-list" hidden></div>
+        <div class="folder-list" id="startup" tabindex="-1"></div>
+        <div id="search-list" tabindex="-1" hidden></div>
         <ul id="context-menu" class="box hidden"></ul>
     </main>
     <footer>
