@@ -198,6 +198,9 @@ const nav = {
   },
   removePath(target) {
     while (target.nextElementSibling) {
+      if (settings.clearScrollPosWhenExitFolder == 1 && target.nextElementSibling.type === 'folder') {
+        $curFolderList[scrollAttr] = 0;
+      }
       target.nextElementSibling.remove();
     }
   },
