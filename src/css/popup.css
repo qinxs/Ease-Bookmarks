@@ -80,10 +80,11 @@ header {
 }
 main {
   position: relative;
-  padding: 0;
+  display: flex;
+  flex-direction: column;
   max-height: 476px;
   min-height: 400px;
-  overflow: auto;
+  padding: 0;
 }
 footer {
   width: inherit;
@@ -187,9 +188,11 @@ i {
 #search-list {
   display: grid;
   grid-auto-flow: column;
-  grid-template-rows: repeat(var(--list-rows), 1fr);
+  grid-template-rows: repeat(var(--list-rows), var(--height-item));
   grid-template-columns: repeat(var(--list-cols), calc(100% / var(--body-width-cols)));
   font-size: var(--base-font-size);
+  flex: 1;
+  overflow: auto;
 }
 .folder-list[hidden],
 #search-list[hidden] {

@@ -28,8 +28,6 @@ var $fromTarget = null;
 var pathTitle = '';
 window.openFolderDelay = null;
 var isScrollDirectionX, scrollAttr;
-var mainScrollPos = 0;
-var cachedFolderScrollPos = 0;
 // 点击的右键菜单ID，需要弹出dialog时动态改变
 var curContextMenuID;
 
@@ -799,12 +797,6 @@ function setListSize($list) {
 // 视图切换
 function toggleList(id, searchMode = false) {
   // console.log($curFolderList);
-  if (mainScrollPos || searchMode) {
-    if (searchMode) {
-      cachedFolderScrollPos = mainScrollPos;
-    }
-    $main[scrollAttr] = 0;
-  }
   $curFolderList.hidden = true;
   // SearchView 会多次调用 单独处理
   if (searchMode) {
@@ -817,10 +809,6 @@ function toggleList(id, searchMode = false) {
     isSearchView = false;
     $curFolderList = $list;
     setListSize($curFolderList);
-    if (cachedFolderScrollPos) {
-      $main.scrollTop = cachedFolderScrollPos;
-      cachedFolderScrollPos = 0;
-    }
   }
 }
 
@@ -1471,7 +1459,7 @@ function saveLastData() {
   if (curStartupFromLast < 0) {
     localStorage.setItem('startupID', nav.lastPathID);
     if (curStartupFromLast < -1) {
-      localStorage.setItem('LastScrollPos', $main[scrollAttr]);
+      localStorage.setItem('LastScrollPos', (isSearchView ? $searchList : $curFolderList)[scrollAttr]);
     }
   }
 }
@@ -1490,16 +1478,13 @@ function resumeLastStatus() {
 
   var LastScrollPos = localStorage.getItem('LastScrollPos') || 0;
   setTimeout(() => {
-    if (LastScrollPos) $main[scrollAttr] = LastScrollPos;
+    if (LastScrollPos) (isSearchView ? $searchList : $curFolderList)[scrollAttr] = LastScrollPos;
 
-    $main.addEventListener('scroll', function() {
-      mainScrollPos = this[scrollAttr];
-    }, false);
     if (isScrollDirectionX) {
       $main.addEventListener('wheel', function(event) {
         event.preventDefault();
         // 滚动页面的水平位置
-        $main.scrollLeft += event.deltaY;
+        (isSearchView ? $searchList : $curFolderList).scrollLeft += event.deltaY;
       });
     }
   }, LastScrollPos > 0 ? 50 : 0);
