@@ -81,11 +81,11 @@ header {
 }
 main {
   position: relative;
+  display: flex;
+  flex-direction: column;
   padding: 0;
   max-height: 476px;
   min-height: 400px;
-  scrollbar-width: thin;
-  overflow: auto;
 }
 footer {
   width: inherit;
@@ -189,9 +189,12 @@ i {
 #search-list {
   display: grid;
   grid-auto-flow: column;
-  grid-template-rows: repeat(var(--list-rows), 1fr);
+  grid-template-rows: repeat(var(--list-rows), var(--height-item));
   grid-template-columns: repeat(var(--list-cols), calc(100% / var(--body-width-cols)));
   font-size: var(--base-font-size);
+  flex: 1;
+  scrollbar-width: thin;
+  overflow: auto;
 }
 .folder-list[hidden],
 #search-list[hidden] {
