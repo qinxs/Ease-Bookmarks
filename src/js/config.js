@@ -30,6 +30,7 @@ window.BM = {
     bodyWidth_3: '530px',
     bodyWidth_4: '660px',
     bodyWidth_5: '800px',
+    clearScrollPosWhenExitFolder: 1,
     compositionEvent: 0,
     fastCreate: 0, // 0-2
     faviconAPI: 'https://api.xinac.net/icon/?url={hostname}',
