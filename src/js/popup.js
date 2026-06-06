@@ -538,11 +538,14 @@ const dialog = {
     this.$name = $('#edit-dialog-name');
     this.$url = $('#edit-dialog-url');
     // 光标移到末尾
-    this.$name.addEventListener('focus', () => {
-      var range = window.getSelection();
-      range.selectAllChildren(this.$name);
-      range.collapseToEnd();
-    }, false);
+    [this.$name, this.$url].forEach((ele) => {
+      ele.addEventListener('focus', () => {
+        if (ele.scrollHeight > ele.clientHeight) return;
+        var range = window.getSelection();
+        range.selectAllChildren(ele);
+        range.collapseToEnd();
+      }, false);
+    });
     $('#edit-cancel').addEventListener('click', () => this.close(event), false);
     $('#edit-save').addEventListener('click', () => this.save(event), false);
   },
