@@ -807,6 +807,7 @@ function toggleList(id, searchMode = false) {
   if (searchMode) {
     $searchList.hidden = false;
     isSearchView = true;
+    setListSize($searchList);
   } else {
     var $list = cachedFolderInfo.lists[id];
     $list.hidden = false;
