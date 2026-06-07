@@ -8,7 +8,11 @@ const bookmarkNode = {
   updateTopIDs(rootTree) {
     if (!rootTree) return;
 
+    const mainNode = rootTree.find(n => n.folderType === "bookmarks-bar") || rootTree[0];
     const otherNode = rootTree.find(n => n.folderType === "other") || rootTree[1];
+    if (mainNode) {
+      this.main = mainNode.id;
+    }
     if (otherNode) {
       this.other = otherNode.id;
     }
