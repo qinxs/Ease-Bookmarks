@@ -10,9 +10,21 @@ const bookmarkNode = {
   updateTopIDs(rootTree) {
     if (!rootTree) return;
 
+    const mainNode = rootTree.find(n => n.folderType === "bookmarks-bar") || rootTree[0];
     const otherNode = rootTree.find(n => n.folderType === "other") || rootTree[1];
+    if (mainNode) {
+      this.main = mainNode.id;
+    }
     if (otherNode) {
       this.other = otherNode.id;
+    }
+  },
+  checkRootInfo(rootInfo) {
+    // 其他书签ID变了
+    if (!rootInfo[bookmarkNode.main] || !rootInfo[bookmarkNode.other]) {
+      chrome.runtime.sendMessage({ task: 'setRootInfo' }, () => {
+        location.reload();
+      });
     }
   },
 }
@@ -86,22 +98,22 @@ loadRootNode = new Promise(function(resolve, reject) {
 });
 
 // 提前读取bookmarks数据，优化启动速度
-if (location.pathname === '/popup.html') {
-  loadPreItems = new Promise(function(resolve, reject) {
-    chrome.bookmarks.getChildren(BM.startupReal.toString(), (results) => {
-      // console.log(results);
-      // 启动文件夹被删除了
-      if (typeof results === 'undefined') {
-        localStorage.setItem('startupID', BM.default.startup);
-        chrome.storage.sync.set({startup: BM.default.startup}, () => {
+loadPreItems = new Promise(function(resolve, reject) {
+  chrome.bookmarks.getChildren(BM.startupReal.toString(), (results) => {
+    // console.log(results);
+    // 启动文件夹被删除了
+    if (typeof results === 'undefined') {
+      loadRootNode.then(() => {
+        localStorage.setItem('startupID', bookmarkNode.main);
+        chrome.storage.sync.set({startup: bookmarkNode.main}, () => {
           location.reload();
         });
-      }
-      BM.preItems = results;
-      resolve();
-    });
+      });
+    }
+    BM.preItems = results;
+    resolve();
   });
-}
+});
 
 const $ = (css, d = document) => d.querySelector(css);
 const $$ = (css, d = document) => d.querySelectorAll(css);
