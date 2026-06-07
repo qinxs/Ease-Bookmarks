@@ -16,7 +16,7 @@ const bookmarkNode = {
 }
 
 // default_icon 设为透明图标，但效果不好
-chrome.runtime.onStartup.addListener(() => {
+chrome.runtime?.onStartup?.addListener(() => {
   chrome.storage.local.get('customIcon', items => {
     var iconBase64 = items.customIcon;
     if (iconBase64) {
@@ -47,7 +47,7 @@ function updataOldData() {
   // v1.7.2 ↑
   // 从上次位置启动 改为 从任意目录启动
   localStorage.removeItem('version');
-  var iconBase64 = localStorage.customIcon;
+  var iconBase64 = globalThis.localStorage?.customIcon;
   if (iconBase64) {
     // console.log(iconBase64);
     chrome.storage.local.set({customIcon: iconBase64});
@@ -56,7 +56,7 @@ function updataOldData() {
 }
 
 // 安装、更新
-chrome.runtime.onInstalled.addListener((details) => {
+chrome.runtime?.onInstalled?.addListener((details) => {
   if (!['install', 'update'].includes(details.reason)) return;
 
   if (details.reason === 'install') {
@@ -68,15 +68,15 @@ chrome.runtime.onInstalled.addListener((details) => {
   }
 });
 
-chrome.runtime.onInstalled.addListener(() => {
-  chrome.contextMenus.create({
+chrome.runtime?.onInstalled?.addListener(() => {
+  chrome.contextMenus?.create({
     id: 'open-bookmarks-manager',
     title: chrome.i18n.getMessage('bookmarksManager'), 
     contexts: ['action'],
   });
 });
 
-chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+chrome.runtime?.onMessage?.addListener((message, sender, sendResponse) => {
   // console.log(message, sender);
   let task = message.task;
   if (task === 'reset') {
@@ -98,7 +98,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
 });
 
 
-chrome.contextMenus.onClicked.addListener((data) => {
+chrome.contextMenus?.onClicked.addListener((data) => {
   switch(data.menuItemId) {
     case 'open-bookmarks-manager':
       chrome.tabs.create({
