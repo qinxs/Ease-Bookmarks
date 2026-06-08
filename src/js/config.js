@@ -82,7 +82,7 @@ if (location.pathname === '/popup.html') {
       if (typeof results === 'undefined') {
         localStorage.setItem('startupID', BM.default.startup);
         chrome.storage.sync.set({startup: BM.default.startup}, () => {
-          location.reload();
+          safeReload();
         });
       }
       BM.preItems = results;
@@ -110,4 +110,16 @@ function setStartupID(folderID) {
   
   folderID > -1 && localStorage.removeItem('startupFromLast');
   folderID > -2 && localStorage.removeItem('LastScrollPos');
+}
+
+function safeReload(maxCount = 3) {
+  const url = new URL(window.location);
+  const params = url.searchParams;
+  const count = parseInt(params.get('_r') || '0');
+  
+  if (count < maxCount) {
+    params.set('_r', (count + 1).toString());
+    url.search = params.toString();
+    location.replace(url.toString());
+  }
 }
