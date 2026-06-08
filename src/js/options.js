@@ -43,7 +43,7 @@ $('#importBtn').addEventListener('click', () => {
     onFileSelected: (files) => {
       const [file] = files;
       return importConfig(file).then(() => {
-        location.reload();
+        safeReload();
       });
     }
   });
@@ -57,7 +57,7 @@ $('#resetBtn').addEventListener('click', () => {
       chrome.runtime.sendMessage({ task: 'reset' }, () => {
           localStorage.version = chrome.runtime.getManifest().version;
           
-          location.reload();
+          safeReload();
         });
     })
   }

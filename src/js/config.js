@@ -23,7 +23,7 @@ const bookmarkNode = {
     // 其他书签ID变了
     if (!rootInfo[bookmarkNode.main] || !rootInfo[bookmarkNode.other]) {
       chrome.runtime.sendMessage({ task: 'setRootInfo' }, () => {
-        location.reload();
+        safeReload();
       });
     }
   },
@@ -106,7 +106,7 @@ loadPreItems = new Promise(function(resolve, reject) {
       loadRootNode.then(() => {
         localStorage.setItem('startupID', bookmarkNode.main);
         chrome.storage.sync.set({startup: bookmarkNode.main}, () => {
-          location.reload();
+          safeReload();
         });
       });
     }
@@ -129,4 +129,16 @@ function setStartupID(folderID) {
   folderID > 0 && localStorage.setItem('startupID', folderID);
   folderID > -1 && localStorage.removeItem('startupFromLast');
   folderID > -2 && localStorage.removeItem('LastScrollPos');
+}
+
+function safeReload(maxCount = 3) {
+  const url = new URL(window.location);
+  const params = url.searchParams;
+  const count = parseInt(params.get('_r') || '0');
+  
+  if (count < maxCount) {
+    params.set('_r', (count + 1).toString());
+    url.search = params.toString();
+    location.replace(url.toString());
+  }
 }
