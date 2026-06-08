@@ -80,6 +80,7 @@ Ease Bookmarks 是一款为了替代浏览器原有书签栏的扩展
 | 字段 / 功能                                                          | 说明                                                                                                                   |
 | ------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------- |
 | `bodyWidth_*`         <br>修改多列布局时的popup窗口宽度                | 由于Chrome对扩展的限制，最大有效值为800px                                                                                 |
+| `clearScrollPosWhenExitFolder`  <br>退出文件夹时清除滚动位置参数       | - `0`：不启用                 <br>- `1`：启用（默认）                                                                       |
 | `compositionEvent`    <br>是否开启搜索输入合成事件                     | - `0`：不启用（默认）         <br>- `1`：启用   <br>注：中文输入法强制开启                                                   |
 | `fastCreate`          <br>中键点击书签favicon图标快速添加书签          | - `0`：禁用（默认）           <br>- `1`：将书签添加到此位置后    <br>- `2`：与1一样，但如果点击的是文件夹，则添加到文件夹内  <br>（详见 [#15][issues-15]） |
 | `faviconAPI`          <br>[ firefox only ] 获取 favicon 图标 API      | 支持的占位符 {hostname} {origin}  <br>（[ 详细用法 ][issues-firefox]）                                                        |
@@ -88,7 +89,7 @@ Ease Bookmarks 是一款为了替代浏览器原有书签栏的扩展
 | `hotkeyEnterSecond`   <br>打开书签                                    | - `F9`：（与回车键一样，#49）                                                                                             |
 | `keepLastSearchValue` <br>恢复上次搜索关键字                          | - `0`：不恢复（默认）          <br>- `1`：打开 popup 窗口时，恢复上次的搜索关键字和搜索结果                                    |
 | `keepMaxCols`         <br>页面保持最大宽度                            | - `0`：页面宽度随内容变化      <br>- `1`：保持最大打开宽度（默认，避免切换文件夹时页面跳动）                                    |
-| `openBookmarkAfterCurrentTab`<br>在当前标签页右侧打开书签              | - `0`：禁用（默认）           <br>- `1`：启用（仅通过本扩展打开时有效）                                                       |
+| `openBookmarkAfterCurrentTab` <br>在当前标签页右侧打开书签             | - `0`：禁用（默认）           <br>- `1`：启用（仅通过本扩展打开时有效）                                                       |
 | `searchResultSort`    <br>搜索结果排序                                | - `1`：按名称升序（默认）      <br>- `0`：不改变，与 `chrome://bookmarks/` 页面搜索一致  <br>- `-1`：按名称降序                  |
 | `updateBookmarkOpt`   <br>菜单「更新为当前网址」的更新选项              | - `1`：仅更新URL（默认）      <br>- `2`：同时更新URL和标题                                                                  |
 

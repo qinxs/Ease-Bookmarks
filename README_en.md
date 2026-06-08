@@ -80,6 +80,7 @@ Configure at (`/options.html#configTable`)
 | Parameter / Feature                                                     | Description                                                                                                                                 |
 | ----------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- |
 | `bodyWidth_*`         <br>Adjust popup width for multi-column layout     | Maximum effective value is 800px due to Chrome extension limits                                                                             |
+| `clearScrollPosWhenExitFolder`  <br>Clear scroll position when exiting the folder  | - `0`: Disabled               <br>- `1`: Enabled (default)                                                                          |
 | `compositionEvent`    <br>Enable composition event for search input      | - `0`: Disabled (default)               <br>- `1`: Enabled    <br>Note: Always enabled for Chinese IME                                        |
 | `fastCreate`          <br>Middle-click favicon to quickly add bookmark   | - `0`: Disabled (default)               <br>- `1`: Add bookmark here    <br>- `2`: Same as 1, but if a folder is clicked, it is added to the folder   <br>（more details [#15][issues-15]） |
 | `faviconAPI`          <br>[ firefox only ] Favicon fetching API          | Supported placeholders: {hostname} {origin}  <br>（[ more details ][issues-firefox]）                                                       |
@@ -88,7 +89,7 @@ Configure at (`/options.html#configTable`)
 | `hotkeyEnterSecond`   <br>Open bookmark                                  | - `F9`: (Same as the Enter key, #49)                                                                                                         |
 | `keepLastSearchValue` <br>Restore last search keywords                   | - `0`: Disabled (default)               <br>- `1`: When openning the popup window, the last search keywords and search results are restored.  |
 | `keepMaxCols`         <br>Maintain maximum popup width                   | - `0`: Dynamic width                    <br>- `1`: Maintain maximum opening width (default, prevents layout jumps)                            |
-| `openBookmarkAfterCurrentTab`<br>Open bookmarks after current tab        | - `0`: Disabled (default)               <br>- `1`: Enabled (only works when opened via this extension)                                        |
+| `openBookmarkAfterCurrentTab` <br>Open bookmarks after current tab       | - `0`: Disabled (default)               <br>- `1`: Enabled (only works when opened via this extension)                                        |
 | `searchResultSort`    <br>Search result sorting                          | - `1`: Name ascending (default)         <br>- `0`: Native order, Same as searching in `chrome://bookmarks/`  <br>- `-1`: Name descending        |
 | `updateBookmarkOpt`   <br>"Update to Current URL" menu behavior          | - `1`: Update URL only (default)        <br>- `2`: Update both URL and title                                                                  |
 
