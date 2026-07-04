@@ -933,22 +933,26 @@ function openUrl(url, event) {
         // 官方页面 不能直接执行js
         chrome.tabs.create({ url: url, active: true });
       } else {
-        // @TODO
-        // var clipboardFlag = false;
-        // var regex = /javascript:\s*navigator\.clipboard\.writeText(.+?);?$/i;
+        if (chrome.userScripts) {
+          var clipboardFlag = false;
+          var regex = /javascript:\s*navigator\.clipboard\.writeText(.+?);?$/i;
 
-        // var match = url.match(regex);
-        // if (match) {
-        //   url = match[1];
-        //   clipboardFlag = true;
-        // }
-
-        // chrome.tabs.executeScript({ code: url }, result => {
-        //   clipboardFlag && copyToClipboard(result[0]);
-        //   setTimeout(() => {
-        //     isPopupWindow && window.close();
-        //   });
-        // });
+          var match = url.match(regex);
+          if (match) {
+            url = match[1];
+            clipboardFlag = true;
+          }
+          chrome.userScripts.execute({
+            target: { tabId: tab.id },
+            injectImmediately: true,
+            js: [{ code: url }],
+          }, result => {
+            clipboardFlag && copyToClipboard(result[0].result);
+            setTimeout(() => {
+              isPopupWindow && window.close();
+            });
+          });
+        }
       }
     } else if(flag >> 1 == 0) {
       chrome.tabs.update({ url: url });
