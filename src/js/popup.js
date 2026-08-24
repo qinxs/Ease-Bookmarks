@@ -1328,6 +1328,7 @@ function hotkeyEvents(event) {
       break;
     case "Enter":
     case settings.hotkeyEnterSecond:
+      event.preventDefault();
       var $itemA = $('.item.active > a', $list);
       if (!$itemA) return;
       var id = $itemA.getAttribute('data-id');
