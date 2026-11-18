@@ -316,6 +316,10 @@ const search = {
   },
   _loadSearchView(keyword) {
     chrome.bookmarks.search(keyword, (results) => {
+      // 只搜索书签：文件夹没有 url，过滤掉
+      if (settings.searchOnlyBookmarks == 1) {
+        results = results.filter(item => item.url);
+      }
       if (results.length) {
         if (settings.searchResultSort != '0') {
           results.sort((a, b) => {

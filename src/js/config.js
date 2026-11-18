@@ -44,6 +44,7 @@ window.BM = {
     // 2：url和title
     openBookmarkAfterCurrentTab: 0, // 当前标签页右边打开书签
     searchResultSort: 1, // 搜索结果排序
+    searchOnlyBookmarks: 0, // 0-1 搜索时只显示书签，不显示文件夹
     updateBookmarkOpt: 1,
   },
   set: function(name, value) {
